@@ -33,10 +33,10 @@ class PT:
     def getName(self):
         return self.name
     
-    def updateVoltage(self):
-        self.voltage, _ = self.ADC.interogate(self.channel)
-        self.timeStamp = timing.missionTime()
-        return self.voltage
+    # def updateVoltage(self):
+    #     self.voltage, _ = self.ADC.interogate(self.channel)
+    #     self.timeStamp = timing.missionTime()
+    #     return self.voltage
     
         #converts volts to PSI
     def voltsToPSI(self, voltage:float):
@@ -44,7 +44,7 @@ class PT:
 
     def updatePressure(self):
         self.voltage, _ = self.ADC.interrogate(self.channel)
-        self.timeStamp = timing.missionTime()
+        #self.timeStamp = timing.missionTime()
         self.pressure = self.voltsToPSI(self.voltage)
         return self.pressure
 
@@ -55,7 +55,7 @@ def openSPI(chip, frequency):
     spi.max_speed_hz = frequency
     return spi
 
-def parsePTini(PTfile: str, s: socket):
+def parsePTini(PTfile: str):
     PTparser = ConfigParser()
     #will automatically closes the resource...sweet
 
@@ -69,16 +69,16 @@ def parsePTini(PTfile: str, s: socket):
 
 
     #PI commands ... ignore for now
-    # SPI0 = openSPI(0, 1000)
-    # SPI1 = openSPI(1, 1000)
+    SPI0 = openSPI(0, 1000)
+    SPI1 = openSPI(1, 1000)
 
 
-    # ADC0 = MCP3008(SPI0)
-    # ADC1 = MCP3008(SPI1)
+    ADC0 = MCP3008(SPI0)
+    ADC1 = MCP3008(SPI1)
 
-    #dummy variables for now
-    ADC0 = 0
-    ADC1 = 1
+    #dummy variables to run on PC
+    # ADC0 = 0
+    # ADC1 = 1
 
     PTs = dict()
 
@@ -86,16 +86,16 @@ def parsePTini(PTfile: str, s: socket):
     PTLoadCount = 0
     #Error checking done here
     for PTname in PTparser.sections():
-        PT_port = PTparser[PTname]['port']
-        PT_channel = int(PT_port[1])-1
-        PT_slope = float(PTparser[PTname]['slope'])
-        PT_offset = float(PTparser[PTname]['offset'])
+        PTport = PTparser[PTname]['port']
+        PTchannel = int(PTport[1])-1
+        PTslope = float(PTparser[PTname]['slope'])
+        PToffset = float(PTparser[PTname]['offset'])
         #hard coded values for ADC initializations 
         #should check for validity here
-        if PT_port[0] == 'A':
-            PTs[PTname] = PT(PTname, ADC0,PT_channel, PT_offset, PT_slope)
-        elif PT_port[0] == 'B':
-            PTs[PTname] = PT(PTname, ADC1,PT_channel, PT_offset, PT_slope)
+        if PTport[0] == 'A':
+            PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
+        elif PTport[0] == 'B':
+            PTs[PTname] = PT(PTname, ADC1, PTchannel, PToffset, PTslope)
 
         PTLoadCount += 1
         #print loading bar
