@@ -1,0 +1,47 @@
+Intended interations:
+
+    Initiations:
+        - Add some precheck hardcode to test valve functionality
+        - Loading bars for TCs and PTs
+        - Print out any necessary informatiom 
+
+        - server should have a loading screen for the console and data stream
+        - server should open a terminal for the console and automatically attempt
+        to connect 
+
+
+    PTs
+        Client side (PI)
+        - Constantly read values at a set interval using multithreading (done)
+            hypothetically should be more efficient than current implementation
+                requires some tests
+        Server side (PC)
+        - Should read N/A or -1 (decide ltr) if the socket connection is broken
+        * no way to check to see if the PT is physically disconnected due to noise...
+    
+    TCs
+        Same concept as PTs
+    
+    Valve
+        - Figure out interaction with GUI
+            Have some inkling on how it works...just gotta play test with it
+                Will take a good amount of time
+        -  valveCommands should have the following interaction:
+            server sends signal over to the Client
+            client should return a feedback message of some sort
+            should also check if there is already an outgoing command and deny
+            further commands to the value until an existing command timeouts
+            checks all existing threads every ~1 second to see if a timeout has
+            occurred. 
+        * is there a way to ensure a valve works from a software perspective
+
+    Console
+        - Console commands should be outputted to a separate terminal instead of an
+        existing one 
+        -Messages that should go to the console:
+            - Value switch mesages 
+            - ini file failure messages (error checking)
+        
+    GUI
+        - Not touching this with a ten foot pole atm 
+        - Add a slider(s?) (will need more info from the lab on this)
