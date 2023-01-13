@@ -7,11 +7,11 @@ def parseIniFile(filepath, consoleType):
         with open(filepath) as f:
             iniParser.read_file(f)
     except IOError:
-        print("ERROR: config.ini is missing")
+        print("ERROR:", filepath, "is missing")
         return None
     
     if consoleType not in iniParser.sections():
-        print("ERROR: Invalid Ini File")
+        print("ERROR: Invalid file for:", consoleType)
         return None
     
     #validation here
