@@ -1,5 +1,6 @@
 import concurrent.futures
 import socket
+import threading
 
 import time
 
@@ -10,7 +11,11 @@ import PTLib
 import TCLib
 import SVLib
 
-def client_IO(s:socket.socket,frequency:float,clientReadings:readings.Readings):
+def receiveNExecute(s:socket.socket, lock:threading.Lock):
+    pass
+
+
+def clientIO(s:socket.socket,frequency:float,clientReadings:readings.Readings):
     period = 1/frequency
     print("Starting data stream...")
     while True:
@@ -24,8 +29,7 @@ def client_IO(s:socket.socket,frequency:float,clientReadings:readings.Readings):
             print("WARNING: Client has lost connection to the server")
             break
 
-
-def client_coms(server: dict, frequency:float, clientReadings: readings.Readings):
+def runClient(server: dict, frequency:float, clientReadings: readings.Readings):
     while True:
         try:
             print("Looking for server")
@@ -34,7 +38,7 @@ def client_coms(server: dict, frequency:float, clientReadings: readings.Readings
             s.connect((server["IP"], server["port"]))
             s.setblocking(0) #might change to settimeout
             print("Connection established with server. IP:{}    port:{}".format(server['IP'],server['port']))
-            client_IO(s, frequency, clientReadings)
+            clientIO(s, frequency, clientReadings)
         except:
             print("Could not connect...retrying in 5 seconds")
             time.sleep(5)
@@ -48,9 +52,9 @@ def main():
     TCs = TCLib.TC_Initialization("configFiles/TC_Config_FV.ini")
     SVs = SVLib.initialiseValves("configFiles/SV_Config_FV.ini")
 
-    iniVals = telemetry.parseIniFile("configFiles/config.ini", "PI")
+    iniData = telemetry.parseIniFile("configFiles/config.ini", "PI")
 
-    server = {'IP':iniVals["ip"],'port':iniVals["port"]}
+    server = {'IP':iniData["ip"],'port':iniData["port"]}
 
 
     #print("'" + telemetry.getIP() + "'")
@@ -59,11 +63,9 @@ def main():
     FV_readings = readings.Readings(PTs,TCs,SVs)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        executor.submit(PTLib.refreshPTs,PTs, iniVals["PTpoll"]) #PT interogation thread
+        executor.submit(PTLib.refreshPTs,PTs, iniData["PTpoll"]) #PT interogation thread
         executor.submit(TCLib.refreshTCs,TCs)
-        executor.submit(client_coms,server,iniVals["sendRate"],FV_readings)
-
-
+        executor.submit(runClient,server,iniData["sendRate"],FV_readings)
 
 #runs FV_client
 main()

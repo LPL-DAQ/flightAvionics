@@ -17,19 +17,6 @@ def parseIniFile(filepath, consoleType):
     #validation here
     return iniParser[consoleType]
 
-#opens a socket given the ip and the port 
-def openSocket(ip:str, port:int):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((ip, port))
-    return s
-
-#connects with a socket
-def connect(socket):
-    socket.listen(1)
-    clientsocket, address = socket.accept()
-    print(f"Connection from {address} has been established.")
-    return clientsocket
-
 #sends msg given a socket
 def sendMsg(socket, msg):
     msg = str.encode(msg)
