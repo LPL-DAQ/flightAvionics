@@ -3,6 +3,7 @@ import time
 import math
 import readings
 
+import serverFunc
 
 import sys
 
@@ -13,22 +14,23 @@ from PySide6.QtCore import QObject, Slot, QTimer
 QML_IMPORT_NAME = "GUI2"
 QML_IMPORT_MAJOR_VERSION = 1
 
-class myClass():
+#not sure what this does...
+# class myClass():
 
-    myprop:int = 0
+#     myprop:int = 0
 
-    def someMeth(self):
-        #return math.sin(time.time())
-        self.myprop = self.myprop + 1
-        return self.myprop
+#     def someMeth(self):
+#         #return math.sin(time.time())
+#         self.myprop = self.myprop + 1
+#         return self.myprop
 
 
  
 @QmlElement
 class Bridge(QObject):
     
-    guiReadings: telemetry.Readings
-    armedValves = telemetry.armedValves
+    guiReadings: serverFunc.readings
+    armedValves = serverFunc.armedValves
 
     @Slot(result=str)
     def uptext(self):
@@ -63,7 +65,7 @@ class Bridge(QObject):
                 return False
 
         except:
-            self.guiReadings.push(valveName,'OPENED_','000000')
+            self.guiReadings.update(valveName,'OPENED_','000000')
             return False
 
     
@@ -82,7 +84,7 @@ class Bridge(QObject):
 
     @Slot()
     def sendCommand(self):
-        telemetry.appendCommand(self.guiReadings)
+        serverFunc.appendCommand(self.guiReadings)
         
 
 
