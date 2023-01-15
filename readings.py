@@ -168,6 +168,5 @@ def sendCommand(FV_Socket:socket):
 
         print(msg)
 
-config = dict()
     
 
