@@ -11,8 +11,28 @@ import PTLib
 import TCLib
 import SVLib
 
-def receiveNExecute(s:socket.socket, lock:threading.Lock):
-    pass
+def receiveNExecute(s:socket.socket, lock:threading.Lock, readings):
+    while True:
+        msg = s.recv(1024).decode("utf-8")
+        data = msg.split("#")
+        while data:
+            if len(data[0]) == 22:
+            
+                received_reading = data[0].split("/")
+
+                name = received_reading[0]
+                value = received_reading[1]
+                time = received_reading[2]
+
+                print(received_reading)
+                readings.execute(name,value,time)
+
+                #confirmation command here using lock
+
+            else:
+                print("WARNING: Corrupted command")
+            data.remove(data[0])
+
 
 
 def clientIO(s:socket.socket,frequency:float,clientReadings:readings.Readings):
@@ -53,7 +73,7 @@ def main():
     SVs = SVLib.initialiseValves("configFiles/SV_Config_FV.ini")
 
     iniData = telemetry.parseIniFile("configFiles/config.ini", "PI")
-
+    lock = threading.Lock()
     server = {'IP':iniData["ip"],'port':iniData["port"]}
 
 
@@ -63,6 +83,7 @@ def main():
     FV_readings = readings.Readings(PTs,TCs,SVs)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
+        #executor.submit(receiveNExecute, )
         executor.submit(PTLib.refreshPTs,PTs, iniData["PTpoll"]) #PT interogation thread
         executor.submit(TCLib.refreshTCs,TCs)
         executor.submit(runClient,server,iniData["sendRate"],FV_readings)
