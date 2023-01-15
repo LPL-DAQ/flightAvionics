@@ -1,6 +1,7 @@
 import telemetry
 import time
 import math
+import readings
 
 
 import sys
@@ -85,7 +86,7 @@ class Bridge(QObject):
         
 
 
-def guiThreadFunc(inReadings:telemetry.Readings):
+def guiThreadFunc(inReadings:readings.Readings):
 
     #newobject = myClass()
 

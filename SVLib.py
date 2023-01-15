@@ -1,6 +1,7 @@
 
 import serial 
 import time
+
 from configparser import ConfigParser
 
 def set_up_serial(port):

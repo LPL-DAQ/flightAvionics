@@ -4,9 +4,9 @@ import time
 
 import timing
 import telemetry
+import serverFunc
 
 armedValves: dict = {}
-sourceFile = open("data_logs/TP600T02_" + str(timing.missionTime()) +'_TP600T15TR01D0501.txt', 'w')
 
 class Readings:
 
@@ -34,7 +34,7 @@ class Readings:
             new_reading['type']= 'TC'
             self.readings[TC_name] = new_reading
 
-    def push(self,name:str,value:str,time:str):
+    def update(self,name:str,value:str,time:str):
         
         new_reading = dict()
         new_reading['value']= value
@@ -48,12 +48,12 @@ class Readings:
             print("getting command 111111")
             self.SVs[name].openValve()
             
-            self.push(name,'OPENED_',time)
+            self.update(name,'OPENED_',time)
         elif value == 'CLOSE':
             
             self.SVs[name].closeValve()
             
-            self.push(name,'CLOSED_',time)
+            self.update(name,'CLOSED_',time)
 
 def sendReading(name:str, reading:dict, socket: socket.socket):
     value = reading['value']
@@ -63,7 +63,7 @@ def sendReading(name:str, reading:dict, socket: socket.socket):
     msg = "#" + name + "/" + value + "/" + time
     telemetry.sendMsg(socket, msg)
 
-def getCommand(serverSocket:socket,FV_Reandings:Readings):
+def getCommand(serverSocket:socket,FV_Readings:Readings):
     print("getting command")
     
     msg = serverSocket.recv(1024)
@@ -71,7 +71,7 @@ def getCommand(serverSocket:socket,FV_Reandings:Readings):
 
     data = msg.split("#")
     #print("msg = ",msg)
-
+    
     
     while data:
         #print("data= ",data[0])
@@ -83,7 +83,7 @@ def getCommand(serverSocket:socket,FV_Reandings:Readings):
             value = received_reading[1]
             time = received_reading[2]
             
-            FV_Reandings.execute(name,value,time)
+            FV_Readings.execute(name,value,time)
 
             print(received_reading)
             
@@ -91,13 +91,13 @@ def getCommand(serverSocket:socket,FV_Reandings:Readings):
 
         data.remove(data[0])
 
-def receiveData(socket,readings:Readings):
+def receiveData(socket,readings:Readings, fp):
 
     msg = socket.recv(1024)
     
     if msg:
         msg = msg.decode("utf-8")
-    else:
+    else: #not sure if this will ever run...
         socket.close
         print("Connection Lost")
         raise Exception("Connection Lost")
@@ -117,25 +117,27 @@ def receiveData(socket,readings:Readings):
                 value = received_reading[1]
                 time = received_reading[2]
 
-                readings.push(name,value,time)
+                #GUI update func
+                readings.update(name,value,time)
+                #write to file func
+                #need to change mission time ltr
+                fp.write(name + " " + value + " " + timing.missionTime())
+                #print to console
+                print(name + " " + value + " " + timing.missionTime(), flush = True)
 
                 #if name =='PTH001':
                 #print ("Time: " + time)
                 #logStamp = timing.getTimeDiffInSeconds(originTime, time)
-                print (name + " " + value + " " + timing.missionTime() , file = sourceFile, flush = True)
+                #print (name + " " + value + " " + timing.missionTime() , file = filename, flush = True)
                 #print(data[0], file = sourceFile, flush=True)
-                
-                print(name + " " + value + " " + timing.missionTime(), flush = True)
-            
 
             data.remove(data[0])
     except:
         print('Data processing error occured')
             
 
-commands:list = []
 
-def appendCommand(inReadings:Readings):
+def appendCommand(inReadings:Readings, commandQ):
     for valve in armedValves:
         if armedValves[valve]=='ARMED':
             
@@ -144,7 +146,6 @@ def appendCommand(inReadings:Readings):
             state = reading['value']
 
             if state == "OPENED_":
-                
                 #inReadings.push(valve,"CLOSES","00000")
                 msg = "#" + valve + "/" + "CLOSE" + "/" + timing.missionTime() 
                 #inReadings.push(valve,"CLOSED",time)
@@ -155,7 +156,7 @@ def appendCommand(inReadings:Readings):
                 #print("Set",valve,"to OPENED")
                 inReadings.push(valve,"OPENED",time)
 
-            commands.append(msg)
+            commandQ.append(msg)
 
 
 def sendCommand(FV_Socket:socket):
