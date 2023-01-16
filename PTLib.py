@@ -17,7 +17,7 @@ class PT:
     #data values
     voltage = -1.0
     pressure = -1.0
-    timeStamp = "-1"
+    timeStamp = ""
 
     def __init__(self, name: str, ADC_init: MCP3008, channel_init: int, offset:float, slope:float):  
         self.name = name
@@ -106,7 +106,6 @@ def parsePTini(PTfile: str):
 def refreshPTs(PT_dict: dict(), PT_freq_Hz: float):
     #The time between reading from PT(n) and PT(n+1)
     PT_period = 1/PT_freq_Hz #seconds
-    print(PT_period)
     while True:
         for PT_name in PT_dict:
             PT_dict[PT_name].updatePressure()

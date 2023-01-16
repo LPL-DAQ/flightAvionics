@@ -32,6 +32,7 @@ class Bridge(QObject):
         super().__init__()
         self.guiReadings = serverFunc.dataReadings
         self.armedValues = serverFunc.armedValves
+        self.valveStates = serverFunc.SVdata
 
     # guiReadings: dataRead.Readings
     # armedValves = dict()
@@ -52,7 +53,6 @@ class Bridge(QObject):
             return self.guiReadings[gageName]
 
         except Exception as e:
-            print("Exception", e)
             return "N/A"
 
     @Slot(str,str)#arming the valves to their default state
@@ -64,7 +64,7 @@ class Bridge(QObject):
     def getValveState(self, valveName:str):
         #return true if valve is open
         try:
-            reading = self.guiReadings[valveName]
+            reading = self.valveStates[valveName]
             if reading == 'OPENED_':
                 return True
             else:
@@ -72,7 +72,7 @@ class Bridge(QObject):
 
         except:
             #self.data.update(valveName,'OPENED_','000000')
-            self.guiReadings[valveName] = "OPENED_"
+            self.valveStates[valveName] = "OPENED_"
             return False
 
     
@@ -91,7 +91,7 @@ class Bridge(QObject):
 
     @Slot()
     def sendCommand(self):
-        serverFunc.appendCommand(self.guiReadings, self.armedValues)
+        serverFunc.appendCommand(self.valveStates, self.armedValues)
         
 
 

@@ -2,6 +2,7 @@ from PySide6.QtCore import QThread
 import concurrent.futures
 import threading
 import queue
+import time
 
 import telemetry
 import timing
@@ -23,6 +24,9 @@ def establishConnection(ip:int, port:int):
             serverFunc.serverSocket = clientsocket
             print(f"Connection from {address} has been established.")
             serverFunc.connected = True
+        #do not need to check that frquently
+        time.sleep(5)
+        
 
 def dataListener(dataReadings, fp):
     while True:
@@ -39,10 +43,10 @@ def valveCmd(commands:queue.Queue, lock:threading.Lock):
         if serverFunc.connected:
             try:
                 if not commands.empty():
-                    msg = commands.pop()
-                    lock.acquire()
+                    msg = commands.get()
+                    #lock.acquire()
                     telemetry.sendMsg(serverFunc.serverSocket, msg)
-                    lock.release()
+                    #lock.release()
             except:
                 print("ERROR2: Connection forcibly disconnected by host")
                 serverFunc.serverSocket.close()
@@ -91,7 +95,7 @@ def main():
     
     worker1 = masterThread(iniData)
     worker2 = dataReceiver(serverFunc.dataReadings, fp)
-    worker3 = commandSender(serverFunc.commandQ, lock, serverFunc.dataReadings)
+    worker3 = commandSender(serverFunc.commandQ, lock, serverFunc.SVdata)
     worker1.start()
     worker2.start()
     worker3.start()

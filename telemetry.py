@@ -3,10 +3,9 @@ from configparser import ConfigParser
 
 class Readings:
 
-    def __init__(self,PT_dict:dict,TC_dict:dict,SV_dict:dict):
+    def __init__(self,PT_dict:dict,TC_dict:dict):
         self.PTs = PT_dict
         self.TCs = TC_dict
-        self.SVs = SV_dict
         self.readings = dict()
         self.refreshAll()
         
@@ -29,7 +28,20 @@ class Readings:
 
     def getData(self, name:str):
         return self.readings[name]
+    
+    def update(self,name:str,value:str,time:str):
+        new_reading = dict()
+        new_reading['value']= value
+        new_reading['time']= time
+        new_reading['type']= name[0:2]
+        self.readings[name] = new_reading
         
+
+class valveStates:
+    def __init__(self, SV_dict:dict) -> None:
+        self.SVs = SV_dict
+        self.states = dict()
+
     def update(self,name:str,value:str,time:str):
         new_reading = dict()
         new_reading['value']= value
@@ -49,6 +61,7 @@ class Readings:
             self.SVs[name].closeValve()
             
             self.update(name,'CLOSED_',time)
+
 
 def parseIniFile(filepath, consoleType):
     iniParser = ConfigParser()
