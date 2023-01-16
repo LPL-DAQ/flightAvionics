@@ -140,7 +140,7 @@ def TC_Initialization(config_File_Name: str()):
     TC_port_ID = ConfigParser()
 
     TC_config.read(config_File_Name)
-    TC_port_ID.read('TC_Port_ID.ini')
+    TC_port_ID.read('configFiles/TC_Port_ID.ini')
 
     TC_init_dict = dict()
 

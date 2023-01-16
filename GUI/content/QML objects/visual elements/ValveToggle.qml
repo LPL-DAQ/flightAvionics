@@ -147,10 +147,10 @@ Rectangle {
         function toggle() {
             if (toggle.state === "on"){
                 toggle.state = "off";
-                bridge.armValve(valve_ctrl.name,"nil");
+                bridge.armValve(valve_ctrl.name, "nil");
             }else{
                 toggle.state = "on";
-                bridge.armValve(valve_ctrl.name,"ARMED");
+                bridge.armValve(valve_ctrl.name, "ARMED");
             }
         }
 
