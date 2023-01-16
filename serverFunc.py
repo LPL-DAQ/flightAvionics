@@ -8,26 +8,26 @@ import telemetry
 commandQ = queue.Queue()
 dataReadings = dict()
 armedValves = dict()
+SVdata = dict()
 serverSocket = None
 connected = False
 
-def appendCommand(inReadings, armedValues):
+def appendCommand(SVstates, armedValues):
     for valve in armedValues:
         if armedValues[valve]=='ARMED':
 
-            state = inReadings[valve]
+            state = SVstates[valve]
 
             if state == "OPENED_":
                 #inReadings.push(valve,"CLOSES","00000")
                 msg = "#" + valve + "/" + "CLOSE" + "/" + timing.missionTime() 
-                inReadings[valve] = "CLOSED_"
+                SVstates[valve] = "CLOSED_"
                 print("Set",valve,"to CLOSED")
             else:
                 #inReadings.push(valve,"OPENED","00000")
                 msg = "#" + valve + "/" + "OPEN_" + "/" + timing.missionTime()
-                inReadings[valve] = "OPENED_"
+                SVstates[valve] = "OPENED_"
                 print("Set", valve, "to OPENED")
-
             commandQ.put(msg)
 
 
@@ -39,7 +39,6 @@ def receiveData(socket, dataReadings:telemetry.Readings, fp):
         socket.close
         print("Connection Lost")
         raise Exception("Connection Lost")
-
     data = msg.split("#")
     #print("msg = ",msg)
 
@@ -53,17 +52,18 @@ def receiveData(socket, dataReadings:telemetry.Readings, fp):
                 name = received_reading[0]
                 value = received_reading[1]
                 time = received_reading[2]
-
-                print(name, value, time)
+                if name[:2] == "SV":
+                    SVdata[name] = value
+                else:
+                    dataReadings[name] = value
                 #GUI update func
                 #dataReadings.update(name,value,time)
-                dataReadings[name] = value
-
+                
                 #write to file func
                 #need to change mission time ltr
-                #fp.write(name + " " + value + " " + timing.missionTime() + "\n")
+                fp.write(name + " " + value + " " + timing.missionTime() + "\n")
                 #print to console
-                #print(name + " " + value + " " + timing.missionTime(), flush = True)
+                print(name + " " + value + " " + timing.missionTime(), flush = True)
 
                 #if name =='PTH001':
                 #print ("Time: " + time)
