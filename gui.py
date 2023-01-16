@@ -1,7 +1,6 @@
 import telemetry
 import time
 import math
-import readings
 
 import serverFunc
 
@@ -29,8 +28,15 @@ QML_IMPORT_MAJOR_VERSION = 1
 @QmlElement
 class Bridge(QObject):
     
-    guiReadings: serverFunc.readings
-    armedValves = serverFunc.armedValves
+    def __init__(self) -> None:
+        super().__init__()
+        self.guiReadings = serverFunc.dataReadings
+        self.armedValues = serverFunc.armedValves
+
+    # guiReadings: dataRead.Readings
+    # armedValves = dict()
+    # guiReadings = readings.Readings
+    # armedValves = dict()
 
     @Slot(result=str)
     def uptext(self):
@@ -43,29 +49,30 @@ class Bridge(QObject):
     @Slot(str, result=str)
     def updateGage(self, gageName):
         try:
-            reading = self.guiReadings.readings[gageName]
-            return reading['value']
+            return self.guiReadings[gageName]
 
-        except:
+        except Exception as e:
+            print("Exception", e)
             return "N/A"
 
-    @Slot(str,str)
+    @Slot(str,str)#arming the valves to their default state
     def armValve(self, valveName:str, state:str):
-        self.armedValves[valveName]=state
+        self.armedValues[valveName]=state
         print(valveName,":",state)
 
     @Slot(str, result=bool)
     def getValveState(self, valveName:str):
         #return true if valve is open
         try:
-            reading = self.guiReadings.readings[valveName]
-            if reading['value'] == 'OPENED_':
+            reading = self.guiReadings[valveName]
+            if reading == 'OPENED_':
                 return True
             else:
                 return False
 
         except:
-            self.guiReadings.update(valveName,'OPENED_','000000')
+            #self.data.update(valveName,'OPENED_','000000')
+            self.guiReadings[valveName] = "OPENED_"
             return False
 
     
@@ -84,17 +91,18 @@ class Bridge(QObject):
 
     @Slot()
     def sendCommand(self):
-        serverFunc.appendCommand(self.guiReadings)
+        serverFunc.appendCommand(self.guiReadings, self.armedValues)
         
 
 
-def guiThreadFunc(inReadings:readings.Readings):
+def guiThreadFunc(inReadings, armedValues):
 
     #newobject = myClass()
 
     bridge = Bridge()
 
-    bridge.guiReadings = inReadings
+    # bridge.guiReadings = inReadings
+    # bridge.guiReadings = armedValues
     
 
     #print(newobject.myprop)
