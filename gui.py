@@ -80,7 +80,7 @@ class Bridge(QObject):
     def getArmState(self, valveName:str):
         #return true if valve is armed
         try:
-            armed = self.armedValves[valveName]
+            armed = self.armedValues[valveName]
             if armed == 'ARMED':
                 return True
             else:
