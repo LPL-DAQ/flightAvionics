@@ -1,8 +1,8 @@
 import socket
 from configparser import ConfigParser
 
+#class for all sensor HW
 class Readings:
-
     def __init__(self,PT_dict:dict,TC_dict:dict):
         self.PTs = PT_dict
         self.TCs = TC_dict
@@ -26,9 +26,11 @@ class Readings:
             new_reading['type']= 'TC'
             self.readings[TC_name] = new_reading
 
+    #returns the data based off of sensor name
     def getData(self, name:str):
         return self.readings[name]
     
+    #updates the value of a sensor 
     def update(self,name:str,value:str,time:str):
         new_reading = dict()
         new_reading['value']= value
@@ -36,48 +38,89 @@ class Readings:
         new_reading['type']= name[0:2]
         self.readings[name] = new_reading
         
-
+#class for all control HW
 class valveStates:
     def __init__(self, SV_dict:dict) -> None:
         self.SVs = SV_dict
         self.states = dict()
 
+    #updates the state of a sensor
     def update(self,name:str,value:str,time:str):
         new_reading = dict()
         new_reading['value']= value
         new_reading['time']= time
         new_reading['type']= name[0:2]
-        self.readings[name] = new_reading
-
+        self.states[name] = new_reading
+    
+    #ex
     def execute(self,name:str,value:str,time:str):
-        print("getting command " + name)
         if value == 'OPEN_':
-            print("getting command 111111")
             self.SVs[name].openValve()
-            
             self.update(name,'OPENED_',time)
         elif value == 'CLOSE':
-            
             self.SVs[name].closeValve()
-            
             self.update(name,'CLOSED_',time)
 
 
-def parseIniFile(filepath, consoleType):
-    iniParser = ConfigParser()
+#returns a dict if the file is valid and None if the file does not exist
+def verifyExistence(filepath:str, consoleType:str) -> dict:
+    parser = ConfigParser()
     try:
         with open(filepath) as f:
-            iniParser.read_file(f)
+            parser.read_file(f)
     except IOError:
-        print("ERROR:", filepath, "is missing")
+        print("ERROR:", filepath, "not found")
         return None
-    
-    if consoleType not in iniParser.sections():
-        print("ERROR: Invalid file for:", consoleType)
+    #parser = parser.sections()
+    if consoleType not in parser.sections():
+        print("ERROR: [", consoleType, "] is missing from ", filepath, sep = "")
         return None
+    fileDict = dict()
+    for i in parser.items(consoleType):
+        fileDict[i[0]] = i[1]
+    return fileDict
+
+def getIPAddress(filepath):
+    valid = True
+    ipAddress = verifyExistence(filepath, "address")
+    if ipAddress == None:
+        return None, None
     
-    #validation here
-    return iniParser[consoleType]
+    if "ip" not in ipAddress:
+        valid = False
+        print("ERROR: ip not specified in [address] section")
+    else:
+        ip = ipAddress["ip"]
+    if "port" not in ipAddress:
+        valid = False
+        print("ERROR: port is not specifed in the [address] section")
+    else:
+        try:
+            port = int(ipAddress["port"])
+            if port < 1024 or port >49151:
+                print("ERROR: Port ranges can only be from 1024 - 49151")
+                valid = False
+        except:
+            valid = False
+            print("ERROR: port is an invalid int")
+
+    if not valid:
+        return None, None
+    else:
+        return ip, port
+        
+
+#returns a dict based with the necessary parameters based on the console type
+# def parseIniFile(filepath, consoleType):
+#     iniParser = verifyIni(filepath)
+
+#     if consoleType not in iniParser.sections():
+#         print("ERROR: Invalid file for:", consoleType)
+#         return None
+    
+#     #validation here
+#     return iniParser[consoleType]
+
 
 #sends msg given a socket
 def sendMsg(socket, msg):

@@ -45,13 +45,14 @@ class Valve():
         self.isOpen = False
         self.serial_port = serial_port
         
-
-    def openValve(self):
+    #sets valve to normal state
+    def powerOFF(self):
         msg = "#S"+self.pin+"/LOW__\n"
         send_data(self.serial_port,msg)
         self.isOpen = True
 
-    def closeValve(self):
+    #sets valve to closed state
+    def powerON(self):
         msg = "#S"+self.pin+"/HIGH_\n"
         send_data(self.serial_port,msg)
         self.isOpen = False

@@ -76,25 +76,30 @@ class dataReceiver(QThread):
         dataListener(self.readings, self.fp)
 
 class masterThread(QThread):
-    def __init__(self, iniData) -> None:
+    def __init__(self, ip:str, port:int) -> None:
         super().__init__()
-        self.ini = iniData
+        self.ip = ip
+        self.port = port
 
     def run(self):
-        establishConnection(self.ini["ip"], int(self.ini["port"]))
+        establishConnection(self.ip, int(self.port))
 
 def main():
-    iniData = telemetry.parseIniFile("configFiles/config.ini", "server")
+    #iniData = telemetry.parseIniFile("configFiles/config.ini", "server")
+    serverDict = serverFunc.verifyServerIni("configFiles/config.ini", "server")
+    if serverDict == None:
+        print("File rejected for the following reasons ^")
+        return 0
     #initialize phase goes here
     lock = threading.Lock()
     #s = establishConnection(iniData["ip"], int(iniData["port"])) 
-    fp = open("data/" + iniData["saveFile"] + str(timing.missionTime()), 'w')
+    #fp = open("data/" + iniData["saveFile"] + str(timing.missionTime()), 'w')
 
     # worker1 = dataReceiver(s, readings, fp)
     # worker2 = commandSender(s, commandQ, lock, readings)
     
-    worker1 = masterThread(iniData)
-    worker2 = dataReceiver(serverFunc.dataReadings, fp)
+    worker1 = masterThread(serverDict["ip"], serverDict["port"])
+    worker2 = dataReceiver(serverFunc.dataReadings, serverDict["fp"])
     worker3 = commandSender(serverFunc.commandQ, lock, serverFunc.SVdata)
     worker1.start()
     worker2.start()

@@ -11,7 +11,33 @@ armedValves = dict()
 SVdata = dict()
 serverSocket = None
 connected = False
+#returns dict with necessary values
+def verifyServerIni(filepath:str, consoleType:str):
+    parser = telemetry.verifyExistence(filepath, consoleType)
+    if parser == None:
+        return None
+    valid = True
+    serverDict = dict()
+    #print("debug", parser)
+    try:
+        if "savefile" not in parser:
+            valid = False
+            print("ERROR: savefile not specified")
+        else:   
+            serverDict["fp"] = open("data/" + parser["savefile"] + str(timing.missionTime()), 'w')
+    except:
+        print("ERROR: Invalid file name or data file is missing")
+        valid = False
+    serverDict["ip"], serverDict["port"] = telemetry.getIPAddress(filepath)
+    if serverDict["ip"] == None or serverDict["port"] == None:
+        print("test")
+        valid = False
+    if not valid:
+        return None
+    return serverDict
+    
 
+    
 def appendCommand(SVstates, armedValues):
     for valve in armedValues:
         if armedValues[valve]=='ARMED':
