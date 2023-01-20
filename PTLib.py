@@ -57,7 +57,7 @@ def openSPI(chip, frequency):
 
 def parsePTini(PTfile: str):
     PTparser = ConfigParser()
-    #will automatically closes the resource...sweet
+    #will automatically close the resource...sweet
 
     try:
         with open(PTfile) as f:
