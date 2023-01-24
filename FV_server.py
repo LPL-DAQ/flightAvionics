@@ -27,7 +27,7 @@ def establishConnection(ip:int, port:int):
         #do not need to check that frquently
         time.sleep(5)
         
-
+#thread function for receiving data
 def dataListener(dataReadings, fp):
     while True:
         if serverFunc.connected:
@@ -38,6 +38,7 @@ def dataListener(dataReadings, fp):
                 serverFunc.serverSocket.close()
                 serverFunc.connected = False
 
+#thread function for sending valve commands
 def valveCmd(commands:queue.Queue, lock:threading.Lock):
     while True:
         if serverFunc.connected:
@@ -92,11 +93,6 @@ def main():
         return 0
     #initialize phase goes here
     lock = threading.Lock()
-    #s = establishConnection(iniData["ip"], int(iniData["port"])) 
-    #fp = open("data/" + iniData["saveFile"] + str(timing.missionTime()), 'w')
-
-    # worker1 = dataReceiver(s, readings, fp)
-    # worker2 = commandSender(s, commandQ, lock, readings)
     
     worker1 = masterThread(serverDict["ip"], serverDict["port"])
     worker2 = dataReceiver(serverFunc.dataReadings, serverDict["fp"])

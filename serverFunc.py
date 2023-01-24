@@ -1,5 +1,6 @@
 import time
 import socket
+import threading
 
 import queue
 import timing
@@ -11,14 +12,15 @@ armedValves = dict()
 SVdata = dict()
 serverSocket = None
 connected = False
-#returns dict with necessary values
+
+#returns dict with necessary server values (savefile for now)
 def verifyServerIni(filepath:str, consoleType:str):
     parser = telemetry.verifyExistence(filepath, consoleType)
     if parser == None:
-        return None
+        exit()
+        #assumes the file is valid unless proven otherwise
     valid = True
     serverDict = dict()
-    #print("debug", parser)
     try:
         if "savefile" not in parser:
             valid = False
@@ -30,33 +32,28 @@ def verifyServerIni(filepath:str, consoleType:str):
         valid = False
     serverDict["ip"], serverDict["port"] = telemetry.getIPAddress(filepath)
     if serverDict["ip"] == None or serverDict["port"] == None:
-        print("test")
         valid = False
     if not valid:
-        return None
+        exit()
     return serverDict
     
 
-    
+#adds a valve command to the client...needs a verification and client feedback msg
 def appendCommand(SVstates, armedValues):
     for valve in armedValues:
         if armedValues[valve]=='ARMED':
-
             state = SVstates[valve]
-
             if state == "OPENED_":
-                #inReadings.push(valve,"CLOSES","00000")
                 msg = "#" + valve + "/" + "CLOSE" + "/" + timing.missionTime() 
                 SVstates[valve] = "CLOSED_"
                 print("Set",valve,"to CLOSED")
             else:
-                #inReadings.push(valve,"OPENED","00000")
                 msg = "#" + valve + "/" + "OPEN_" + "/" + timing.missionTime()
                 SVstates[valve] = "OPENED_"
                 print("Set", valve, "to OPENED")
             commandQ.put(msg)
 
-
+#server receives a message (data msg for now)
 def receiveData(socket, dataReadings:telemetry.Readings, fp):
     msg = socket.recv(1024)
     if msg:
@@ -66,13 +63,11 @@ def receiveData(socket, dataReadings:telemetry.Readings, fp):
         print("Connection Lost")
         raise Exception("Connection Lost")
     data = msg.split("#")
-    #print("msg = ",msg)
 
     try:
         while data:
             if len(data[0]) == 24:
-                #print("data= ",data[0])
-                
+
                 received_reading = data[0].split("/")
 
                 name = received_reading[0]
@@ -82,21 +77,16 @@ def receiveData(socket, dataReadings:telemetry.Readings, fp):
                     SVdata[name] = value
                 else:
                     dataReadings[name] = value
-                #GUI update func
+                #GUI update func (readings class not necessary...dict will suffice)
                 #dataReadings.update(name,value,time)
                 
                 #write to file func
                 #need to change mission time ltr
                 fp.write(name + " " + value + " " + timing.missionTime() + "\n")
+                
                 #print to console
                 print(name + " " + value + " " + timing.missionTime(), flush = True)
-
-                #if name =='PTH001':
-                #print ("Time: " + time)
-                #logStamp = timing.getTimeDiffInSeconds(originTime, time)
-                #print (name + " " + value + " " + timing.missionTime() , file = filename, flush = True)
-                #print(data[0], file = sourceFile, flush=True)
-
+                
             data.remove(data[0])
     except Exception as e:
         print(e)

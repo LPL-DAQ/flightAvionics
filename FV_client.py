@@ -85,9 +85,9 @@ def main():
     timing.setRefTime(0,0,0)
     systemName = 'FV'
 
-    PTs = PTLib.parsePTini("configFiles/PTs_Config_FV.ini")
+    PTs = PTLib.parsePTini("configFiles/PT_Config_FV.ini")
     TCs = TCLib.TC_Initialization("configFiles/TC_Config_FV.ini")
-    SVs = SVLib.initialiseValves("configFiles/SV_Config.ini")
+    SVs = SVLib.initialiseValves("configFiles/SV_Config_FV.ini")
     iniData = telemetry.parseIniFile("configFiles/config.ini", "client")
     lock = threading.Lock()
     clientFunc.clientSocket = findConnection(iniData["ip"],int(iniData["port"]))
