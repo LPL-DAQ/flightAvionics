@@ -1,3 +1,4 @@
+from PySide6.QtCore import QThread
 import time
 import socket
 import threading
@@ -5,13 +6,59 @@ import threading
 import queue
 import timing
 import telemetry
+import server
 
-commandQ = queue.Queue()
-dataReadings = dict()
-armedValves = dict()
-SVdata = dict()
-serverSocket = None
-connected = False
+
+        
+#thread function for dataReceiver 
+def dataListener(s:server.Server):
+    while True:
+        s.establishConnection()
+        if s.isConnected():
+            try:
+                receiveData(s.getSocket(), s.getDataReadings(), s.getFilePointer())
+            except Exception as e:
+                print("ERROR1: Connection forcibly disconnected by host")
+                s.closeSocket()
+
+#thread function for commandSender
+def valveCmd(s:server.Server):
+    while True:
+        if s.isConnected:
+            commands = s.getCommandQ()
+            try:
+                if not commands.empty():
+                    msg = commands.get()
+                    #lock.acquire()
+                    telemetry.sendMsg(s.getSocket(), msg)
+                    #lock.release()
+            except:
+                print("ERROR2: Connection forcibly disconnected by host")
+                s.closeSocket()
+        else:
+            #Might need to fix ltr
+            time.sleep(5)
+
+#sends valve commands to the PI
+class commandSender(QThread):
+    def __init__(self, s:server.Server) -> None:
+        super().__init__()
+        self.s = s
+
+    def run(self):
+        valveCmd(self.s)
+
+
+#receives any and all data from the PI (PT and TC readings + SV confirm msgs)
+class dataReceiver(QThread):
+
+    def __init__(self, s:server.Server) -> None:
+        super().__init__()
+        self.s = s
+
+    def run(self):
+        dataListener(self.s)
+
 
 #returns dict with necessary server values (savefile for now)
 def verifyServerIni(filepath:str, consoleType:str):
@@ -85,7 +132,7 @@ def receiveData(socket, dataReadings:telemetry.Readings, fp):
                 fp.write(name + " " + value + " " + timing.missionTime() + "\n")
                 
                 #print to console
-                print(name + " " + value + " " + timing.missionTime(), flush = True)
+                #print(name + " " + value + " " + timing.missionTime(), flush = True)
                 
             data.remove(data[0])
     except Exception as e:
