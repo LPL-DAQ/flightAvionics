@@ -3,6 +3,7 @@ import time
 import math
 
 import serverFunc
+import server
 
 import sys
 
@@ -28,24 +29,26 @@ QML_IMPORT_MAJOR_VERSION = 1
 @QmlElement
 class Bridge(QObject):
     
-    def __init__(self) -> None:
+    def __init__(self, s:server.Server) -> None:
         super().__init__()
-        self.guiReadings = serverFunc.dataReadings
-        self.armedValues = serverFunc.armedValves
-        self.valveStates = serverFunc.SVdata
+        self.s = s
+        self.armedValues = s.getArmedValves()
+        self.guiReadings = s.getDataReadings()
+        self.valveStates = s.getValveReadings()
+
 
     # guiReadings: dataRead.Readings
     # armedValves = dict()
     # guiReadings = readings.Readings
     # armedValves = dict()
 
-    @Slot(result=str)
-    def uptext(self):
+    # @Slot(result=str)
+    # def uptext(self):
         
-        #s = "{:0>7.0f}".format(time.time())
-        s = "YODAYO! 1"
+    #     #s = "{:0>7.0f}".format(time.time())
+    #     s = "YODAYO! 1"
 
-        return s
+    #     return s
 
     @Slot(str, result=str)
     def updateGage(self, gageName):
@@ -95,11 +98,11 @@ class Bridge(QObject):
         
 
 
-def guiThreadFunc(inReadings, armedValues):
+def guiThreadFunc(s:server.Server):
 
     #newobject = myClass()
 
-    bridge = Bridge()
+    bridge = Bridge(s)
 
     # bridge.guiReadings = inReadings
     # bridge.guiReadings = armedValues

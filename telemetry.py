@@ -52,7 +52,7 @@ class valveStates:
         new_reading['type']= name[0:2]
         self.states[name] = new_reading
     
-    #ex
+    #execute valve command...needs error check
     def execute(self,name:str,value:str,time:str):
         if value == 'OPEN_':
             self.SVs[name].openValve()
@@ -62,7 +62,7 @@ class valveStates:
             self.update(name,'CLOSED_',time)
 
 
-#returns a dict if the file is valid and None if the file does not exist
+#returns a dict of the consoleType members if the file is valid and None if the file does not exist
 def verifyExistence(filepath:str, consoleType:str) -> dict:
     parser = ConfigParser()
     try:
@@ -70,16 +70,17 @@ def verifyExistence(filepath:str, consoleType:str) -> dict:
             parser.read_file(f)
     except IOError:
         print("ERROR:", filepath, "not found")
-        return None
+        exit()
     #parser = parser.sections()
     if consoleType not in parser.sections():
         print("ERROR: [", consoleType, "] is missing from ", filepath, sep = "")
-        return None
+        exit()
     fileDict = dict()
     for i in parser.items(consoleType):
         fileDict[i[0]] = i[1]
     return fileDict
 
+#checks file validity and outputs ip and port
 def getIPAddress(filepath):
     valid = True
     ipAddress = verifyExistence(filepath, "address")
@@ -108,19 +109,6 @@ def getIPAddress(filepath):
         return None, None
     else:
         return ip, port
-        
-
-#returns a dict based with the necessary parameters based on the console type
-# def parseIniFile(filepath, consoleType):
-#     iniParser = verifyIni(filepath)
-
-#     if consoleType not in iniParser.sections():
-#         print("ERROR: Invalid file for:", consoleType)
-#         return None
-    
-#     #validation here
-#     return iniParser[consoleType]
-
 
 #sends msg given a socket
 def sendMsg(socket, msg):
@@ -132,5 +120,5 @@ def sendReading(name:str, reading:dict, socket: socket.socket):
     time =  reading['time']
     
     msg = "#" + name + "/" + value + "/" + time
-    #print(msg)
+    
     sendMsg(socket, msg)
