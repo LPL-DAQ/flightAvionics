@@ -1,5 +1,4 @@
 import socket
-from configparser import ConfigParser
 
 #class for all sensor HW
 class Readings:
@@ -60,55 +59,6 @@ class valveStates:
         elif value == 'CLOSE':
             self.SVs[name].closeValve()
             self.update(name,'CLOSED_',time)
-
-
-#returns a dict of the consoleType members if the file is valid and None if the file does not exist
-def verifyExistence(filepath:str, consoleType:str) -> dict:
-    parser = ConfigParser()
-    try:
-        with open(filepath) as f:
-            parser.read_file(f)
-    except IOError:
-        print("ERROR:", filepath, "not found")
-        exit()
-    #parser = parser.sections()
-    if consoleType not in parser.sections():
-        print("ERROR: [", consoleType, "] is missing from ", filepath, sep = "")
-        exit()
-    fileDict = dict()
-    for i in parser.items(consoleType):
-        fileDict[i[0]] = i[1]
-    return fileDict
-
-#checks file validity and outputs ip and port
-def getIPAddress(filepath):
-    valid = True
-    ipAddress = verifyExistence(filepath, "address")
-    if ipAddress == None:
-        return None, None
-    
-    if "ip" not in ipAddress:
-        valid = False
-        print("ERROR: ip not specified in [address] section")
-    else:
-        ip = ipAddress["ip"]
-    if "port" not in ipAddress:
-        valid = False
-        print("ERROR: port is not specifed in the [address] section")
-    else:
-        try:
-            port = int(ipAddress["port"])
-            if port < 1024 or port >49151:
-                print("ERROR: Port ranges can only be from 1024 - 49151")
-                valid = False
-        except:
-            valid = False
-            print("ERROR: port is an invalid int")
-
-    if not valid:
-        return None, None
-    else:
-        return ip, port
 
 #sends msg given a socket
 def sendMsg(socket, msg):

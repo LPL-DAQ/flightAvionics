@@ -145,7 +145,7 @@ Rectangle {
 
 
         function toggle() {
-            if (toggle.state === "on"){
+            if (toggle.state == "on"){
                 toggle.state = "off";
                 bridge.armValve(valve_ctrl.name, "nil");
             }else{

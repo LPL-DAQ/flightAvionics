@@ -2,21 +2,20 @@ import telemetry
 import timing
 import gui
 import socket
+import serverThreads
 import serverFunc
-import server
 
 
 def main():
     #iniData = telemetry.parseIniFile("configFiles/config.ini", "server")
 
-    s = server.Server("configFiles/config.ini")
-    if s == None:
-        print("File rejected for the above reasons. Please fix and restart")
-        return 0
-    worker1 = serverFunc.dataReceiver(s)
-    worker2 = serverFunc.commandSender(s)
+    s = serverFunc.Server("configFiles/config.ini")
+    worker1 = serverThreads.dataReceiver(s)
+    worker2 = serverThreads.commandSender(s)
+    worker3 = serverThreads.valveTimeOut(s)
     worker1.start()
     worker2.start()
+    worker3.start()
 
     #console thread 
     gui.guiThreadFunc(s) 
