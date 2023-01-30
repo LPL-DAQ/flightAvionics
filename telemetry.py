@@ -1,8 +1,5 @@
 import socket
 
-import PTLib
-import TCLib
-import SVLib
 
 #class for all sensor HW
 class Readings:
