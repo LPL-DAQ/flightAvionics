@@ -91,7 +91,7 @@ class Server:
                         value = received_reading[1]
                         time = received_reading[2]
                         if name[:2] == "SV":
-                            self.verfiyValve(name, value, time)
+                            self.verifyValve(name, value, time)
                         else:
                             self.dataLock.acquire()
                             self.dataReadings[name] = value
@@ -152,9 +152,8 @@ class Server:
                 else: #if there is deny command
                     print("ERROR:", valve, "COMMAND ALREADY SENT PLEASE WAIT")
     
-    def verfiyValve(self, name:str, value:str, time:str):
+    def verifyValve(self, name:str, value:str, time:str):
         if name in self.pendingValves:
-            currentState = self.valveReadings[name]
             self.removeValve(name)
             if self.valveReadings[name] != value:
                 print("ERROR:", name, "received the wrong state")

@@ -1,5 +1,9 @@
 import socket
 
+import PTLib
+import TCLib
+import SVLib
+
 #class for all sensor HW
 class Readings:
     def __init__(self,PT_dict:dict,TC_dict:dict):
@@ -53,12 +57,18 @@ class valveStates:
     
     #execute valve command...needs error check
     def execute(self,name:str,value:str,time:str):
-        if value == 'OPEN_':
-            self.SVs[name].openValve()
-            self.update(name,'OPENED_',time)
-        elif value == 'CLOSE':
-            self.SVs[name].closeValve()
-            self.update(name,'CLOSED_',time)
+        if value == 'ON':
+            self.SVs[name].powerOFF()
+            self.update(name,'OFF',time)
+        elif value == 'OFF':
+            self.SVs[name].powerON()
+            self.update(name,'ON',time)
+
+    def getValveState(self, name:str):
+        if name not in self.SVs:
+            print("WARNING: Unknown Valve name")
+            return None
+        return self.SVs[name]["type"]
 
 #sends msg given a socket
 def sendMsg(socket, msg):
@@ -72,3 +82,5 @@ def sendReading(name:str, reading:dict, socket: socket.socket):
     msg = "#" + name + "/" + value + "/" + time
     
     sendMsg(socket, msg)
+
+
