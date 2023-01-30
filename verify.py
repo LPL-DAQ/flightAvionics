@@ -78,7 +78,7 @@ def verifyServerIni(filepath:str):
     return serverDict
 
 def verifyClientIni(filepath:str):
-    parser = verifyExistence(filepath, "client"):
+    parser = verifyExistence(filepath, "client")
     if parser == None:
         exit()
     valid = True
