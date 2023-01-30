@@ -2,8 +2,8 @@ import telemetry
 import time
 import math
 
+import serverThreads
 import serverFunc
-import server
 
 import sys
 
@@ -29,7 +29,7 @@ QML_IMPORT_MAJOR_VERSION = 1
 @QmlElement
 class Bridge(QObject):
     
-    def __init__(self, s:server.Server) -> None:
+    def __init__(self, s:serverFunc.Server) -> None:
         super().__init__()
         self.s = s
         self.armedValues = s.getArmedValves()
@@ -49,7 +49,8 @@ class Bridge(QObject):
     #     s = "YODAYO! 1"
 
     #     return s
-
+    
+    #returns the value associated with the sensor
     @Slot(str, result=str)
     def updateGage(self, gageName):
         try:
@@ -94,11 +95,11 @@ class Bridge(QObject):
 
     @Slot()
     def sendCommand(self):
-        serverFunc.appendCommand(self.valveStates, self.armedValues)
+        serverThreads.appendCommand(self.valveStates, self.armedValues)
         
 
 
-def guiThreadFunc(s:server.Server):
+def guiThreadFunc(s:serverFunc.Server):
 
     #newobject = myClass()
 

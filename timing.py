@@ -19,3 +19,11 @@ def missionTime():
     time_stamp = "{:0>9.3f}".format(time_ellapsed)
 
     return time_stamp
+
+def getTimeDiff(first:str, last:str):
+    
+    sol = float(last) - float(first)
+    if sol < 0:
+        #print("WARNING: SERVER OPERATED THRU MIDNIGHT")
+        sol += 86400
+    return sol

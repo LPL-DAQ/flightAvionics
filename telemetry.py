@@ -1,5 +1,8 @@
 import socket
-from configparser import ConfigParser
+
+import PTLib
+import TCLib
+import SVLib
 
 #class for all sensor HW
 class Readings:
@@ -54,61 +57,18 @@ class valveStates:
     
     #execute valve command...needs error check
     def execute(self,name:str,value:str,time:str):
-        if value == 'OPEN_':
-            self.SVs[name].openValve()
-            self.update(name,'OPENED_',time)
-        elif value == 'CLOSE':
-            self.SVs[name].closeValve()
-            self.update(name,'CLOSED_',time)
+        if value == 'ON':
+            self.SVs[name].powerOFF()
+            self.update(name,'OFF',time)
+        elif value == 'OFF':
+            self.SVs[name].powerON()
+            self.update(name,'ON',time)
 
-
-#returns a dict of the consoleType members if the file is valid and None if the file does not exist
-def verifyExistence(filepath:str, consoleType:str) -> dict:
-    parser = ConfigParser()
-    try:
-        with open(filepath) as f:
-            parser.read_file(f)
-    except IOError:
-        print("ERROR:", filepath, "not found")
-        exit()
-    #parser = parser.sections()
-    if consoleType not in parser.sections():
-        print("ERROR: [", consoleType, "] is missing from ", filepath, sep = "")
-        exit()
-    fileDict = dict()
-    for i in parser.items(consoleType):
-        fileDict[i[0]] = i[1]
-    return fileDict
-
-#checks file validity and outputs ip and port
-def getIPAddress(filepath):
-    valid = True
-    ipAddress = verifyExistence(filepath, "address")
-    if ipAddress == None:
-        return None, None
-    
-    if "ip" not in ipAddress:
-        valid = False
-        print("ERROR: ip not specified in [address] section")
-    else:
-        ip = ipAddress["ip"]
-    if "port" not in ipAddress:
-        valid = False
-        print("ERROR: port is not specifed in the [address] section")
-    else:
-        try:
-            port = int(ipAddress["port"])
-            if port < 1024 or port >49151:
-                print("ERROR: Port ranges can only be from 1024 - 49151")
-                valid = False
-        except:
-            valid = False
-            print("ERROR: port is an invalid int")
-
-    if not valid:
-        return None, None
-    else:
-        return ip, port
+    def getValveState(self, name:str):
+        if name not in self.SVs:
+            print("WARNING: Unknown Valve name")
+            return None
+        return self.SVs[name]["type"]
 
 #sends msg given a socket
 def sendMsg(socket, msg):
@@ -122,3 +82,5 @@ def sendReading(name:str, reading:dict, socket: socket.socket):
     msg = "#" + name + "/" + value + "/" + time
     
     sendMsg(socket, msg)
+
+
