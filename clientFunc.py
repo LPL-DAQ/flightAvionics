@@ -14,7 +14,7 @@ class Client:
         self.FVreadings = FVreadings
         self.FVstates = FVstates
         #pt_poll, sendrate
-        self.clientIni = telemetry.parseIniFile(filepath, "client")
+        self.clientIni = verify.verifyClientIni(filepath)
         
         #socket stuff
         self.connected = False

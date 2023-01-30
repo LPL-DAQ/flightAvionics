@@ -1,11 +1,8 @@
-import time
 import socket
 import threading
 
 import queue
 import timing
-import telemetry
-import serverThreads
 import verify
 
 class Server:
