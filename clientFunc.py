@@ -7,6 +7,9 @@ import telemetry
 import timing 
 
 
+messengerLock = threading.Lock()
+
+
 class Client:
     def __init__(self, filepath:str, FVreadings:telemetry.Readings, FVstates:telemetry.valveStates) -> None:
         #TODO
@@ -19,9 +22,9 @@ class Client:
         #socket stuff
         self.connected = False
         self.ip, self.port = verify.getIPAddress(filepath)
-        self.clientSocket = self.findConnection(self.ip, self.port)
+        self.clientSocket = self.findConnection()
 
-        self.messengerLock = threading.Lock()
+        #self.messengerLock = threading.Lock()
         
     def getFVReadings(self):
         return self.FVreadings
@@ -46,13 +49,14 @@ class Client:
                 print("Looking for server")
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect((self.ip, self.port))
-                #s.setblocking(0) #might change to settimeout
+                s.setblocking(1) #might change to settimeout
                 
                 self.connected = True
                 
-                print("Connection established with server. IP:{}    port:{}".format(ip , port))
+                print("Connection established with server. IP:{}    port:{}".format(self.ip , self.port))
                 return s
-            except:
+            except Exception as e:
+                print(e)
                 print("Could not connect...retrying in 5 seconds")
                 time.sleep(5)
 
@@ -63,9 +67,9 @@ class Client:
             self.FVreadings.refreshAll()
             try:
                 for sensorName in self.FVreadings.readings:
-                    self.messengerLock.acquire()
-                    telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName])
-                    self.messengerLock.release()
+                    #messengerLock.acquire()
+                    telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
+                    #messengerLock.release()
                     time.sleep(period)
             except Exception as e:
                 #remove this ltr
@@ -85,28 +89,34 @@ class Client:
                 print("something unexpected occurred ¯\_(ツ)_/¯")
 
     def receiveNExecute(self):
-        try:
-            while True:
-                if self.connected:
-                    msg = self.clientSocket.recv(1024)
-                    msg = msg.decode("utf-8")
-                    data = msg.split("#")
-                    while data:
+        while True:
+            if self.connected:
+                
+                msg = self.clientSocket.recv(1024)
+                
+                msg = msg.decode("utf-8")
+                data = msg.split("#")
+                try:
+                    print(msg)
+                    while len(data) != 0:
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
-                            name = received_reading[0]
-                            value = received_reading[1]
-                            time = received_reading[2]
-                            print("Received:", name, value, time)
-                            self.FVstates.execute(name,value,time)
-                            self.messengerLock.acquire()
-                            telemetry.sendReading(name, self.FVstates.getValveState(name), timing.missionTime())
-                            self.messengerLock.release()
-                            
-        except Exception as e:
-            print("Exception", e)
+                            if len(received_reading) == 2:
+                                name = received_reading[0]
+                                value = received_reading[1]
+                                print("Received:", name, value)
+                                self.FVstates.execute(name,value)
+                                #messengerLock.acquire()
+                                telemetry.sendReading(name, self.FVstates.getValveState(name), timing.missionTime())
+                                #messengerLock.release()
+                            else:
+                                print("FUCKED UP MSG :)")
+                        data.remove(data[0])
+                
+                        
+                except Exception as e:
+                    print("Exception", e)
         
-    def verifyNConfirm(self):
 
 
 
