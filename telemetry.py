@@ -1,8 +1,5 @@
 import socket
 
-import PTLib
-import TCLib
-import SVLib
 
 #class for all sensor HW
 class Readings:
@@ -56,13 +53,13 @@ class valveStates:
         self.states[name] = new_reading
     
     #execute valve command...needs error check
-    def execute(self,name:str,value:str,time:str):
+    def execute(self,name:str,value:str):
         if value == 'ON':
             self.SVs[name].powerOFF()
-            self.update(name,'OFF',time)
+            self.update(name,'OFF')
         elif value == 'OFF':
             self.SVs[name].powerON()
-            self.update(name,'ON',time)
+            self.update(name,'ON')
 
     def getValveState(self, name:str):
         if name not in self.SVs:

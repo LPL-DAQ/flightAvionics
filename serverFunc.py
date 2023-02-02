@@ -1,32 +1,30 @@
-import time
 import socket
 import threading
 
+import telemetry
 import queue
 import timing
-import telemetry
-import serverThreads
 import verify
 
 class Server:
     def __init__(self, filepath:str) -> None:
         #server ini data
         self.serverIni = verify.verifyServerIni(filepath)
+        self.fp = self.serverIni["fp"]
         #socket stuff
         self.ip, self.port = verify.getIPAddress(filepath)
         self.socket = None
+        self.address = self.establishAddress(self.ip, self.port)
         self.connect = False
         #PT and TC data
         self.dataReadings = dict()
         #SV control data
-        self.pendingValves = dict()
+        self.pendingValves = []
         self.valveReadings = dict()
         self.armedValves = dict()
         self.commandQ = queue.Queue()
         
-        self.workLock = threading.Lock()
-        self.dataLock = threading.Lock()
-        self.sockLock = threading.Lock()
+        self.pendLock = threading.Lock()
 
     #standard getter methods
     def getDataReadings(self):
@@ -51,35 +49,40 @@ class Server:
         return self.commandQ  
     def getPendingValves(self):
         return self.pendingValves
+    def getPendLock(self):
+        return self.pendLock
+
+    def establishAddress(self, ip:str, port:int):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print(f"IP address: '{ip}' Port {port}")
+        s.bind((ip, port))
+        return s
     
     def closeSocket(self):
-        self.lock.acquire()
+        #self.sockLock.acquire()
         self.socket.close()
         self.connect = False
-        self.lock.release()
+        #self.sockLock.release()
 
     def establishConnection(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print(f"IP address: '{self.ip}' Port {self.port}")
-        s.bind((self.ip,self.port))
         # try:
         #     s.bind((self.ip,self.port))
         # except:
         #     print("Error: Invalid ip address please change the ini file")
         while not self.connect:
             print("Awaiting connection from client")
-            s.listen(1)
-            clientsocket, address = s.accept()
+            self.address.listen(1)
+            clientsocket, address = self.address.accept()
             
-            self.sockLock.acquire()
+            #self.sockLock.acquire()
             self.socket = clientsocket
             self.connect = True
-            self.sockLock.release()
+            #self.sockLock.release()
 
             print(f"Connection from {address} has been established.")
     
     def receiveData(self):
-        msg = self.s.recv(1024)
+        msg = self.socket.recv(1024)
         msg = msg.decode("utf-8")
         data = msg.split("#")
         try:
@@ -90,14 +93,14 @@ class Server:
                         name = received_reading[0]
                         value = received_reading[1]
                         time = received_reading[2]
-                        if name[:2] == "SV":
-                            self.verifyValve(name, value, time)
-                        else:
-                            self.dataLock.acquire()
-                            self.dataReadings[name] = value
-                            self.dataLock.release()
-                            self.fp.write(name + " " + value + " " + time + "\n")
-
+                        self.dataReadings[name] =  value 
+                        #self.fp.write(name + " " + value + " " + time + "\n")
+                        #print(name + " " + value + " " + time)
+                    elif len(received_reading) == 2:
+                        valve = received_reading[0]
+                        state = received_reading[1]
+                        self.verifyValve(name, value)
+                        self.valveReadings[name] = value
                     else:
                         print("WARNING: Malformed message received", data[0])
                 data.remove(data[0])
@@ -119,7 +122,7 @@ class Server:
     def addValve(self, valveName:str, state:str, time:str):
         if valveName not in self.pendingValves:
             self.workLock.acquire()
-            self.pendingValves.update(valveName, (state, time))
+            self.pendingValves[valveName] = (state, time)
             self.workLock.release()
             return True
         else:
@@ -144,8 +147,9 @@ class Server:
                         newState = "OFF"
                     else:#test msg for debug purposes :3
                         print("FUCKED UP VALVE CMD MSG BUDDY")
+                        print("State:", state)
                         continue
-                    msg = "#" + valve + "/" + newState + "/" + time
+                    msg = "#" + valve + "/" + newState
                     self.commandQ.put(msg)
                     self.addValve(valve, newState, time) #adds to list of valves that have an outgoing command
                     print("SENDING", newState, "MSG FOR:", valve)

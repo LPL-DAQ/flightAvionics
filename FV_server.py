@@ -1,7 +1,4 @@
-import telemetry
-import timing
 import gui
-import socket
 import serverThreads
 import serverFunc
 

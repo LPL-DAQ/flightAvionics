@@ -69,14 +69,14 @@ class Bridge(QObject):
         #return true if valve is open
         try:
             reading = self.valveStates[valveName]
-            if reading == 'OPENED_':
+            if reading == 'ON':
                 return True
             else:
                 return False
 
         except:
             #self.data.update(valveName,'OPENED_','000000')
-            self.valveStates[valveName] = "OPENED_"
+            self.valveStates[valveName] = "OFF"
             return False
 
     
@@ -95,7 +95,8 @@ class Bridge(QObject):
 
     @Slot()
     def sendCommand(self):
-        serverThreads.appendCommand(self.valveStates, self.armedValues)
+
+        self.s.appendCommandQ()
         
 
 
