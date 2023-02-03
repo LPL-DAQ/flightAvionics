@@ -33,6 +33,7 @@ Intended interations:
             further commands to the value until an existing command timeouts
             checks all existing threads every ~1 second to see if a timeout has
             occurred. 
+        - Implement a valve command thread to listen and wait for commands
         * is there a way to ensure a valve works from a software perspective
 
     Console
