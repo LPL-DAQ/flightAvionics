@@ -69,8 +69,8 @@ def parsePTini(PTfile: str):
 
 
     #PI commands ... ignore for now
-    SPI0 = openSPI(0, 1000)
-    SPI1 = openSPI(1, 1000)
+    SPI0 = openSPI(0, 0, 1000)
+    SPI1 = openSPI(0, 1, 1000)
     SPI2= openSPI(1,0,1000) 
     SPI3= openSPI(1,1,1000)
 
