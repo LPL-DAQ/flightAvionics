@@ -97,9 +97,9 @@ Item {
     }
     function server_status(){
         if (bridge.serverStatus){
-            text7.text= qsTr("CONNECTED")
+            text17.text= qsTr("CONNECTED")
         }else{
-            text7.text= qsTr("NOT CONNECTED")
+            text17.text= qsTr("NOT CONNECTED")
         }
         }
 
@@ -501,7 +501,456 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.bold: true
                     }
-                }
+                
+                    Column {
+                        id: column
+                        height: 200
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.topMargin: 45
+                        anchors.leftMargin: 0
+                        anchors.rightMargin: 0
+
+                        Row {
+                            id: row
+                            height: 40
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.leftMargin: 0
+                            anchors.rightMargin: 0
+
+                            Rectangle {
+                                id: rectangle5
+                                height: 40
+                                color: "#00ffffff"
+                                border.color: "#ffffff"
+                                anchors.left: parent.left
+                                anchors.right: rectangle6.left
+                                anchors.leftMargin: 0
+                                anchors.rightMargin: 0
+
+                                Text {
+                                    id: text6
+                                    color: "#ffffff"
+                                    text: qsTr("TIMER")
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 25
+                                    horizontalAlignment: Text.AlignLeft
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                }
+                            }
+
+                            Rectangle {
+                                id: rectangle6
+                                width: 138
+                                height: 40
+                                color: "#000000"
+                                border.color: "#ffffff"
+                                anchors.right: rectangle7.left
+                                anchors.rightMargin: 0
+
+                                TextField {
+                                    id: textField
+                                    opacity: 1
+                                    visible: true
+                                    color: "#26bd2e"
+                                    text: "30"
+                                    readOnly: false
+                                    anchors.fill: parent
+                                    font.pixelSize: 22
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    hoverEnabled: false
+                                    anchors.rightMargin: 0
+                                    anchors.bottomMargin: 0
+                                    anchors.leftMargin: 0
+                                    anchors.topMargin: 0
+                                    placeholderTextColor: "#00ffffff"
+                                    placeholderText: qsTr("Text Field")
+                                    background: Rectangle {
+                                        id: rectangle_txt_bg_1
+                                        width: 138
+                                        height: 40
+                                        color: "#00ffffff"
+                                        border.color: "#ffffff"
+                                    }
+                                }
+                            }
+
+                            Rectangle {
+                                id: rectangle7
+                                width: 138
+                                height: 40
+                                color: "#00ffffff"
+                                border.color: "#ffffff"
+                                anchors.right: parent.right
+                                anchors.rightMargin: 0
+                                Text {
+                                    id: text7
+                                    color: "#65e5e7"
+                                    text: qsTr("s")
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 22
+                                    horizontalAlignment: Text.AlignLeft
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                }
+                            }
+                         }
+                        Row {
+                            id: row1
+                            height: 40
+                            anchors.left: column.left
+                            anchors.right: column.right
+                            anchors.top: column.top
+                            anchors.topMargin: 40
+                            anchors.leftMargin: 0
+                            anchors.rightMargin: 0
+                            Rectangle {
+                                id: rectangle8
+                                height: 40
+                                color: "#00ffffff"
+                                border.color: "#ffffff"
+                                anchors.left: parent.left
+                                anchors.right: rectangle9.left
+                                anchors.leftMargin: 0
+                                anchors.rightMargin: 0
+
+                                Text {
+                                    id: text8
+                                    color: "#ffffff"
+                                    text: qsTr("PBVF201")
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 25
+                                    horizontalAlignment: Text.AlignLeft
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                }
+                            }
+
+                            Rectangle {
+                                    id: rectangle9
+                                    width: 138
+                                    height: 40
+                                    color: "#000000"
+                                    border.color: "#ffffff"
+                                    anchors.right: rectangle11.left
+                                    anchors.rightMargin: 0
+
+                                    TextField {
+                                        id: textField2
+                                        opacity: 1
+                                        visible: true
+                                        color: "#26bd2e"
+                                        readOnly: false
+                                        text: "30"
+                                        anchors.fill: parent
+                                        font.pixelSize: 22
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        hoverEnabled: false
+                                        anchors.rightMargin: 0
+                                        anchors.bottomMargin: 0
+                                        anchors.leftMargin: 0
+                                        anchors.topMargin: 0
+                                        placeholderTextColor: "#00ffffff"
+                                        placeholderText: qsTr("Text Field")
+                                        background: Rectangle {
+                                            id: rectangle_txt_bg_3
+                                            width: 138
+                                            height: 40
+                                            color: "#00ffffff"
+                                            border.color: "#ffffff"
+                                        }
+                                    }
+                                }
+
+                            Rectangle {
+                                    id: rectangle11
+                                    width: 138
+                                    height: 40
+                                    color: "#00ffffff"
+                                    border.color: "#ffffff"
+                                    anchors.right: parent.right
+                                    anchors.rightMargin: 0
+                                    Text {
+                                        id: text9
+                                        color: "#65e5e7"
+                                        text: qsTr("ms")
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pixelSize: 22
+                                        horizontalAlignment: Text.AlignLeft
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                }
+                             
+                         }
+                        Row {
+                            id: row2
+                            height: 40
+                            anchors.left: column.right
+                            anchors.right: column.left
+                            anchors.top: column.top
+                            anchors.topMargin: 80
+                            anchors.leftMargin: 0
+                            anchors.rightMargin: 0
+                            Rectangle {
+                                id: rectangle12
+                                height: 40
+                                color: "#00ffffff"
+                                border.color: "#ffffff"
+                                anchors.left: parent.right
+                                anchors.right: rectangle13.left
+                                anchors.leftMargin: 0
+                                anchors.rightMargin: 0
+
+                                Text {
+                                    id: text10
+                                    color: "#ffffff"
+                                    text: qsTr("EBVO102")
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 25
+                                    horizontalAlignment: Text.AlignLeft
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                }
+                            }
+
+                            Rectangle {
+                                    id: rectangle13
+                                    width: 138
+                                    height: 40
+                                    color: "#000000"
+                                    border.color: "#ffffff"
+                                    anchors.right: rectangle14.left
+                                    anchors.rightMargin: 0
+
+                                    TextField {
+                                        id: textField3
+                                        opacity: 1
+                                        visible: true
+                                        color: "#26bd2e"
+                                        readOnly: false
+                                        text: "30"
+                                        anchors.fill: parent
+                                        font.pixelSize: 22
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        hoverEnabled: false
+                                        anchors.rightMargin: 0
+                                        anchors.bottomMargin: 0
+                                        anchors.leftMargin: 0
+                                        anchors.topMargin: 0
+                                        placeholderTextColor: "#00ffffff"
+                                        placeholderText: qsTr("Text Field")
+                                        background: Rectangle {
+                                            id: rectangle_txt_bg_2
+                                            width: 138
+                                            height: 40
+                                            color: "#00ffffff"
+                                            border.color: "#ffffff"
+                                        }
+                                    }
+                                }
+
+                            Rectangle {
+                                    id: rectangle14
+                                    width: 138
+                                    height: 40
+                                    color: "#00ffffff"
+                                    border.color: "#ffffff"
+                                    anchors.right: row2.left
+                                    anchors.rightMargin: 0
+                                    Text {
+                                        id: text11
+                                        color: "#65e5e7"
+                                        text: qsTr("ms")
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pixelSize: 22
+                                        horizontalAlignment: Text.AlignLeft
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                }
+                             }
+                         }
+                        Row {
+                            id: row3
+                            height: 40
+                            anchors.left: column.right
+                            anchors.right: column.left
+                            anchors.top: column.top
+                            anchors.topMargin: 120
+                            anchors.leftMargin: 0
+                            anchors.rightMargin: 0
+                            Rectangle {
+                                id: rectangle15
+                                height: 40
+                                color: "#00ffffff"
+                                border.color: "#ffffff"
+                                anchors.left: parent.right
+                                anchors.right: rectangle16.left
+                                anchors.leftMargin: 0
+                                anchors.rightMargin: 0
+
+                                Text {
+                                    id: text12
+                                    color: "#ffffff"
+                                    text: qsTr("IGNITER")
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 25
+                                    horizontalAlignment: Text.AlignLeft
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                }
+                            }
+
+                            Rectangle {
+                                    id: rectangle16
+                                    width: 138
+                                    height: 40
+                                    color: "#000000"
+                                    border.color: "#ffffff"
+                                    anchors.right: rectangle17.left
+                                    anchors.rightMargin: 0
+
+                                    TextField {
+                                        id: textField4
+                                        opacity: 1
+                                        visible: true
+                                        color: "#26bd2e"
+                                        text: "30"
+                                        readOnly: false
+                                        anchors.fill: parent
+                                        font.pixelSize: 22
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        hoverEnabled: false
+                                        anchors.rightMargin: 0
+                                        anchors.bottomMargin: 0
+                                        anchors.leftMargin: 0
+                                        anchors.topMargin: 0
+                                        placeholderTextColor: "#00ffffff"
+                                        placeholderText: qsTr("Text Field")
+                                        background: Rectangle {
+                                            id: rectangle_txt_bg_4
+                                            width: 138
+                                            height: 40
+                                            color: "#00ffffff"
+                                            border.color: "#ffffff"
+                                        }
+                                    }
+                                }
+
+                            Rectangle {
+                                    id: rectangle17
+                                    width: 138
+                                    height: 40
+                                    color: "#00ffffff"
+                                    border.color: "#ffffff"
+                                    anchors.right: row3.left
+                                    anchors.rightMargin: 0
+                                    Text {
+                                        id: text13
+                                        color: "#65e5e7"
+                                        text: qsTr("ms")
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pixelSize: 22
+                                        horizontalAlignment: Text.AlignLeft
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                }
+                             
+                         }
+                            Button {
+                                    id: edit_button
+                                    y: 220
+                                    text: "EDIT"
+                                    width: 207
+                                    height: 76  
+                                    anchors.left: rectangle3.left
+                                    anchors.leftMargin: 33
+                                    
+                                    contentItem: Text {
+                                        text: edit_button.text
+                                        font.pointSize: 30
+                                        font.bold: true
+                                        opacity: enabled ? 1.0 : 0.3
+                                        color: "#ffffff"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+                                    background: Rectangle {
+                                        implicitWidth: 100
+                                        implicitHeight: 40
+                                        opacity: enabled ? 1 : 0.3
+                                        color: edit_button.down ? "#865006" : "#373637"
+                                        border.color: "#ffffff"
+                                        border.width: 1
+                                        radius: 4
+                                    }
+                                   
+                                }   
+                                Button {
+                                    id: save_button
+                                    y: 220
+                                    text: "SAVE"
+                                    width: 207
+                                    height: 76  
+                                    anchors.right: rectangle3.right
+                                    anchors.rightMargin: 33
+                                    
+                                    contentItem: Text {
+                                        text: save_button.text
+                                        font.pointSize: 30
+                                        font.bold: true
+                                        opacity: enabled ? 1.0 : 0.3
+                                        color: "#ffffff"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+                                    background: Rectangle {
+                                        implicitWidth: 100
+                                        implicitHeight: 40
+                                        opacity: enabled ? 1 : 0.3
+                                        color: save_button.down ? "#865006" : "#373637"
+                                        border.color: "#ffffff"
+                                        border.width: 1
+                                        radius: 4
+                                    }
+                                   
+                                }  
+                                Button {
+                                    id: send_button
+                                    y: 320
+                                    text: "SEND TIMING"
+                                    height: 76  
+                                    anchors.left: rectangle3.left
+                                    anchors.leftMargin: 33
+                                    anchors.right: rectangle3.right
+                                    anchors.rightMargin: 33
+                                    
+                                    contentItem: Text {
+                                        text: send_button.text
+                                        font.pointSize: 30
+                                        font.bold: true
+                                        opacity: enabled ? 1.0 : 0.3
+                                        color: "#ffffff"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+                                    background: Rectangle {
+                                        implicitWidth: 100
+                                        implicitHeight: 40
+                                        opacity: enabled ? 1 : 0.3
+                                        color: send_button.down ? "#732727" : "#cb2a2a"
+                                        border.color: "#ffffff"
+                                        border.width: 1
+                                        radius: 4
+                                    }
+                                   
+                                }                                          
+                                
+                     }
 
                 Gage {
                     id: ptf401
@@ -956,7 +1405,7 @@ Item {
             }
         }
         Text {
-            id: text6
+            id: text16
             x: 49
             y: 1214
             width: 250
@@ -968,7 +1417,7 @@ Item {
         }
         
         Text {
-            id: text7
+            id: text17
             x: 305
             y: 1214
             width: 250
