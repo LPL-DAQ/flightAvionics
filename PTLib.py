@@ -48,6 +48,17 @@ class PT:
         self.pressure = self.voltsToPSI(self.voltage)
         return self.pressure
 
+class DP(PT):
+    tank_ht: float = 0
+    density: float = 0
+    percentage_fill: float = 0
+
+    def get_fill(self):
+        self.updatePressure()
+        infil_density = self.pressure / (self.density * 9.81)
+        self.percentage_fill = infil_density/571.07 
+        return self.percentage_fill
+    
 def openSPI(chip, frequency):
     #opens an SPI channel
     spi = spidev.SpiDev()
@@ -88,15 +99,25 @@ def parsePTini(PTfile: str):
     for PTname in PTparser.sections():
         PTport = PTparser[PTname]['port']
         PTchannel = int(PTport[1])-1
+        if PTname[:2] != "DP":
+            if PTport[0] == 'A':
+                PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'B':
+                PTs[PTname] = PT(PTname, ADC1, PTchannel, PToffset, PTslope)
+        else:
+            if PTport[0] == 'A':
+                PTs[PTname] = DP(PTname, ADC0, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'B':
+                PTs[PTname] = DP(PTname, ADC1, PTchannel, PToffset, PTslope)
+            PTs[PTname].tank_ht = float(PTparser[PTname]['tank_ht']) #tank height
+            PTs[PTname].density = float(PTparser[PTname]['density']) #density 
+
+
         PTslope = float(PTparser[PTname]['slope'])
         PToffset = float(PTparser[PTname]['offset'])
         #hard coded values for ADC initializations 
         #should check for validity here
-        if PTport[0] == 'A':
-            PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
-        elif PTport[0] == 'B':
-            PTs[PTname] = PT(PTname, ADC1, PTchannel, PToffset, PTslope)
-
+        
         PTLoadCount += 1
         #print loading bar
     print("Successfully configured", PTLoadCount, "to the PI")
@@ -109,6 +130,8 @@ def refreshPTs(PT_dict: dict(), PT_freq_Hz: float):
     while True:
         for PT_name in PT_dict:
             PT_dict[PT_name].updatePressure()
+            if PT_name[:2] == "DP":
+              PT_dict[PT_name].get_fill()
             #print(PT_dict[PT_name].getName() + " " + str(v1)) debug lines for value
             time.sleep(PT_period)
 

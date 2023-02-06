@@ -14,7 +14,7 @@ class Server:
         #socket stuff
         self.ip, self.port = verify.getIPAddress(filepath)
         self.socket = None
-        self.address = self.establishAddress(self.ip, self.port)
+        #self.address = self.establishAddress(self.ip, self.port)
         self.connect = False
         #PT and TC data
         self.dataReadings = dict()
