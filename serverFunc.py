@@ -14,7 +14,7 @@ class Server:
         #socket stuff
         self.ip, self.port = verify.getIPAddress(filepath)
         self.socket = None
-        self.address = self.establishAddress(self.ip, self.port)
+        self.address = None
         self.connect = False
         #PT and TC data
         self.dataReadings = dict()
@@ -59,20 +59,19 @@ class Server:
         return s
     
     def closeSocket(self):
-        #self.sockLock.acquire()
         self.socket.close()
         self.connect = False
-        #self.sockLock.release()
 
     def establishConnection(self):
         # try:
         #     s.bind((self.ip,self.port))
         # except:
         #     print("Error: Invalid ip address please change the ini file")
+        s = self.establishAddress(self.ip, self.address)
         while not self.connect:
             print("Awaiting connection from client")
-            self.address.listen(1)
-            clientsocket, address = self.address.accept()
+            s.listen(1)
+            clientsocket, address = s.accept()
             
             #self.sockLock.acquire()
             self.socket = clientsocket
