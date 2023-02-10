@@ -48,10 +48,10 @@ class PT:
         self.pressure = self.voltsToPSI(self.voltage)
         return self.pressure
 
-def openSPI(chip, frequency):
+def openSPI(channel, chip, frequency):
     #opens an SPI channel
     spi = spidev.SpiDev()
-    spi.open(0,chip)
+    spi.open(channel,chip)
     spi.max_speed_hz = frequency
     return spi
 
