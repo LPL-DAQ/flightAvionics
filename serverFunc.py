@@ -19,7 +19,7 @@ class Server:
         #PT and TC data
         self.dataReadings = dict()
         #SV control data
-        self.pendingValves = []
+        self.pendingValves = dict()
         self.valveReadings = dict()
         self.armedValves = dict()
         self.commandQ = queue.Queue()
@@ -54,6 +54,7 @@ class Server:
 
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("TESTING")
         print(f"IP address: '{ip}' Port {port}")
         s.bind((ip, port))
         return s
@@ -67,7 +68,7 @@ class Server:
         #     s.bind((self.ip,self.port))
         # except:
         #     print("Error: Invalid ip address please change the ini file")
-        s = self.establishAddress(self.ip, self.address)
+        s = self.establishAddress(self.ip, self.port)
         while not self.connect:
             print("Awaiting connection from client")
             s.listen(1)
@@ -88,18 +89,20 @@ class Server:
             while data:
                 if len(data[0]) != 0: #value
                     received_reading = data[0].split("/")
+                    print(received_reading)
                     if len(received_reading) == 3:
-                        name = received_reading[0]
-                        value = received_reading[1]
+                        sensorName = received_reading[0]
+                        sensorValue = received_reading[1]
                         time = received_reading[2]
-                        self.dataReadings[name] =  value 
+                        self.dataReadings[sensorName] = sensorValue
                         #self.fp.write(name + " " + value + " " + time + "\n")
                         #print(name + " " + value + " " + time)
                     elif len(received_reading) == 2:
-                        valve = received_reading[0]
-                        state = received_reading[1]
-                        self.verifyValve(name, value)
-                        self.valveReadings[name] = value
+                        print("THis triggered")
+                        valveName = received_reading[0]
+                        valveState = received_reading[1]
+                        self.verifyValve(valveName, valveState)
+                        self.valveReadings[valveName] = valveState
                     else:
                         print("WARNING: Malformed message received", data[0])
                 data.remove(data[0])
@@ -110,9 +113,9 @@ class Server:
     
     def removeValve(self, valveName:str):
         if valveName in self.pendingValves:
-            self.workLock.acquire()
-            self.pendingValves.pop(valveName)
-            self.workLock.release()
+            self.pendLock.acquire()
+            del self.pendingValves[valveName]
+            self.pendLock.release()
             return True
         else:
             print("ERROR:", valveName, "Message Never Sent")
@@ -120,9 +123,9 @@ class Server:
     
     def addValve(self, valveName:str, state:str, time:str):
         if valveName not in self.pendingValves:
-            self.workLock.acquire()
+            self.pendLock.acquire()
             self.pendingValves[valveName] = (state, time)
-            self.workLock.release()
+            self.pendLock.release()
             return True
         else:
             print("ERROR:", valveName, "already in work queue")
