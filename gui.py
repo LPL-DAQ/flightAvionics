@@ -36,6 +36,8 @@ class Bridge(QObject):
         self.guiReadings = s.getDataReadings()
         self.valveStates = s.getValveReadings()
         self.serverStatus = s.isConnected()
+        self.percent1=0
+        self.percent2=0
 
 
     # guiReadings: dataRead.Readings
@@ -59,7 +61,42 @@ class Bridge(QObject):
 
         except Exception as e:
             return "N/A"
+        
+    @Slot(str,str, result=int)        
+    def regCommand(self, name:str, direction:str):
+        if name=="PRH001": 
+            if direction == "increase":
+                if self.armedValues[name]=="ARMED":
+                    self.percent1+=1
+                    percent=self.percent1
+            else:
+                if self.armedValues[name]=="ARMED":
+                    self.percent1-=1
+                    percent=self.percent1
 
+        if name=="PRH002":
+            if direction == "increase":
+                if self.armedValues[name]=="ARMED":
+                    self.percent2+=1
+                    percent=self.percent2
+            else:
+                if self.armedValues[name]=="ARMED":
+                    self.percent2-=1
+                    percent=self.percent2
+        
+        print(name, "open percent: ", percent )
+        return percent
+    
+    @Slot(str,result=str)        
+    def regState(self,name):
+        if name=="PRH001":
+            return str(self.percent1)
+        else:
+            return str(self.percent2)
+        
+         
+
+    
     @Slot(str,str)#arming the valves to their default state
     def armValve(self, valveName:str, state:str):
         self.armedValues[valveName]=state
