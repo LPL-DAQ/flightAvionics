@@ -5,6 +5,7 @@ import threading
 import verify
 import telemetry
 import timing 
+from crcLib import CRC
 
 
 messengerLock = threading.Lock()
@@ -86,7 +87,7 @@ class Client:
                 self.clientSocket = self.findConnection()
             except Exception as e:
                 print(e)
-                print("something unexpected occurred ¯\_(ツ)_/¯")
+                print("something unexpected occurred ¯\\_(ツ)_/¯")
 
     def receiveNExecute(self):
         while True:
@@ -95,23 +96,29 @@ class Client:
                 msg = self.clientSocket.recv(1024)
                 
                 msg = msg.decode("utf-8")
-                data = msg.split("#")
-                try:
-                    print(msg)
-                    while len(data) != 0:
-                        if len(data[0]) != 0:
-                            received_reading = data[0].split("/")
-                            if len(received_reading) == 2:
-                                name = received_reading[0]
-                                value = received_reading[1]
-                                print("Received:", name, value)
-                                self.FVstates.execute(name,value)
-                                #messengerLock.acquire()
-                                telemetry.sendReading(name, self.FVstates.getValveState(name), timing.missionTime())
-                                #messengerLock.release()
-                            else:
-                                print("FUCKED UP MSG :)")
-                        data.remove(data[0])
+
+                if CRC.check_crc(msg[:-2],msg[-1]) != -1:
+                    msg = msg[:-2]
+                    
+                    data = msg.split("#")
+                    try:
+                        print(msg)
+                        while len(data) != 0:
+                            if len(data[0]) != 0:
+                                received_reading = data[0].split("/")
+                                if len(received_reading) == 2:
+                                    name = received_reading[0]
+                                    value = received_reading[1]
+                                    print("Received:", name, value)
+                                    self.FVstates.execute(name,value)
+                                    #messengerLock.acquire()
+                                    telemetry.sendReading(name, self.FVstates.getValveState(name), timing.missionTime())
+                                    #messengerLock.release()
+                                else:
+                                    print("FUCKED UP MSG :)")
+                            data.remove(data[0])
+                else:
+                    print("Bad CRC")
                 
                         
                 except Exception as e:

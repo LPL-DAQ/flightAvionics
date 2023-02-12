@@ -1,4 +1,6 @@
 import socket
+from crcLib import CRC
+
 
 
 #class for all sensor HW
@@ -70,6 +72,7 @@ class valveStates:
 #sends msg given a socket
 def sendMsg(socket, msg):
     msg = str.encode(msg)
+    msg.append(CRC.encode(msg))
     socket.sendall(msg)
 
 def sendReading(name:str, reading:dict, socket: socket.socket):

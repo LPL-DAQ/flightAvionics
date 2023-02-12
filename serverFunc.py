@@ -6,6 +6,8 @@ import queue
 import timing
 import verify
 
+from crcLib import CRC
+
 class Server:
     def __init__(self, filepath:str) -> None:
         #server ini data
@@ -83,29 +85,35 @@ class Server:
     def receiveData(self):
         msg = self.socket.recv(1024)
         msg = msg.decode("utf-8")
-        data = msg.split("#")
-        try:
-            while data:
-                if len(data[0]) != 0: #value
-                    received_reading = data[0].split("/")
-                    if len(received_reading) == 3:
-                        name = received_reading[0]
-                        value = received_reading[1]
-                        time = received_reading[2]
-                        self.dataReadings[name] =  value 
-                        #self.fp.write(name + " " + value + " " + time + "\n")
-                        #print(name + " " + value + " " + time)
-                    elif len(received_reading) == 2:
-                        valve = received_reading[0]
-                        state = received_reading[1]
-                        self.verifyValve(name, value)
-                        self.valveReadings[name] = value
-                    else:
-                        print("WARNING: Malformed message received", data[0])
-                data.remove(data[0])
-        except Exception as e:
-            print(e)
-            print('Data processing error occured')
+        
+        if CRC.check_crc(msg[:-2],msg[-1]) != -1:
+            msg = msg[:-2]
+            data = msg.split("#")
+            try:
+                while data:
+                    if len(data[0]) != 0: #value
+                        received_reading = data[0].split("/")
+                        if len(received_reading) == 3:
+                            name = received_reading[0]
+                            value = received_reading[1]
+                            time = received_reading[2]
+                            self.dataReadings[name] =  value 
+                            #self.fp.write(name + " " + value + " " + time + "\n")
+                            #print(name + " " + value + " " + time)
+                        elif len(received_reading) == 2:
+                            valve = received_reading[0]
+                            state = received_reading[1]
+                            self.verifyValve(name, value)
+                            self.valveReadings[name] = value
+                        else:
+                            print("WARNING: Malformed message received", data[0])
+                    data.remove(data[0])
+            except Exception as e:
+                print(e)
+                print('Data processing error occured')
+
+        else:
+            print("Bad CRC")
             
     
     def removeValve(self, valveName:str):
