@@ -24,7 +24,7 @@ class Client:
         self.ip, self.port = verify.getIPAddress(filepath)
         self.clientSocket = self.findConnection()
 
-        #self.messengerLock = threading.Lock()
+        self.messengerLock = threading.Lock()
         
     def getFVReadings(self):
         return self.FVreadings
@@ -67,9 +67,9 @@ class Client:
             self.FVreadings.refreshAll()
             try:
                 for sensorName in self.FVreadings.readings:
-                    #messengerLock.acquire()
-                    telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
-                    #messengerLock.release()
+                    messengerLock.acquire()
+                    #telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
+                    messengerLock.release()
                     time.sleep(period)
             except Exception as e:
                 #remove this ltr
@@ -106,9 +106,13 @@ class Client:
                                 value = received_reading[1]
                                 print("Received:", name, value)
                                 self.FVstates.execute(name,value)
-                                #messengerLock.acquire()
-                                telemetry.sendReading(name, self.FVstates.getValveState(name), timing.missionTime())
-                                #messengerLock.release()
+                                print("SENDING")
+                                
+                                msg = "#" + name + "/" + self.FVstates.getValveState(name)
+                                messengerLock.acquire()
+                                telemetry.sendMsg(self.clientSocket, msg)
+                                messengerLock.release()
+                                print("MSG SENT")
                             else:
                                 print("FUCKED UP MSG :)")
                         data.remove(data[0])

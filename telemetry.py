@@ -45,27 +45,28 @@ class valveStates:
         self.states = dict()
 
     #updates the state of a sensor
-    def update(self,name:str,value:str,time:str):
-        new_reading = dict()
-        new_reading['value']= value
-        new_reading['time']= time
-        new_reading['type']= name[0:2]
-        self.states[name] = new_reading
+    def update(self,name:str,value:str):
+        # new_reading = dict()
+        # # new_reading['value']= value
+        # # new_reading['type']= name[0:2]
+        self.states[name] = value
     
     #execute valve command...needs error check
     def execute(self,name:str,value:str):
         if value == 'ON':
-            self.SVs[name].powerOFF()
-            self.update(name,'OFF')
-        elif value == 'OFF':
             self.SVs[name].powerON()
             self.update(name,'ON')
+        elif value == 'OFF':
+            self.SVs[name].powerOFF()
+            self.update(name,'OFF')
+        else:
+            print("DID NOTHING:", value)
 
     def getValveState(self, name:str):
-        if name not in self.SVs:
+        if name not in self.states:
             print("WARNING: Unknown Valve name")
             return None
-        return self.SVs[name]["type"]
+        return self.states[name]
 
 #sends msg given a socket
 def sendMsg(socket, msg):

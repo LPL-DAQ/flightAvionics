@@ -19,7 +19,7 @@ class Server:
         #PT and TC data
         self.dataReadings = dict()
         #SV control data
-        self.pendingValves = []
+        self.pendingValves = dict()
         self.valveReadings = dict()
         self.armedValves = dict()
         self.commandQ = queue.Queue()
@@ -54,6 +54,7 @@ class Server:
 
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("TESTING")
         print(f"IP address: '{ip}' Port {port}")
         s.bind((ip, port))
         return s
@@ -67,7 +68,7 @@ class Server:
         #     s.bind((self.ip,self.port))
         # except:
         #     print("Error: Invalid ip address please change the ini file")
-        s = self.establishAddress(self.ip, self.address)
+        s = self.establishAddress(self.ip, self.port)
         while not self.connect:
             print("Awaiting connection from client")
             s.listen(1)
@@ -81,6 +82,8 @@ class Server:
             print(f"Connection from {address} has been established.")
     
     def receiveData(self):
+
+        
         msg = self.socket.recv(1024)
         msg = msg.decode("utf-8")
         data = msg.split("#")
@@ -88,18 +91,22 @@ class Server:
             while data:
                 if len(data[0]) != 0: #value
                     received_reading = data[0].split("/")
+                    print(received_reading)
                     if len(received_reading) == 3:
-                        name = received_reading[0]
-                        value = received_reading[1]
+                        sensorName = received_reading[0]
+                        sensorValue = received_reading[1]
                         time = received_reading[2]
-                        self.dataReadings[name] =  value 
-                        #self.fp.write(name + " " + value + " " + time + "\n")
+                        self.dataReadings[sensorName] = sensorValue
+                        self.fp.write(sensorName + " " + sensorValue + " " + time + "\n")
                         #print(name + " " + value + " " + time)
                     elif len(received_reading) == 2:
-                        valve = received_reading[0]
-                        state = received_reading[1]
-                        self.verifyValve(name, value)
-                        self.valveReadings[name] = value
+                        print("THis triggered")
+                        valveName = received_reading[0]
+                        valveState = received_reading[1]
+                        #add this later :)
+                        self.verifyValve(valveName, valveState)
+                        self.removeValve(valveName)
+                        self.valveReadings[valveName] = valveState
                     else:
                         print("WARNING: Malformed message received", data[0])
                 data.remove(data[0])
@@ -110,9 +117,9 @@ class Server:
     
     def removeValve(self, valveName:str):
         if valveName in self.pendingValves:
-            self.workLock.acquire()
-            self.pendingValves.pop(valveName)
-            self.workLock.release()
+            self.pendLock.acquire()
+            del self.pendingValves[valveName]
+            self.pendLock.release()
             return True
         else:
             print("ERROR:", valveName, "Message Never Sent")
@@ -120,9 +127,9 @@ class Server:
     
     def addValve(self, valveName:str, state:str, time:str):
         if valveName not in self.pendingValves:
-            self.workLock.acquire()
+            self.pendLock.acquire()
             self.pendingValves[valveName] = (state, time)
-            self.workLock.release()
+            self.pendLock.release()
             return True
         else:
             print("ERROR:", valveName, "already in work queue")
@@ -155,17 +162,16 @@ class Server:
                 else: #if there is deny command
                     print("ERROR:", valve, "COMMAND ALREADY SENT PLEASE WAIT")
     
-    def verifyValve(self, name:str, value:str, time:str):
+    def verifyValve(self, name:str, value:str):
         if name in self.pendingValves:
-            self.removeValve(name)
             if self.valveReadings[name] != value:
                 print("ERROR:", name, "received the wrong state")
             self.valveReadings[name] = value
-            print("[", name, "] actuated in ", timing.getTimeDiff(time, timing.missionTime()), " seconds")  
-                
+            print("[", name, "] actuated in ", timing.getTimeDiff(self.pendingValves[name][1], timing.missionTime()), "seconds")  
         else:
             self.valveReadings[name] = value
             print("[", name, "] has successfully been initialized to ", value, sep = "")
+        self.removeValve(name)
 
          
             

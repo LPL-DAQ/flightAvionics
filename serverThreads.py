@@ -12,14 +12,10 @@ import serverFunc
 def valveTimeOut(s:serverFunc.Server):
     pendingValves = s.getPendingValves()
     while True:
-        if not pendingValves.empty():
-            firstVal = pendingValves[0]
-            while timing.getTimeDiff(firstVal[1], timing.missionTime()) > 5 and not pendingValves.empty():
-                pass
-                firstVal = pendingValves[0]
-            time.sleep(1)
-                
-            
+        for i in pendingValves:
+            if timing.getTimeDiff(pendingValves[i][1], timing.missionTime()) > 5:
+                print("WARNING:", i , "command timeout")
+                s.removeValve(i)
         time.sleep(1)
         
 
@@ -38,14 +34,14 @@ def dataListener(s:serverFunc.Server):
 #thread function for commandSender
 def valveCmd(s:serverFunc.Server):
     while True:
-        if s.isConnected:
+        if s.isConnected():
             commands = s.getCommandQ()
             try:
                 if not commands.empty():
                     msg = commands.get()
-                    #lock.acquire()
+                    s.getPendLock().acquire()
                     telemetry.sendMsg(s.getSocket(), msg)
-                    #lock.release()
+                    s.getPendLock().release()
             except:
                 print("ERROR2: Connection forcibly disconnected by host")
                 s.closeSocket()
