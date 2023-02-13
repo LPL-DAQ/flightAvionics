@@ -10,7 +10,7 @@ class CRC:
 		err = 0
 		calculator = Calculator(Crc8.CCITT, optimized=True)
 
-		if crc_byte != calculator.checksum(data)
+		if crc_byte != calculator.checksum(data):
 			err = -1
 
 		return err

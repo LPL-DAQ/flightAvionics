@@ -99,7 +99,7 @@ class Client:
 
                 if CRC.check_crc(msg[:-2],msg[-1]) != -1:
                     msg = msg[:-2]
-                    
+
                     data = msg.split("#")
                     try:
                         print(msg)
@@ -117,12 +117,13 @@ class Client:
                                 else:
                                     print("FUCKED UP MSG :)")
                             data.remove(data[0])
+                    except Exception as e:
+                        print("Exception", e)
                 else:
                     print("Bad CRC")
                 
                         
-                except Exception as e:
-                    print("Exception", e)
+                
         
 
 
