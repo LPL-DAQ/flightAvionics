@@ -68,7 +68,7 @@ class Client:
             try:
                 for sensorName in self.FVreadings.readings:
                     messengerLock.acquire()
-                    telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
+                    #telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
                     messengerLock.release()
                     time.sleep(period)
             except Exception as e:
@@ -108,7 +108,7 @@ class Client:
                                 self.FVstates.execute(name,value)
                                 print("SENDING")
                                 
-                                msg = "#" + name + "/" + self.FVstates.getValveState(name) + "/" + timing.missionTime()
+                                msg = "#" + name + "/" + self.FVstates.getValveState(name)
                                 messengerLock.acquire()
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 messengerLock.release()

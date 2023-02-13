@@ -39,9 +39,9 @@ def valveCmd(s:serverFunc.Server):
             try:
                 if not commands.empty():
                     msg = commands.get()
-                    #lock.acquire()
+                    s.getPendLock().acquire()
                     telemetry.sendMsg(s.getSocket(), msg)
-                    #lock.release()
+                    s.getPendLock().release()
             except:
                 print("ERROR2: Connection forcibly disconnected by host")
                 s.closeSocket()

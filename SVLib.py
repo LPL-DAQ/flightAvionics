@@ -72,6 +72,6 @@ def initialiseValves(configFile:str):
         valves[SV_name] = Valve(ser,SV_port)
         #might need an arduino poll to fully determine state
         #test all of them
-        valves[SV_name].powerON()
+        valves[SV_name].powerOFF()
         print("[", SV_name, "] has been initialized in its normal state", sep="")
     return valves

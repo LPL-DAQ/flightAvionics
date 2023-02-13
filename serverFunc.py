@@ -82,6 +82,8 @@ class Server:
             print(f"Connection from {address} has been established.")
     
     def receiveData(self):
+
+        
         msg = self.socket.recv(1024)
         msg = msg.decode("utf-8")
         data = msg.split("#")
@@ -95,13 +97,15 @@ class Server:
                         sensorValue = received_reading[1]
                         time = received_reading[2]
                         self.dataReadings[sensorName] = sensorValue
-                        #self.fp.write(name + " " + value + " " + time + "\n")
+                        self.fp.write(sensorName + " " + sensorValue + " " + time + "\n")
                         #print(name + " " + value + " " + time)
                     elif len(received_reading) == 2:
                         print("THis triggered")
                         valveName = received_reading[0]
                         valveState = received_reading[1]
+                        #add this later :)
                         self.verifyValve(valveName, valveState)
+                        self.removeValve(valveName)
                         self.valveReadings[valveName] = valveState
                     else:
                         print("WARNING: Malformed message received", data[0])
@@ -158,17 +162,16 @@ class Server:
                 else: #if there is deny command
                     print("ERROR:", valve, "COMMAND ALREADY SENT PLEASE WAIT")
     
-    def verifyValve(self, name:str, value:str, time:str):
+    def verifyValve(self, name:str, value:str):
         if name in self.pendingValves:
-            self.removeValve(name)
             if self.valveReadings[name] != value:
                 print("ERROR:", name, "received the wrong state")
             self.valveReadings[name] = value
-            print("[", name, "] actuated in ", timing.getTimeDiff(time, timing.missionTime()), " seconds")  
-                
+            print("[", name, "] actuated in ", timing.getTimeDiff(self.pendingValves[name][1], timing.missionTime()), "seconds")  
         else:
             self.valveReadings[name] = value
             print("[", name, "] has successfully been initialized to ", value, sep = "")
+        self.removeValve(name)
 
          
             

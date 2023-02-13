@@ -54,11 +54,13 @@ class valveStates:
     #execute valve command...needs error check
     def execute(self,name:str,value:str):
         if value == 'ON':
-            self.SVs[name].powerOFF()
-            self.update(name,'OFF')
-        elif value == 'OFF':
             self.SVs[name].powerON()
             self.update(name,'ON')
+        elif value == 'OFF':
+            self.SVs[name].powerOFF()
+            self.update(name,'OFF')
+        else:
+            print("DID NOTHING:", value)
 
     def getValveState(self, name:str):
         if name not in self.states:
