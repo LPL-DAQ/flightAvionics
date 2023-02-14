@@ -49,6 +49,8 @@ ehthumbs_vista.db
 
 #python
 __pycache__
+
+#DAQ
 data
 GUI/*.autosave
 
