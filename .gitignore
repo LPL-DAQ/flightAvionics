@@ -50,4 +50,5 @@ ehthumbs_vista.db
 #python
 __pycache__
 data
+GUI/*.autosave
 
