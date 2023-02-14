@@ -35,6 +35,10 @@ class Bridge(QObject):
         self.armedValues = s.getArmedValves()
         self.guiReadings = s.getDataReadings()
         self.valveStates = s.getValveReadings()
+        self.serverStatus = s.isConnected()
+        self.percent1=0
+        self.percent2=0
+        self.armFlag=0
 
 
     # guiReadings: dataRead.Readings
@@ -92,7 +96,37 @@ class Bridge(QObject):
 
         except:
             return False
+    @Slot(str,str, result=int)        
+    def regCommand(self, name:str, direction:str):
+        if name=="PRH001": 
+            if direction == "increase":
+                if self.armedValues[name]=="ARMED":
+                    self.percent1+=1
+                    percent=self.percent1
+            else:
+                if self.armedValues[name]=="ARMED":
+                    self.percent1-=1
+                    percent=self.percent1
 
+        if name=="PRH002":
+            if direction == "increase":
+                if self.armedValues[name]=="ARMED":
+                    self.percent2+=1
+                    percent=self.percent2
+            else:
+                if self.armedValues[name]=="ARMED":
+                    self.percent2-=1
+                    percent=self.percent2
+        
+        print(name, "open percent: ", percent )
+        return percent
+    
+    @Slot(str,result=str)        
+    def regState(self,name):
+        if name=="PRH001":
+            return str(self.percent1)
+        else:
+            return str(self.percent2)
     @Slot()
     def sendCommand(self):
 
@@ -118,7 +152,7 @@ def guiThreadFunc(s:serverFunc.Server):
     timer = QTimer()
     timer.start(10)
 
-    view.setSource("GUI/mainView.qml")
+    view.setSource("GUI/mainView2.qml")
 
     root = view.rootObject()
 
@@ -126,6 +160,8 @@ def guiThreadFunc(s:serverFunc.Server):
     context.setContextProperty("bridge", bridge)
 
     timer.timeout.connect(root.updateElements)
+    timer.timeout.connect(root.server_status)
+
     
     view.show()
     

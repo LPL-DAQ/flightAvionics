@@ -7,34 +7,12 @@ Rectangle {
     y: 0
     width: 208
 
-
-
     height: 65
     color: "#00ff0000"
     border.color: "#7f5d5d"
     border.width: 0
 
-    property string name: "SVH001"
-    property bool isOpen: false
-    property bool nrml_Opn: true
-
-    function update() {
-        if (bridge.getValveState(name)) {
-            opn_txt.state = "open"
-            if(valve_ctrl.nrml_Opn){
-                pwr_txt.state = "off"
-            }else{
-                pwr_txt.state = "on"
-            }
-        }else{
-            opn_txt.state = "closed"
-            if(valve_ctrl.nrml_Opn){
-                pwr_txt.state = "on"
-            }else{
-                pwr_txt.state = "off"
-            }
-        }
-    }
+    property string name: "PRH001"
 
     Item {
         id: indicator
@@ -63,7 +41,7 @@ Rectangle {
             Text {
                 id: opn_txt
                 color: "#7f7f7f"
-                text: qsTr("OPEN")
+                text: qsTr("ARM")
                 anchors.fill: parent
                 font.pixelSize: 18
                 horizontalAlignment: Text.AlignHCenter
@@ -71,18 +49,20 @@ Rectangle {
                 styleColor: "#2ad12f"
                 font.family: "Arial"
 
-                state: "open"
+                state: "unarmed"
 
                 states: [
                     State {
-                        name: "open"
+                        name: "armed"
                         PropertyChanges { target: opn_txt; color: "#2ad12f"}
-                        PropertyChanges { target: opn_txt; text: qsTr("OPEN")}
+                        PropertyChanges { target: opn_txt; text: "ARMED"}
+
                     },
                     State {
-                        name: "closed"
+                        name: "unarmed"
                         PropertyChanges { target: opn_txt; color: "#7f7f7f"}
-                        PropertyChanges { target: opn_txt; text: qsTr("CLOSED")}
+                        PropertyChanges { target: opn_txt; text: "ARM"}
+
                     }
                 ]
             }
@@ -147,12 +127,12 @@ Rectangle {
         function toggle() {
             if (toggle.state == "on"){
                 toggle.state = "off";
+                opn_txt.state = "unarmed";
                 bridge.armValve(valve_ctrl.name, "nil");
-                bridge.armFlag=0
-            }else if (bridge.armFlag!=1){
+            }else{
                 toggle.state = "on";
+                opn_txt.state = "armed";
                 bridge.armValve(valve_ctrl.name, "ARMED");
-                bridge.armFlag=1
             }
         }
 
@@ -192,14 +172,14 @@ Rectangle {
             height: 23
             color: "#ffffff"
             text: qsTr(valve_ctrl.name)
-            anchors.bottom: valve_ctrl.bottom
+            //anchors.bottom: valve_ctrl.bottom
             font.pixelSize: 18
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            anchors.bottomMargin: 4
-            anchors.horizontalCenterOffset: 0
+            //anchors.bottomMargin: 4
+            //anchors.horizontalCenterOffset: 0
             font.family: "Arial"
-            anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.horizontalCenter: parent.horizontalCenter
         }
 
         Item {
