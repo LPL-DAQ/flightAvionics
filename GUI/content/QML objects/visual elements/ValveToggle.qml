@@ -146,12 +146,18 @@ Rectangle {
 
         function toggle() {
             if (toggle.state == "on"){
-                toggle.state = "off";
-                bridge.armValve(valve_ctrl.name, "nil");
-            }else{
-                toggle.state = "on";
-                bridge.armValve(valve_ctrl.name, "ARMED");
-            }
+                    toggle.state = "off";
+                    bridge.armValve(valve_ctrl.name, "nil");
+                    bridge.armFlag=0
+                    }
+            else if (bridge.armFlag!=1){
+                    toggle.state = "on";
+                    bridge.armValve(valve_ctrl.name, "ARMED");
+                    bridge.armFlag=1
+
+                }
+            
+            
         }
 
         states: [

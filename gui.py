@@ -38,6 +38,7 @@ class Bridge(QObject):
         self.serverStatus = s.isConnected()
         self.percent1=0
         self.percent2=0
+        self.armFlag=0
 
 
     # guiReadings: dataRead.Readings

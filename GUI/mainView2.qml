@@ -119,7 +119,7 @@ Item {
             x: 28
             y: 21
             width: 1970
-            height: 1281
+            height: 979
             color: "#00ffffff"
             border.color: "#ffffff"
 
@@ -858,7 +858,7 @@ Item {
 
                 Rectangle {
                     id: rectangle3
-                    y: 744
+                    y: 772
                     height: 45
                     color: "#1a3f0f"
                     border.color: "#ffffff"
@@ -1235,7 +1235,7 @@ Item {
                                 }
                              
                          }
-                            Button {
+                            /*Button {
                                     id: edit_button
                                     y: 220
                                     text: "EDIT"
@@ -1264,8 +1264,8 @@ Item {
                                         radius: 4
                                     }
                                    
-                                }   
-                                Button {
+                                }   */
+                            /*Button {
                                     id: save_button
                                     y: 220
                                     text: "SAVE"
@@ -1294,10 +1294,10 @@ Item {
                                         radius: 4
                                     }
                                    
-                                }  
-                                Button {
+                            }*/  
+                            Button {
                                     id: send_button
-                                    y: 320
+                                    y: 230
                                     text: "SEND TIMING"
                                     height: 76  
                                     anchors.left: rectangle3.left
