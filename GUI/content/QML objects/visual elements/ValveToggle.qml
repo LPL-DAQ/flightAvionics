@@ -146,6 +146,7 @@ Rectangle {
 
         function toggle() {
             if (toggle.state == "on"){
+<<<<<<< HEAD
                     toggle.state = "off";
                     bridge.armValve(valve_ctrl.name, "nil");
                     bridge.armFlag=0
@@ -158,6 +159,14 @@ Rectangle {
                 }
             
             
+=======
+                toggle.state = "off";
+                bridge.armValve(valve_ctrl.name, "nil");
+            }else{
+                toggle.state = "on";
+                bridge.armValve(valve_ctrl.name, "ARMED");
+            }
+>>>>>>> dev
         }
 
         states: [
@@ -196,6 +205,7 @@ Rectangle {
             height: 23
             color: "#ffffff"
             text: qsTr(valve_ctrl.name)
+<<<<<<< HEAD
             //anchors.bottom: valve_ctrl.bottom
             font.pixelSize: 18
             horizontalAlignment: Text.AlignHCenter
@@ -204,6 +214,16 @@ Rectangle {
             //anchors.horizontalCenterOffset: 0
             font.family: "Arial"
             //anchors.horizontalCenter: parent.horizontalCenter
+=======
+            anchors.bottom: valve_ctrl.bottom
+            font.pixelSize: 18
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            anchors.bottomMargin: 4
+            anchors.horizontalCenterOffset: 0
+            font.family: "Arial"
+            anchors.horizontalCenter: parent.horizontalCenter
+>>>>>>> dev
         }
 
         Item {

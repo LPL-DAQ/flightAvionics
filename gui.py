@@ -35,10 +35,13 @@ class Bridge(QObject):
         self.armedValues = s.getArmedValves()
         self.guiReadings = s.getDataReadings()
         self.valveStates = s.getValveReadings()
+<<<<<<< HEAD
         self.serverStatus = s.isConnected()
         self.percent1=0
         self.percent2=0
         self.armFlag=0
+=======
+>>>>>>> dev
 
 
     # guiReadings: dataRead.Readings
@@ -62,6 +65,7 @@ class Bridge(QObject):
 
         except Exception as e:
             return "N/A"
+<<<<<<< HEAD
         
     @Slot(str,str, result=int)        
     def regCommand(self, name:str, direction:str):
@@ -98,6 +102,9 @@ class Bridge(QObject):
          
 
     
+=======
+
+>>>>>>> dev
     @Slot(str,str)#arming the valves to their default state
     def armValve(self, valveName:str, state:str):
         self.armedValues[valveName]=state
@@ -108,14 +115,22 @@ class Bridge(QObject):
         #return true if valve is open
         try:
             reading = self.valveStates[valveName]
+<<<<<<< HEAD
             if reading == 'ON':
+=======
+            if reading == 'OPENED_':
+>>>>>>> dev
                 return True
             else:
                 return False
 
         except:
             #self.data.update(valveName,'OPENED_','000000')
+<<<<<<< HEAD
             self.valveStates[valveName] = "OFF"
+=======
+            self.valveStates[valveName] = "OPENED_"
+>>>>>>> dev
             return False
 
     
@@ -132,11 +147,17 @@ class Bridge(QObject):
         except:
             return False
 
+<<<<<<< HEAD
         
     @Slot()
     def sendCommand(self):
 
         self.s.appendCommandQ()
+=======
+    @Slot()
+    def sendCommand(self):
+        serverThreads.appendCommand(self.valveStates, self.armedValues)
+>>>>>>> dev
         
 
 
@@ -158,7 +179,11 @@ def guiThreadFunc(s:serverFunc.Server):
     timer = QTimer()
     timer.start(10)
 
+<<<<<<< HEAD
     view.setSource("GUI/mainView2.qml")
+=======
+    view.setSource("GUI/mainView.qml")
+>>>>>>> dev
 
     root = view.rootObject()
 
@@ -166,8 +191,12 @@ def guiThreadFunc(s:serverFunc.Server):
     context.setContextProperty("bridge", bridge)
 
     timer.timeout.connect(root.updateElements)
+<<<<<<< HEAD
     timer.timeout.connect(root.server_status)
 
+=======
+    
+>>>>>>> dev
     view.show()
     
     sys.exit(app.exec())

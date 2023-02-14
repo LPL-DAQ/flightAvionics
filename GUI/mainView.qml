@@ -12,7 +12,11 @@ Item {
     width: 1920*dpi_scale
     height: 1080*dpi_scale
     visible: true
+<<<<<<< HEAD
     property real dpi_scale: 0.65
+=======
+    property real dpi_scale: 0.7
+>>>>>>> dev
     scale: 1
 
 
@@ -1120,6 +1124,12 @@ Item {
             }
         }
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> dev
     }
 
 

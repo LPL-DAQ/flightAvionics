@@ -1,30 +1,58 @@
+<<<<<<< HEAD
 import socket
 import threading
 
 import telemetry
 import queue
 import timing
+=======
+import time
+import socket
+import threading
+
+import queue
+import timing
+import telemetry
+import serverThreads
+>>>>>>> dev
 import verify
 
 class Server:
     def __init__(self, filepath:str) -> None:
         #server ini data
+<<<<<<< HEAD
         #self.serverIni = verify.verifyServerIni(filepath)
         #self.fp = self.serverIni["fp"]
         #socket stuff
         #self.ip, self.port = verify.getIPAddress(filepath)
         self.socket = None
         #self.address = self.establishAddress(self.ip, self.port)
+=======
+        self.serverIni = verify.verifyServerIni(filepath)
+        #socket stuff
+        self.ip, self.port = verify.getIPAddress(filepath)
+        self.socket = None
+>>>>>>> dev
         self.connect = False
         #PT and TC data
         self.dataReadings = dict()
         #SV control data
+<<<<<<< HEAD
         self.pendingValves = []
+=======
+        self.pendingValves = dict()
+>>>>>>> dev
         self.valveReadings = dict()
         self.armedValves = dict()
         self.commandQ = queue.Queue()
         
+<<<<<<< HEAD
         self.pendLock = threading.Lock()
+=======
+        self.workLock = threading.Lock()
+        self.dataLock = threading.Lock()
+        self.sockLock = threading.Lock()
+>>>>>>> dev
 
     #standard getter methods
     def getDataReadings(self):
@@ -49,6 +77,7 @@ class Server:
         return self.commandQ  
     def getPendingValves(self):
         return self.pendingValves
+<<<<<<< HEAD
     def getPendLock(self):
         return self.pendLock
 
@@ -65,12 +94,26 @@ class Server:
         #self.sockLock.release()
 
     def establishConnection(self):
+=======
+    
+    def closeSocket(self):
+        self.lock.acquire()
+        self.socket.close()
+        self.connect = False
+        self.lock.release()
+
+    def establishConnection(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print(f"IP address: '{self.ip}' Port {self.port}")
+        s.bind((self.ip,self.port))
+>>>>>>> dev
         # try:
         #     s.bind((self.ip,self.port))
         # except:
         #     print("Error: Invalid ip address please change the ini file")
         while not self.connect:
             print("Awaiting connection from client")
+<<<<<<< HEAD
             self.address.listen(1)
             clientsocket, address = self.address.accept()
             
@@ -78,11 +121,24 @@ class Server:
             self.socket = clientsocket
             self.connect = True
             #self.sockLock.release()
+=======
+            s.listen(1)
+            clientsocket, address = s.accept()
+            
+            self.sockLock.acquire()
+            self.socket = clientsocket
+            self.connect = True
+            self.sockLock.release()
+>>>>>>> dev
 
             print(f"Connection from {address} has been established.")
     
     def receiveData(self):
+<<<<<<< HEAD
         msg = self.socket.recv(1024)
+=======
+        msg = self.s.recv(1024)
+>>>>>>> dev
         msg = msg.decode("utf-8")
         data = msg.split("#")
         try:
@@ -93,6 +149,7 @@ class Server:
                         name = received_reading[0]
                         value = received_reading[1]
                         time = received_reading[2]
+<<<<<<< HEAD
                         self.dataReadings[name] =  value 
                         #self.fp.write(name + " " + value + " " + time + "\n")
                         #print(name + " " + value + " " + time)
@@ -101,6 +158,16 @@ class Server:
                         state = received_reading[1]
                         self.verifyValve(name, value)
                         self.valveReadings[name] = value
+=======
+                        if name[:2] == "SV":
+                            self.verifyValve(name, value, time)
+                        else:
+                            self.dataLock.acquire()
+                            self.dataReadings[name] = value
+                            self.dataLock.release()
+                            self.fp.write(name + " " + value + " " + time + "\n")
+
+>>>>>>> dev
                     else:
                         print("WARNING: Malformed message received", data[0])
                 data.remove(data[0])
@@ -122,7 +189,11 @@ class Server:
     def addValve(self, valveName:str, state:str, time:str):
         if valveName not in self.pendingValves:
             self.workLock.acquire()
+<<<<<<< HEAD
             self.pendingValves[valveName] = (state, time)
+=======
+            self.pendingValves.update(valveName, (state, time))
+>>>>>>> dev
             self.workLock.release()
             return True
         else:
@@ -147,9 +218,14 @@ class Server:
                         newState = "OFF"
                     else:#test msg for debug purposes :3
                         print("FUCKED UP VALVE CMD MSG BUDDY")
+<<<<<<< HEAD
                         print("State:", state)
                         continue
                     msg = "#" + valve + "/" + newState
+=======
+                        continue
+                    msg = "#" + valve + "/" + newState + "/" + time
+>>>>>>> dev
                     self.commandQ.put(msg)
                     self.addValve(valve, newState, time) #adds to list of valves that have an outgoing command
                     print("SENDING", newState, "MSG FOR:", valve)

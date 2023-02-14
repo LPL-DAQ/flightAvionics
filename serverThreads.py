@@ -12,6 +12,7 @@ import serverFunc
 def valveTimeOut(s:serverFunc.Server):
     pendingValves = s.getPendingValves()
     while True:
+<<<<<<< HEAD
         if not pendingValves.empty():
             firstVal = pendingValves[0]
             while timing.getTimeDiff(firstVal[1], timing.missionTime()) > 5 and not pendingValves.empty():
@@ -20,17 +21,30 @@ def valveTimeOut(s:serverFunc.Server):
             time.sleep(1)
                 
             
+=======
+        for i in pendingValves:
+            if timing.getTimeDiff(pendingValves[i][2], timing.missionTime()) > 5:
+                print("WARNING:", i, " timeout occurred")
+                s.removeValve(i)
+>>>>>>> dev
         time.sleep(1)
         
 
 #thread function for dataReceiver 
 def dataListener(s:serverFunc.Server):
     while True:
+<<<<<<< HEAD
         if not s.isConnected():
             s.establishConnection()
         elif s.isConnected():
             try:
                 s.receiveData()
+=======
+        s.establishConnection()
+        if s.isConnected():
+            try:
+                serverFunc.receiveData(s.getSocket(), s.getDataReadings(), s.getFilePointer())
+>>>>>>> dev
             except Exception as e:
                 print("ERROR1: Connection forcibly disconnected by host")
                 s.closeSocket()

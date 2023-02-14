@@ -14,11 +14,17 @@ import clientFunc
 def main():
     timing.setRefTime(0,0,0)
     systemName = 'FV'
+<<<<<<< HEAD
     print("Initializing PT Config...")
     PTs = PTLib.parsePTini("configFiles/PT_Config_FV.ini")
     print("Initializing PT Config...")
     TCs = TCLib.TC_Initialization("configFiles/TC_Config_FV.ini")
     print("Initializing PT Config...")
+=======
+
+    PTs = PTLib.parsePTini("configFiles/PT_Config_FV.ini")
+    TCs = TCLib.TC_Initialization("configFiles/TC_Config_FV.ini")
+>>>>>>> dev
     SVs = SVLib.initialiseValves("configFiles/SV_Config_FV.ini")
     # iniData = telemetry.parseIniFile("configFiles/config.ini", "client")
     
