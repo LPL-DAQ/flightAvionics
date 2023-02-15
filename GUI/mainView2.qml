@@ -12,7 +12,7 @@ Item {
     width: 2560*dpi_scale
     height: 1440*dpi_scale
     visible: true
-    property real dpi_scale: 0.5
+    property real dpi_scale: 0.6
     scale: 1
 
     function updateElements() {
@@ -100,9 +100,12 @@ Item {
 
     }
     function server_status(){
-        if (bridge.serverStatus){
+        //print("Test", bridge.serverStatus)
+        if (bridge.getServerStatus()){
+            text17.color = "#32CD32"
             text17.text= qsTr("CONNECTED")
         }else{
+            text17.color = "#FF0000"
             text17.text= qsTr("NOT CONNECTED")
         }
         }
