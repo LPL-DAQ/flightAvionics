@@ -39,20 +39,6 @@ class Bridge(QObject):
         self.percent1=0
         self.percent2=0
         self.armFlag=0
-
-
-    # guiReadings: dataRead.Readings
-    # armedValves = dict()
-    # guiReadings = readings.Readings
-    # armedValves = dict()
-
-    # @Slot(result=str)
-    # def uptext(self):
-        
-    #     #s = "{:0>7.0f}".format(time.time())
-    #     s = "YODAYO! 1"
-
-    #     return s
     
     #returns the value associated with the sensor
     @Slot(str, result=str)
@@ -67,6 +53,10 @@ class Bridge(QObject):
     def armValve(self, valveName:str, state:str):
         self.armedValues[valveName]=state
         print(valveName,":",state)
+        if state == "nil":
+            self.s.setArmedValve("None")
+        else:
+            self.s.setArmedValve(valveName)
 
     @Slot(str, result=bool)
     def getValveState(self, valveName:str):
@@ -129,8 +119,9 @@ class Bridge(QObject):
             return str(self.percent2)
     @Slot()
     def sendCommand(self):
-
-        self.s.appendCommandQ()
+        valveName = self.s.getArmedValve()
+        if valveName != "None":
+            self.s.sendValveCmd(valveName)
         
 
 

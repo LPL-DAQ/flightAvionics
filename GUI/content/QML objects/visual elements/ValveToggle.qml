@@ -154,6 +154,11 @@ Rectangle {
                 bridge.armValve(valve_ctrl.name, "ARMED");
                 bridge.armFlag=1
             }
+            else{
+                //print to console 
+                //print("ERROR:", valve_ctrl.name, "cannot be toggled")
+            }
+            
         }
 
         states: [

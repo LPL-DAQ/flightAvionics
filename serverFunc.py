@@ -19,10 +19,12 @@ class Server:
         #PT and TC data
         self.dataReadings = dict()
         #SV control data
-        self.pendingValves = dict()
         self.valveReadings = dict()
+        #name timestamp
+        self.armedValve = ("None", "")
+        #self.pendingValves = dict()
         self.armedValves = dict()
-        self.commandQ = queue.Queue()
+        #self.commandQ = queue.Queue()
         
         self.pendLock = threading.Lock()
 
@@ -41,16 +43,22 @@ class Server:
         return self.lock
     def isConnected(self):
         return self.connect
-    def getArmedValves(self):
-        return self.armedValves
     def getValveReadings(self):
         return self.valveReadings
-    def getCommandQ(self):
-        return self.commandQ  
-    def getPendingValves(self):
-        return self.pendingValves
+    def getArmedValves(self):
+        return self.armedValves
+    # def getCommandQ(self):
+    #     return self.commandQ  
+    # def getPendingValves(self):
+    #     return self.pendingValves
     def getPendLock(self):
         return self.pendLock
+
+    def getArmedValve(self):
+        return self.armedValve[0]
+    
+    def setArmedValve(self, name:str):
+        self.armedValve = (name, timing.missionTime())
 
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -91,7 +99,7 @@ class Server:
             while data:
                 if len(data[0]) != 0: #value
                     received_reading = data[0].split("/")
-                    print(received_reading)
+                    #print(received_reading)
                     if len(received_reading) == 3:
                         sensorName = received_reading[0]
                         sensorValue = received_reading[1]
@@ -104,8 +112,8 @@ class Server:
                         valveName = received_reading[0]
                         valveState = received_reading[1]
                         #add this later :)
-                        self.verifyValve(valveName, valveState)
-                        self.removeValve(valveName)
+                        self.verifyValve()
+                        #self.removeValve(valveName)
                         self.valveReadings[valveName] = valveState
                     else:
                         print("WARNING: Malformed message received", data[0])
@@ -114,64 +122,76 @@ class Server:
             print(e)
             print('Data processing error occured')
             
+    def sendValveCmd(self, valve:str):
+        if not self.isConnected:
+            print("WARNING: No Connection")
+            return
+        state = self.valveReadings[valve]
+        time = timing.missionTime()
+        if state == "OFF":
+            newState = "ON"
+        elif state == "ON":
+            newState = "OFF"
+        else:#test msg for debug purposes :3
+            print("FUCKED UP VALVE CMD MSG BUDDY")
+            print("State:", state)
+        msg = "#" + valve + "/" + newState
+        telemetry.sendMsg(self.getSocket(), msg)  
+
+    #theres more logic to this but ill do it sometime
+    def verifyValve(self):
+        valve = self.armedValve
+        print(valve[0], "command received in", timing.getTimeDiff(valve[1], timing.missionTime()))
+             
+
+    # def removeValve(self, valveName:str):
+    #     if valveName in self.pendingValves:
+    #         self.pendLock.acquire()
+    #         del self.pendingValves[valveName]
+    #         self.pendLock.release()
+    #         return True
+    #     else:
+    #         print("ERROR:", valveName, "Message Never Sent")
+    #         return False
     
-    def removeValve(self, valveName:str):
-        if valveName in self.pendingValves:
-            self.pendLock.acquire()
-            del self.pendingValves[valveName]
-            self.pendLock.release()
-            return True
-        else:
-            print("ERROR:", valveName, "Message Never Sent")
-            return False
+    # def addValve(self, valveName:str, state:str, time:str):
+    #     if valveName not in self.pendingValves:
+    #         self.pendLock.acquire()
+    #         self.pendingValves[valveName] = (state, time)
+    #         self.pendLock.release()
+    #         return True
+    #     else:
+    #         print("ERROR:", valveName, "already in work queue")
+    #         return False
     
-    def addValve(self, valveName:str, state:str, time:str):
-        if valveName not in self.pendingValves:
-            self.pendLock.acquire()
-            self.pendingValves[valveName] = (state, time)
-            self.pendLock.release()
-            return True
-        else:
-            print("ERROR:", valveName, "already in work queue")
-            return False
-    
-    def checkValve(self, valveName:str) -> bool:
-        return valveName in self.pendingValves
+    # def checkValve(self, valveName:str) -> bool:
+    #     return valveName in self.pendingValves
 
     #adds all valves that are armed to the commandQ
-    def appendCommandQ(self):
-        armedValves = self.armedValves
-        for valve in armedValves:
-            if armedValves[valve] == "ARMED":
-                if not self.checkValve(valve): #if there isn't an ongoing command for that valve 
-                    state = self.valveReadings[valve]
-                    time = timing.missionTime()
-                    if state == "OFF":
-                        newState = "ON"
-                        msg = "#" + valve + "/ON/" + time
-                    elif state == "ON":
-                        newState = "OFF"
-                    else:#test msg for debug purposes :3
-                        print("FUCKED UP VALVE CMD MSG BUDDY")
-                        print("State:", state)
-                        continue
-                    msg = "#" + valve + "/" + newState
-                    self.commandQ.put(msg)
-                    self.addValve(valve, newState, time) #adds to list of valves that have an outgoing command
-                    print("SENDING", newState, "MSG FOR:", valve)
-                else: #if there is deny command
-                    print("ERROR:", valve, "COMMAND ALREADY SENT PLEASE WAIT")
+    # def appendCommandQ(self):
+    #     armedValves = self.armedValves
+    #     for valve in armedValves:
+    #         if armedValves[valve] == "ARMED":
+    #             if not self.checkValve(valve): #if there isn't an ongoing command for that valve 
+    #                 state = self.valveReadings[valve]
+    #                 time = timing.missionTime()
+    #                 if state == "OFF":
+    #                     newState = "ON"
+    #                     msg = "#" + valve + "/ON/" + time
+    #                 elif state == "ON":
+    #                     newState = "OFF"
+    #                 else:#test msg for debug purposes :3
+    #                     print("FUCKED UP VALVE CMD MSG BUDDY")
+    #                     print("State:", state)
+    #                     continue
+    #                 msg = "#" + valve + "/" + newState
+    #                 self.commandQ.put(msg)
+    #                 self.addValve(valve, newState, time) #adds to list of valves that have an outgoing command
+    #                 print("SENDING", newState, "MSG FOR:", valve)
+    #             else: #if there is deny command
+    #                 print("ERROR:", valve, "COMMAND ALREADY SENT PLEASE WAIT")
     
-    def verifyValve(self, name:str, value:str):
-        if name in self.pendingValves:
-            if self.valveReadings[name] != value:
-                print("ERROR:", name, "received the wrong state")
-            self.valveReadings[name] = value
-            print("[", name, "] actuated in ", timing.getTimeDiff(self.pendingValves[name][1], timing.missionTime()), "seconds")  
-        else:
-            self.valveReadings[name] = value
-            print("[", name, "] has successfully been initialized to ", value, sep = "")
-        self.removeValve(name)
+
 
          
             

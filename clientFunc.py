@@ -68,7 +68,7 @@ class Client:
             try:
                 for sensorName in self.FVreadings.readings:
                     messengerLock.acquire()
-                    #telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
+                    telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
                     messengerLock.release()
                     time.sleep(period)
             except Exception as e:
