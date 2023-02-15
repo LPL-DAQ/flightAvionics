@@ -36,10 +36,15 @@ class Bridge(QObject):
         self.guiReadings = s.getDataReadings()
         self.valveStates = s.getValveReadings()
         self.serverStatus = s.isConnected()
+
         self.percent1=0
         self.percent2=0
         self.armFlag=0
-    
+
+    @Slot(result=bool)   
+    def getServerStatus(self):
+        return self.s.isConnected()
+
     #returns the value associated with the sensor
     @Slot(str, result=str)
     def updateGage(self, gageName):
