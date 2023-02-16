@@ -19,6 +19,12 @@ Rectangle {
     property bool nrml_Opn: true
 
     function update() {
+        if (bridge.getArmState(name)){
+            if (bridge.disArm(valve_ctrl.name)){
+                toggle.toggle()
+            }
+        }
+        
         if (bridge.getValveState(name)) {
             opn_txt.state = "open"
             if(valve_ctrl.nrml_Opn){
@@ -34,7 +40,8 @@ Rectangle {
                 pwr_txt.state = "off"
             }
         }
-    }
+        
+     }
 
     Item {
         id: indicator
@@ -149,14 +156,10 @@ Rectangle {
                 toggle.state = "off";
                 bridge.armValve(valve_ctrl.name, "nil");
                 bridge.armFlag=0
-            }else if (bridge.armFlag!=1){
+            }else{
                 toggle.state = "on";
                 bridge.armValve(valve_ctrl.name, "ARMED");
                 bridge.armFlag=1
-            }
-            else{
-                //print to console 
-                //print("ERROR:", valve_ctrl.name, "cannot be toggled")
             }
             
         }
@@ -195,6 +198,7 @@ Rectangle {
             y: 38
             width: 67
             height: 23
+            text: qsTr(valve_ctrl.name)
             color: "#ffffff"
             font.pixelSize: 18
             horizontalAlignment: Text.AlignHCenter

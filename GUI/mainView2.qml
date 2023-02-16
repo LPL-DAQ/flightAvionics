@@ -1334,12 +1334,13 @@ Item {
 
                 Button {
                     id: close_button
-                    text: "CLOSE"
+                    text: "ACTUATE"
                     y: 645
-                    width: 207
                     height: 76
                     anchors.left: parent.left
                     anchors.leftMargin: 33
+                    anchors.right: parent.right
+                    anchors.rightMargin: 33
                     contentItem: Text {
                         text: close_button.text
                         font.pointSize: 30
@@ -1363,40 +1364,7 @@ Item {
                             bridge.sendCommand()
                     }
                 }
-                
-                Button {
-                    id: open_button
-                    x: 248
-                    y: 645
-                    width: 207
-                    height: 76
-                    text: "OPEN"
-                    anchors.right: parent.right
-                    anchors.rightMargin: 33
-                    contentItem: Text {
-                        text: open_button.text
-                        font.pointSize: 30
-                        font.bold: true
-                        opacity: enabled ? 1.0 : 0.3
-                        color: "#ffffff"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-                    background: Rectangle {
-                        implicitWidth: 100
-                        implicitHeight: 40
-                        opacity: enabled ? 1 : 0.3
-                        color: open_button.down ? "#084531" : "#0c6b4d"
-                        border.color: "#ffffff"
-                        border.width: 1
-                        radius: 4
-                    }
-                
-                    onClicked: {
-                            bridge.sendCommand()
-                    }
-                }
+            
                 
                 Section_Header {
                     id: helium_label

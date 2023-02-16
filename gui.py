@@ -58,10 +58,18 @@ class Bridge(QObject):
     def armValve(self, valveName:str, state:str):
         self.armedValues[valveName]=state
         print(valveName,":",state)
-        if state == "nil":
-            self.s.setArmedValve("None")
-        else:
+        if state == "ARMED":
             self.s.setArmedValve(valveName)
+
+    @Slot(str, result=bool)
+    def disArm(self,name:str):
+        valveName = self.s.getArmedValve()
+        #print(valveName)
+        if name!=valveName:
+            return True
+        else:
+            return False
+        
 
     @Slot(str, result=bool)
     def getValveState(self, valveName:str):
@@ -125,6 +133,7 @@ class Bridge(QObject):
     @Slot()
     def sendCommand(self):
         valveName = self.s.getArmedValve()
+        print(valveName)
         if valveName != "None":
             self.s.sendValveCmd(valveName)
         
