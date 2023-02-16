@@ -1,5 +1,6 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
+import QtQuick.Layouts
 import "content/Images"
 import "content/QML objects/Gage"
 import "content/QML objects/Valve"
@@ -93,6 +94,21 @@ Item {
         pbvf201.update()
         svf204.update()
         cpf201.update()
+
+        svh001_state.update()
+        svh002_state.update()
+        svh003_state.update()
+        svh004_state.update()
+        
+        svo101_state.update()
+        svo102_state.update()
+        ebvo102_state.update()
+        bvo101_state.update()
+
+        svf201_state.update()
+        pbvf201_state.update()
+        svf204_state.update()
+        cpf201_state.update()
         prh001.update()
         prh002.update()
         prh001_open.open_percentage()
@@ -855,7 +871,6 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         anchors.horizontalCenter: parent.horizontalCenter
-                        font.bold: true
                     }
                 }
 
@@ -879,37 +894,24 @@ Item {
                         text: qsTr("IGNITION SEQUENCE")
                         font.pixelSize: 23
                         anchors.horizontalCenter: parent.horizontalCenter
-                        font.bold: true
                     }
-                
-                    Column {
-                        id: column
-                        height: 200
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.topMargin: 45
-                        anchors.leftMargin: 0
-                        anchors.rightMargin: 0
+                    GridLayout {
+                        columns: 3
+                        columnSpacing: 0
+                        rowSpacing: 0
+                        Layout.columnSpan: 10
+                        anchors.top: rectangle3.bottom
+                        anchors.topMargin: -2
+                        anchors.left: rectangle3.left
+                        width: 521
+                        height: 163
 
-                        Row {
-                            id: row
-                            height: 40
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
-
-                            Rectangle {
+                        Rectangle {
                                 id: rectangle5
-                                height: 40
+                                height: 41
+                                width:174
                                 color: "#00ffffff"
                                 border.color: "#ffffff"
-                                anchors.left: parent.left
-                                anchors.right: rectangle6.left
-                                anchors.leftMargin: 0
-                                anchors.rightMargin: 0
-
                                 Text {
                                     id: text6
                                     color: "#ffffff"
@@ -921,14 +923,12 @@ Item {
                                 }
                             }
 
-                            Rectangle {
+                        Rectangle {
                                 id: rectangle6
-                                width: 138
-                                height: 40
+                                width: 174
+                                height: 41
                                 color: "#000000"
                                 border.color: "#ffffff"
-                                anchors.right: rectangle7.left
-                                anchors.rightMargin: 0
 
                                 TextField {
                                     id: textField
@@ -938,7 +938,7 @@ Item {
                                     text: "30"
                                     readOnly: false
                                     anchors.fill: parent
-                                    font.pixelSize: 22
+                                    font.pixelSize: 25
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     hoverEnabled: false
@@ -948,24 +948,21 @@ Item {
                                     anchors.topMargin: 0
                                     placeholderTextColor: "#00ffffff"
                                     placeholderText: qsTr("Text Field")
-                                    background: Rectangle {
-                                        id: rectangle_txt_bg_1
-                                        width: 138
-                                        height: 40
-                                        color: "#00ffffff"
-                                        border.color: "#ffffff"
-                                    }
-                                }
-                            }
+                                        background:Rectangle{
+                                            color: "#000000"
+                                            border.color: "#FFFFFF"
+                                        }
+                                    
 
-                            Rectangle {
+                                }
+                         }
+
+                        Rectangle {
                                 id: rectangle7
-                                width: 138
-                                height: 40
+                                width: 174
+                                height: 41
                                 color: "#00ffffff"
                                 border.color: "#ffffff"
-                                anchors.right: parent.right
-                                anchors.rightMargin: 0
                                 Text {
                                     id: text7
                                     color: "#65e5e7"
@@ -975,27 +972,15 @@ Item {
                                     horizontalAlignment: Text.AlignLeft
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
-                            }
                          }
-                        Row {
-                            id: row1
-                            height: 40
-                            anchors.left: column.left
-                            anchors.right: column.right
-                            anchors.top: column.top
-                            anchors.topMargin: 40
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
-                            Rectangle {
+                         
+                        Rectangle {
                                 id: rectangle8
-                                height: 40
+                                height: 41
+                                width:174
+
                                 color: "#00ffffff"
                                 border.color: "#ffffff"
-                                anchors.left: parent.left
-                                anchors.right: rectangle9.left
-                                anchors.leftMargin: 0
-                                anchors.rightMargin: 0
-
                                 Text {
                                     id: text8
                                     color: "#ffffff"
@@ -1005,18 +990,15 @@ Item {
                                     horizontalAlignment: Text.AlignLeft
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
-                            }
+                         }
 
-                            Rectangle {
-                                    id: rectangle9
-                                    width: 138
-                                    height: 40
-                                    color: "#000000"
-                                    border.color: "#ffffff"
-                                    anchors.right: rectangle11.left
-                                    anchors.rightMargin: 0
-
-                                    TextField {
+                        Rectangle {
+                                id: rectangle9
+                                width: 174
+                                height: 41
+                                color: "#000000"
+                                border.color: "#ffffff"
+                                TextField {
                                         id: textField2
                                         opacity: 1
                                         visible: true
@@ -1024,7 +1006,7 @@ Item {
                                         readOnly: false
                                         text: "30"
                                         anchors.fill: parent
-                                        font.pixelSize: 22
+                                        font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                         hoverEnabled: false
@@ -1034,25 +1016,21 @@ Item {
                                         anchors.topMargin: 0
                                         placeholderTextColor: "#00ffffff"
                                         placeholderText: qsTr("Text Field")
-                                        background: Rectangle {
-                                            id: rectangle_txt_bg_3
-                                            width: 138
-                                            height: 40
-                                            color: "#00ffffff"
-                                            border.color: "#ffffff"
+                                        background:Rectangle{
+                                            color: "#000000"
+                                            border.color: "#FFFFFF"
                                         }
-                                    }
-                                }
 
-                            Rectangle {
-                                    id: rectangle11
-                                    width: 138
-                                    height: 40
-                                    color: "#00ffffff"
-                                    border.color: "#ffffff"
-                                    anchors.right: parent.right
-                                    anchors.rightMargin: 0
-                                    Text {
+                                    }
+                            }
+
+                        Rectangle {
+                                id: rectangle11
+                                width: 174
+                                height: 41
+                                color: "#00ffffff"
+                                border.color: "#ffffff"
+                                Text {
                                         id: text9
                                         color: "#65e5e7"
                                         text: qsTr("ms")
@@ -1060,29 +1038,16 @@ Item {
                                         font.pixelSize: 22
                                         horizontalAlignment: Text.AlignLeft
                                         anchors.horizontalCenter: parent.horizontalCenter
-                                    }
-                                }
-                             
+                                 }
                          }
-                        Row {
-                            id: row2
-                            height: 40
-                            anchors.left: column.right
-                            anchors.right: column.left
-                            anchors.top: column.top
-                            anchors.topMargin: 80
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
-                            Rectangle {
+                             
+                        Rectangle {
                                 id: rectangle12
-                                height: 40
+                                height: 41
+                                width:174
+
                                 color: "#00ffffff"
                                 border.color: "#ffffff"
-                                anchors.left: parent.right
-                                anchors.right: rectangle13.left
-                                anchors.leftMargin: 0
-                                anchors.rightMargin: 0
-
                                 Text {
                                     id: text10
                                     color: "#ffffff"
@@ -1092,16 +1057,14 @@ Item {
                                     horizontalAlignment: Text.AlignLeft
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
-                            }
+                        }
 
-                            Rectangle {
+                        Rectangle {
                                     id: rectangle13
-                                    width: 138
-                                    height: 40
+                                    width: 174
+                                    height: 41
                                     color: "#000000"
                                     border.color: "#ffffff"
-                                    anchors.right: rectangle14.left
-                                    anchors.rightMargin: 0
 
                                     TextField {
                                         id: textField3
@@ -1111,7 +1074,7 @@ Item {
                                         readOnly: false
                                         text: "30"
                                         anchors.fill: parent
-                                        font.pixelSize: 22
+                                        font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                         hoverEnabled: false
@@ -1121,24 +1084,20 @@ Item {
                                         anchors.topMargin: 0
                                         placeholderTextColor: "#00ffffff"
                                         placeholderText: qsTr("Text Field")
-                                        background: Rectangle {
-                                            id: rectangle_txt_bg_2
-                                            width: 138
-                                            height: 40
-                                            color: "#00ffffff"
-                                            border.color: "#ffffff"
+                                        background:Rectangle{
+                                            color: "#000000"
+                                            border.color: "#FFFFFF"
                                         }
-                                    }
-                                }
 
-                            Rectangle {
+                                    }
+                         }
+
+                        Rectangle {
                                     id: rectangle14
-                                    width: 138
-                                    height: 40
+                                    width: 174
+                                    height: 41
                                     color: "#00ffffff"
                                     border.color: "#ffffff"
-                                    anchors.right: row2.left
-                                    anchors.rightMargin: 0
                                     Text {
                                         id: text11
                                         color: "#65e5e7"
@@ -1148,27 +1107,15 @@ Item {
                                         horizontalAlignment: Text.AlignLeft
                                         anchors.horizontalCenter: parent.horizontalCenter
                                     }
-                                }
-                             }
-                         }
-                        Row {
-                            id: row3
-                            height: 40
-                            anchors.left: column.right
-                            anchors.right: column.left
-                            anchors.top: column.top
-                            anchors.topMargin: 120
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
-                            Rectangle {
+                                
+                            }
+                         
+                        Rectangle {
                                 id: rectangle15
-                                height: 40
+                                height: 41
+                                width: 174
                                 color: "#00ffffff"
                                 border.color: "#ffffff"
-                                anchors.left: parent.right
-                                anchors.right: rectangle16.left
-                                anchors.leftMargin: 0
-                                anchors.rightMargin: 0
 
                                 Text {
                                     id: text12
@@ -1179,16 +1126,14 @@ Item {
                                     horizontalAlignment: Text.AlignLeft
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
-                            }
+                        }
 
-                            Rectangle {
+                        Rectangle {
                                     id: rectangle16
-                                    width: 138
-                                    height: 40
+                                    width: 174
+                                    height: 41
                                     color: "#000000"
                                     border.color: "#ffffff"
-                                    anchors.right: rectangle17.left
-                                    anchors.rightMargin: 0
 
                                     TextField {
                                         id: textField4
@@ -1198,7 +1143,7 @@ Item {
                                         text: "30"
                                         readOnly: false
                                         anchors.fill: parent
-                                        font.pixelSize: 22
+                                        font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                         hoverEnabled: false
@@ -1208,107 +1153,46 @@ Item {
                                         anchors.topMargin: 0
                                         placeholderTextColor: "#00ffffff"
                                         placeholderText: qsTr("Text Field")
-                                        background: Rectangle {
-                                            id: rectangle_txt_bg_4
-                                            width: 138
-                                            height: 40
-                                            color: "#00ffffff"
-                                            border.color: "#ffffff"
+                                        background:Rectangle{
+                                            color: "#000000"
+                                            border.color: "#FFFFFF"
                                         }
+                                       
                                     }
-                                }
-
-                            Rectangle {
-                                    id: rectangle17
-                                    width: 138
-                                    height: 40
-                                    color: "#00ffffff"
-                                    border.color: "#ffffff"
-                                    anchors.right: row3.left
-                                    anchors.rightMargin: 0
-                                    Text {
-                                        id: text13
-                                        color: "#65e5e7"
-                                        text: qsTr("ms")
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pixelSize: 22
-                                        horizontalAlignment: Text.AlignLeft
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                    }
-                                }
-                             
                          }
-                            /*Button {
-                                    id: edit_button
-                                    y: 220
-                                    text: "EDIT"
-                                    width: 207
-                                    height: 76  
-                                    anchors.left: rectangle3.left
-                                    anchors.leftMargin: 33
+
+                        Rectangle {
+                                id: rectangle17
+                                width: 174
+                                height: 41
+                                color: "#00ffffff"
+                                border.color: "#ffffff"
+
+                                Text {
+                                    id: text13
+                                    color: "#65e5e7"
+                                    text: qsTr("ms")
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 22
+                                    horizontalAlignment: Text.AlignLeft
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                
+                         }
+                     }
+
+                    
+                 Button {
+                        id: send_button
+                        y: 230
+                        text: "SEND TIMING"
+                        height: 76  
+                        anchors.left: rectangle3.left
+                        anchors.leftMargin: 33
+                        anchors.right: rectangle3.right
+                        anchors.rightMargin: 33
                                     
-                                    contentItem: Text {
-                                        text: edit_button.text
-                                        font.pointSize: 30
-                                        font.bold: true
-                                        opacity: enabled ? 1.0 : 0.3
-                                        color: "#ffffff"
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        elide: Text.ElideRight
-                                    }
-                                    background: Rectangle {
-                                        implicitWidth: 100
-                                        implicitHeight: 40
-                                        opacity: enabled ? 1 : 0.3
-                                        color: edit_button.down ? "#865006" : "#373637"
-                                        border.color: "#ffffff"
-                                        border.width: 1
-                                        radius: 4
-                                    }
-                                   
-                                }   */
-                            /*Button {
-                                    id: save_button
-                                    y: 220
-                                    text: "SAVE"
-                                    width: 207
-                                    height: 76  
-                                    anchors.right: rectangle3.right
-                                    anchors.rightMargin: 33
-                                    
-                                    contentItem: Text {
-                                        text: save_button.text
-                                        font.pointSize: 30
-                                        font.bold: true
-                                        opacity: enabled ? 1.0 : 0.3
-                                        color: "#ffffff"
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        elide: Text.ElideRight
-                                    }
-                                    background: Rectangle {
-                                        implicitWidth: 100
-                                        implicitHeight: 40
-                                        opacity: enabled ? 1 : 0.3
-                                        color: save_button.down ? "#865006" : "#373637"
-                                        border.color: "#ffffff"
-                                        border.width: 1
-                                        radius: 4
-                                    }
-                                   
-                            }*/  
-                            Button {
-                                    id: send_button
-                                    y: 230
-                                    text: "SEND TIMING"
-                                    height: 76  
-                                    anchors.left: rectangle3.left
-                                    anchors.leftMargin: 33
-                                    anchors.right: rectangle3.right
-                                    anchors.rightMargin: 33
-                                    
-                                    contentItem: Text {
+                        contentItem: Text {
                                         text: send_button.text
                                         font.pointSize: 30
                                         font.bold: true
@@ -1318,7 +1202,7 @@ Item {
                                         verticalAlignment: Text.AlignVCenter
                                         elide: Text.ElideRight
                                     }
-                                    background: Rectangle {
+                        background: Rectangle {
                                         implicitWidth: 100
                                         implicitHeight: 40
                                         opacity: enabled ? 1 : 0.3
@@ -1328,9 +1212,9 @@ Item {
                                         radius: 4
                                     }
                                    
-                                }                                          
+                        }                                          
                                 
-                     }
+                    }
 
                 
 
@@ -1451,7 +1335,6 @@ Item {
                 Button {
                     id: close_button
                     text: "CLOSE"
-                    highlighted : true
                     y: 645
                     width: 207
                     height: 76
@@ -1483,7 +1366,6 @@ Item {
                 
                 Button {
                     id: open_button
-                    highlighted : true
                     x: 248
                     y: 645
                     width: 207
@@ -1667,7 +1549,6 @@ Item {
                     width: 74
                     color: "#ffffff"
                     font.pixelSize: 30
-                    text: open_percentage       
                     horizontalAlignment: Text.AlignLeft
                     rightPadding: 6
                     anchors.left: parent.left
@@ -1708,7 +1589,6 @@ Item {
                     width: 74
                     color: "#ffffff"
                     font.pixelSize: 30
-                    text: open_percentage       
                     horizontalAlignment: Text.AlignLeft
                     rightPadding: 6
                     anchors.left: parent.left

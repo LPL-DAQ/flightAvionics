@@ -196,8 +196,6 @@ Rectangle {
             width: 67
             height: 23
             color: "#ffffff"
-            text: qsTr(valve_ctrl.name)
-            anchors.bottom: valve_ctrl.bottom
             font.pixelSize: 18
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
