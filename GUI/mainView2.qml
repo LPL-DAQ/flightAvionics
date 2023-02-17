@@ -13,7 +13,7 @@ Item {
     width: 2560*dpi_scale
     height: 1440*dpi_scale
     visible: true
-    property real dpi_scale: 0.6
+    property real dpi_scale: 0.5
     scale: 1
 
     function updateElements() {
@@ -984,7 +984,7 @@ Item {
                                 Text {
                                     id: text8
                                     color: "#ffffff"
-                                    text: qsTr("PBVF201")
+                                    text: qsTr("IGNITER")
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 25
                                     horizontalAlignment: Text.AlignLeft
@@ -1120,7 +1120,7 @@ Item {
                                 Text {
                                     id: text12
                                     color: "#ffffff"
-                                    text: qsTr("IGNITER")
+                                    text: qsTr("PBVF201")
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 25
                                     horizontalAlignment: Text.AlignLeft
@@ -1211,6 +1211,9 @@ Item {
                                         border.width: 1
                                         radius: 4
                                     }
+                            onClicked: {
+                            bridge.sendTiming(textField.text, textField2.text, textField3.text, textField4.text)
+                            }
                                    
                         }                                          
                                 

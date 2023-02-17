@@ -136,7 +136,12 @@ class Bridge(QObject):
         print(valveName)
         if valveName != "None":
             self.s.sendValveCmd(valveName)
-        
+
+    @Slot(str, str, str, str)   
+    def sendTiming(self,timer:str, igniter:str, lox_main:str, fuel_main:str):
+        print(timer,igniter,lox_main,fuel_main)
+        self.s.sendTimingCmd(timer,igniter,lox_main,fuel_main)
+
 
 
 def guiThreadFunc(s:serverFunc.Server):
