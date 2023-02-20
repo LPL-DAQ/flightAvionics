@@ -115,15 +115,16 @@ Item {
         prh002_open.open_percentage()
 
     }
-    function server_status(){
+    function messagesBox(){
         //print("Test", bridge.serverStatus)
         if (bridge.getServerStatus()){
-            text17.color = "#32CD32"
-            text17.text= qsTr("CONNECTED")
+            server_status_text.color = "#32CD32"
+            server_status_text.text= qsTr("CONNECTED")
         }else{
-            text17.color = "#FF0000"
-            text17.text= qsTr("NOT CONNECTED")
+            server_status_text.color = "#FF0000"
+            server_status_text.text= qsTr("NOT CONNECTED")
         }
+
         }
 
     Rectangle {
@@ -843,7 +844,7 @@ Item {
                 x: 1990
                 y: 0
                 width: 521
-                height: 1281
+                height: 1357
                 color: "#00ffffff"
                 border.color: "#ffffff"
                 anchors.right: parent.right
@@ -1206,13 +1207,48 @@ Item {
                                         implicitWidth: 100
                                         implicitHeight: 40
                                         opacity: enabled ? 1 : 0.3
-                                        color: send_button.down ? "#732727" : "#cb2a2a"
+                                        color: send_button.down ? "#732727" : "#696969"
                                         border.color: "#ffffff"
                                         border.width: 1
                                         radius: 4
                                     }
                                    
-                        }                                          
+                        } 
+                        Button {
+                        id: abort_button
+                        y: 400
+                        text: "ABORT"
+                        height: 100  
+                        anchors.left: rectangle3.left
+                        anchors.leftMargin: 33
+                        anchors.right: rectangle3.right
+                        anchors.rightMargin: 33
+                                    
+                        contentItem: Text {
+                                        text: abort_button.text
+                                        font.pointSize: 30
+                                        font.bold: true
+                                        opacity: enabled ? 1.0 : 0.3
+                                        color: "#ffffff"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+                        background: Rectangle {
+                                        implicitWidth: 100
+                                        implicitHeight: 40
+                                        opacity: enabled ? 1 : 0.3
+                                        color: abort_button.down ? "#732727" : "#FF0000"
+                                        border.color: "#ffffff"
+                                        border.width: 1
+                                        radius: 4
+                                    }
+                            onClicked: {
+                            }
+                                   
+                        }   
+
+                                                                    
                                 
                     }
 
@@ -1404,7 +1440,7 @@ Item {
                 x: 1385
                 y: 978
                 width: 585
-                height: 303
+                height: 379
                 color: "#000000"
                 border.color: "#ffffff"
 
@@ -1582,31 +1618,107 @@ Item {
                     prh002_text.text=qsTr(bridge.regState("PRH002"))
                 }
 
-            }
-            }
-        }
-        Text {
-            id: text16
-            x: 49
-            y: 1214
-            width: 250
-            height: 46
-            color: "#ffffff"
-            text: qsTr("SERVER STATUS: ")
-            font.pixelSize: 25
-            horizontalAlignment: Text.AlignLeft
+               }
+             }
         }
         
-        Text {
-            id: text17
-            x: 305
-            y: 1214
-            width: 250
-            height: 46
-            color: "#ff0000"
-            text: qsTr("NOT CONNECTED")
-            font.pixelSize: 25
-            horizontalAlignment: Text.AlignLeft
+        Button{
+            id: kill_server
+            x: 36
+            y: 1351
+            width: 237
+            height: 58
+            text: "KILL SERVER"
+            contentItem: Text {
+                        text: kill_server.text
+                        font.pointSize: 30
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+            background:Rectangle{
+                border.color: "#ffffff"
+                color: kill_server.down ? "#732727" : "#941010"
+            }
+            onClicked: {
+                textField5.visible = true;
+            }
+            TextField {
+                id: textField5
+                x: 300
+                y: 0
+                width: 220
+                height: 47
+                font.pixelSize: 30
+                echoMode: TextInput.Password 
+                visible: false
+                placeholderText: qsTr("Password")
+
+                Keys.onReturnPressed:{
+                    bridge.closeServer(textField5.text)
+                    warning_text1.text= qsTr(bridge.getStatusMessages())
+                }
+             }
+        }
+        
+        TextArea {
+            id: textArea
+            x: 38
+            y: 1026
+            width: 1067
+            height: 300
+            readOnly: true
+            leftPadding: 20
+            topPadding: 10
+            font.pointSize: 30
+            color: "#ffffff"
+            placeholderText: qsTr("Text Area")
+                    Text {
+                    id: server_status_text
+                    x: 23
+                    y: 21
+                    width: 1028
+                    height: 44
+                    color: "#ffffff"
+                    text: qsTr("NOT CONNECTED")
+                    font.pixelSize: 30
+                    horizontalAlignment: Text.AlignLeft
+                }
+                    Text {
+                    id: warning_text1
+                    x: 24
+                    y: 71
+                    width: 1028
+                    height: 78
+                    color: "#ffffff"
+                    text: qsTr(" ")
+                    font.pixelSize: 30
+                    horizontalAlignment: Text.AlignLeft
+                }
+            background:Rectangle{
+                color: "#000000"
+                border.color: "#FFFFFF"
+            }
+        }
+            TextArea {
+            id: textArea1
+            x: 1557
+            y: 35
+            width: 424
+            height: 107
+            color: "#FFFFFF"
+            font.pointSize: 50
+            horizontalAlignment: Text.AlignHCenter
+            text: qsTr("T-30")
+            placeholderText: qsTr("T-30")
+            topPadding: 10
+            leftPadding: 20
+            background:Rectangle{
+                color: "#000000"
+            }
         }
      }
 }
