@@ -134,8 +134,8 @@ ApplicationWindow {
             contentHeight:  1440*dpi_scale
 
             Rectangle {
-                width: 2560
-                height: 1440
+                width: maximumWidth
+                height: maximumHeight
                 color: "#000000"
                 transformOrigin: Item.TopLeft
                 scale: dpi_scale
@@ -1709,23 +1709,56 @@ ApplicationWindow {
                         border.color: "#FFFFFF"
                     }
                 }
-                    TextArea {
-                    id: textArea1
-                    x: 1557
-                    y: 35
-                    width: 424
-                    height: 107
-                    color: "#FFFFFF"
-                    font.pointSize: 50
-                    horizontalAlignment: Text.AlignHCenter
-                    text: qsTr("T-30")
-                    placeholderText: qsTr("T-30")
-                    topPadding: 10
-                    leftPadding: 20
-                    background:Rectangle{
-                        color: "#000000"
+
+                Rectangle {
+                    id: rectangle60
+                    x: 1630
+                    y: 21
+                    width: 368
+                    height: 157
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    
+                    Rectangle {
+                        id: rectangle55
+                        x: 0
+                        y: 0
+                        width: 368
+                        height: 48
+                        color: "#1c5f55"
+                        border.color: "#ffffff"
+                        
+                        Text {
+                            id: text49
+                            x: 100
+                            y: 8
+                            width: 168
+                            height: 32
+                            color: "#ffffff"
+                            text: qsTr("COUNTDOWN")
+                            font.pixelSize: 23
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.bold: true
+                        }
+                    }
+                    
+                    Text {
+                        id: text50
+                        x: 114
+                        y: 73
+                        width: 147
+                        height: 64
+                        color: "#ffffff"
+                        text: qsTr("T-30")
+                        font.pixelSize: 50
+                        font.family: "Courier"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.bold: true
                     }
                 }
+                    
             }
         }
     }
