@@ -36,6 +36,7 @@ class Bridge(QObject):
         self.guiReadings = s.getDataReadings()
         self.valveStates = s.getValveReadings()
         self.serverStatus = s.isConnected()
+        self.statusMessages= "none"
 
         self.percent1=0
         self.percent2=0
@@ -58,10 +59,18 @@ class Bridge(QObject):
     def armValve(self, valveName:str, state:str):
         self.armedValues[valveName]=state
         print(valveName,":",state)
-        if state == "nil":
-            self.s.setArmedValve("None")
-        else:
+        if state == "ARMED":
             self.s.setArmedValve(valveName)
+
+    @Slot(str, result=bool)
+    def disArm(self,name:str):
+        valveName = self.s.getArmedValve()
+        #print(valveName)
+        if name!=valveName:
+            return True
+        else:
+            return False
+        
 
     @Slot(str, result=bool)
     def getValveState(self, valveName:str):
@@ -125,8 +134,24 @@ class Bridge(QObject):
     @Slot()
     def sendCommand(self):
         valveName = self.s.getArmedValve()
+        print(valveName)
         if valveName != "None":
             self.s.sendValveCmd(valveName)
+    
+    @Slot(str)
+    def closeServer(self, password):
+        if password == "kill":
+            self.statusMessages="  "
+            self.s.closeSocket()
+        else:
+            self.statusMessages= "incorrect password, try again"
+    
+    @Slot(result=str)
+    def getStatusMessages(self):
+        return self.statusMessages
+    
+    
+        
         
 
 
@@ -156,7 +181,7 @@ def guiThreadFunc(s:serverFunc.Server):
     context.setContextProperty("bridge", bridge)
 
     timer.timeout.connect(root.updateElements)
-    timer.timeout.connect(root.server_status)
+    timer.timeout.connect(root.messagesBox)
 
     
     view.show()

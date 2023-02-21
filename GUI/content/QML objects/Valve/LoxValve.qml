@@ -23,7 +23,7 @@ Rectangle {
         },
         State {
             name: "OD"
-            PropertyChanges { target: icon_image; source: "OpenValve_Lox.png"}
+            PropertyChanges { target: icon_image; source: "OpenedValve_Lox.png"}
         },
         State {
             name: "CA"
