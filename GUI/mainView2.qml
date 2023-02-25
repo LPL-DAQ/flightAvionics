@@ -1708,57 +1708,7 @@ ApplicationWindow {
                         color: "#000000"
                         border.color: "#FFFFFF"
                     }
-                }
-
-                Rectangle {
-                    id: rectangle60
-                    x: 1630
-                    y: 21
-                    width: 368
-                    height: 157
-                    color: "#000000"
-                    border.color: "#ffffff"
-                    
-                    Rectangle {
-                        id: rectangle55
-                        x: 0
-                        y: 0
-                        width: 368
-                        height: 48
-                        color: "#1c5f55"
-                        border.color: "#ffffff"
-                        
-                        Text {
-                            id: text49
-                            x: 100
-                            y: 8
-                            width: 168
-                            height: 32
-                            color: "#ffffff"
-                            text: qsTr("COUNTDOWN")
-                            font.pixelSize: 23
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.bold: true
-                        }
-                    }
-                    
-                    Text {
-                        id: text50
-                        x: 114
-                        y: 73
-                        width: 147
-                        height: 64
-                        color: "#ffffff"
-                        text: qsTr("T-30")
-                        font.pixelSize: 50
-                        font.family: "Courier"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        font.bold: true
-                    }
-                }
-                    
+                }   
             }
         }
     }
