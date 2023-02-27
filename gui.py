@@ -139,9 +139,12 @@ class Bridge(QObject):
 
     @Slot(str, str, str, str)   
     def sendTiming(self,timer:str, igniter:str, lox_main:str, fuel_main:str):
-        print(timer,igniter,lox_main,fuel_main)
         self.s.sendTimingCmd(timer,igniter,lox_main,fuel_main)
 
+    @Slot(str)
+    def ignitionCmd(self, timer):
+        self.s.ignitionCMD(timer)
+        
 
 
 def guiThreadFunc(s:serverFunc.Server):

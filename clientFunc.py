@@ -5,6 +5,7 @@ import threading
 import verify
 import telemetry
 import timing 
+import SVLib
 
 
 messengerLock = threading.Lock()
@@ -113,6 +114,23 @@ class Client:
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 messengerLock.release()
                                 print("MSG SENT")
+                            if len(received_reading) == 5: #timing sequence
+                                print("Received Timing")
+                                igniter= received_reading[2]
+                                lox= received_reading[3]
+                                fuel= received_reading[4]
+                                timing=[igniter, lox, fuel]
+                                SVLib.timingSequence(timing)
+
+                            if len(received_reading[0]) == "GM1": #ground command
+                                print("Received ignition command")
+                                timer= int(received_reading[2])
+                                time.sleep(timer)
+                                SVLib.groundCommands("IGNITION")
+
+                            
+                                
+
                             else:
                                 print("FUCKED UP MSG :)")
                         data.remove(data[0])

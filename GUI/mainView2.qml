@@ -1206,17 +1206,51 @@ Item {
                                         implicitWidth: 100
                                         implicitHeight: 40
                                         opacity: enabled ? 1 : 0.3
-                                        color: send_button.down ? "#732727" : "#cb2a2a"
+                                        color: send_button.down ? "#732727" : "#808080"
                                         border.color: "#ffffff"
                                         border.width: 1
                                         radius: 4
                                     }
                             onClicked: {
+                            ignition_button.visible = true;
                             bridge.sendTiming(textField.text, textField2.text, textField3.text, textField4.text)
                             }
                                    
                         }                                          
                                 
+                    }
+                    Button {
+                        id: ignition_button
+                        y: 1150
+                        text: "IGNITION"
+                        height: 76  
+                        visible: false
+                        anchors.left: rectangle3.left
+                        anchors.leftMargin: 33
+                        anchors.right: rectangle3.right
+                        anchors.rightMargin: 33
+                        contentItem: Text {
+                                        text: ignition_button.text
+                                        font.pointSize: 30
+                                        font.bold: true
+                                        opacity: enabled ? 1.0 : 0.3
+                                        color: "#ffffff"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+                        background: Rectangle {
+                                        implicitWidth: 100
+                                        implicitHeight: 40
+                                        opacity: enabled ? 1 : 0.3
+                                        color: ignition_button.down ? "#732727" : "#cb2a2a"
+                                        border.color: "#ffffff"
+                                        border.width: 1
+                                        radius: 4
+                                    }
+                            onClicked: {
+                                bridge.ignitionCmd(textField.text)
+                            }
                     }
 
                 

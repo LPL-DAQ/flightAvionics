@@ -75,3 +75,24 @@ def initialiseValves(configFile:str):
         valves[SV_name].powerOFF()
         print("[", SV_name, "] has been initialized in its normal state", sep="")
     return valves
+
+def timingSequence(self, timing):
+    ser = set_up_serial('/dev/ttyACM0')
+    i=0
+    while(i<4):
+        msg = "#T0"+ i + "/" + timing[i] 
+        send_data(ser,msg)
+        time.sleep(100)
+        i=i+1
+
+def groundCommands(self, command):
+    ser = set_up_serial('/dev/ttyACM0')
+    if command == "IGNITION":
+        print("received ignition command")
+        msg= "#GM1/SNDIT"
+    if command == "ABORT":
+        print("received abort command")
+        msg= "#GM1/ABORT"
+    send_data(ser,msg)
+
+
