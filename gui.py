@@ -102,17 +102,21 @@ class Bridge(QObject):
             return False
     @Slot(str,str, result=int)        
     def regCommand(self, name:str, direction:str):
-        if name=="PRH001": 
+        if name=="PRH001": #regulator 1
             if direction == "increase":
                 if self.armedValues[name]=="ARMED":
                     self.percent1+=1
-                    percent=self.percent1
+                    percent=self.percent1 #updates percentage field in GUI
+                    command="#REG001/CW" #command to rotate clockwise by fixed number of steps
+                    telemetry.sendMsg(command)
             else:
                 if self.armedValues[name]=="ARMED":
                     self.percent1-=1
-                    percent=self.percent1
+                    percent=self.percent1 #updates percentage field in GUI
+                    command="#REG001/CCW" #command to rotate counterclockwise by fixed number of steps
+                    telemetry.sendMsg(command)
 
-        if name=="PRH002":
+        if name=="PRH002": #second regulator commands (not used yet)
             if direction == "increase":
                 if self.armedValues[name]=="ARMED":
                     self.percent2+=1
@@ -127,6 +131,7 @@ class Bridge(QObject):
     
     @Slot(str,result=str)        
     def regState(self,name):
+        #provides current regulator open percentage 
         if name=="PRH001":
             return str(self.percent1)
         else:
