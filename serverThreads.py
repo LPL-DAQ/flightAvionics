@@ -9,6 +9,8 @@ import timing
 import telemetry
 import serverFunc
 
+#most of this is unused since we limited the valve commands to actuate one at a time
+
 # def valveTimeOut(s:serverFunc.Server):
 #     pendingValves = s.getPendingValves()
 #     while True:
@@ -69,6 +71,7 @@ class dataReceiver(QThread):
     def run(self):
         dataListener(self.s)
 
+#checks to see if any valve cmds have timed out
 # class valveTimeOut(QThread):
 #     def __init__(self, s:serverFunc.Server) -> None:
 #         super().__init__()

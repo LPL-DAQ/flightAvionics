@@ -9,7 +9,7 @@ class Readings:
         self.readings = dict()
         self.refreshAll()
         
-    #updates the value and timestamp for each value sequentially
+    #updates the value and timestamp for each value sequentially (HW limitation)
     def refreshAll(self):
         for PT_name in self.PTs:
             new_reading = dict()
@@ -46,9 +46,6 @@ class valveStates:
 
     #updates the state of a sensor
     def update(self,name:str,value:str):
-        # new_reading = dict()
-        # # new_reading['value']= value
-        # # new_reading['type']= name[0:2]
         self.states[name] = value
     
     #execute valve command...needs error check
@@ -73,6 +70,7 @@ def sendMsg(socket, msg):
     msg = str.encode(msg)
     socket.sendall(msg)
 
+#sends a reading to a socket
 def sendReading(name:str, reading:dict, socket: socket.socket):
     value = reading['value']
     time =  reading['time']

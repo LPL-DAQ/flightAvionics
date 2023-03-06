@@ -18,7 +18,7 @@ class MCP3008:
         #converts digital value (0...1023) to voltage (0...5V)
         voltage = (digitalReading * 5.365) / 1023
         return voltage
-
+        #poll func
     def interrogate(self, channel):
         data = self.__readMCP3008(channel)
         voltage = self.__dig2volts(data)
