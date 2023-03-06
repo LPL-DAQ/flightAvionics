@@ -13,18 +13,6 @@ from PySide6.QtCore import QObject, Slot, QTimer
 
 QML_IMPORT_NAME = "GUI2"
 QML_IMPORT_MAJOR_VERSION = 1
-
-#not sure what this does...
-# class myClass():
-
-#     myprop:int = 0
-
-#     def someMeth(self):
-#         #return math.sin(time.time())
-#         self.myprop = self.myprop + 1
-#         return self.myprop
-
-
  
 @QmlElement
 class Bridge(QObject):

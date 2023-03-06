@@ -9,8 +9,9 @@ def setRefTime(HH,MM,SS):
     t = time.localtime()
     ref_time = time.mktime((t.tm_year,t.tm_mon,t.tm_mday,HH,MM,SS,t.tm_wday,t.tm_yday,t.tm_isdst))
 
-setRefTime(00,00,00)
+# setRefTime(00,00,00)
 
+#gets the time
 def missionTime():
     #returns formated time stamp of the time ellepased in seconds since the reference time
 
@@ -20,6 +21,7 @@ def missionTime():
 
     return time_stamp
 
+#gets the difference in time between the two
 def getTimeDiff(first:str, last:str):
     
     sol = float(last) - float(first)
