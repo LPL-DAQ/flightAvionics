@@ -8,7 +8,7 @@ import serverFunc
 import sys
 
 from PySide6 import QtWidgets, QtQuick
-from PySide6.QtQml import QmlElement
+from PySide6.QtQml import QmlElement, QQmlApplicationEngine
 from PySide6.QtCore import QObject, Slot, QTimer
 
 QML_IMPORT_NAME = "GUI2"
@@ -161,18 +161,17 @@ def guiThreadFunc(s:serverFunc.Server):
     timer = QTimer()
     timer.start(10)
 
-    view.setSource("GUI/mainView2.qml")
+    engine= QQmlApplicationEngine("GUI/mainViewHODOR.qml")
 
-    root = view.rootObject()
+    root = engine.rootObjects()[0]
 
-    context = view.rootContext()
+    context = engine.rootContext()
     context.setContextProperty("bridge", bridge)
 
     timer.timeout.connect(root.updateElements)
     timer.timeout.connect(root.messagesBox)
 
     
-    view.show()
     
     sys.exit(app.exec())
     
