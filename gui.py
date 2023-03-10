@@ -37,6 +37,7 @@ class Bridge(QObject):
         self.valveStates = s.getValveReadings()
         self.serverStatus = s.isConnected()
         self.statusMessages= "none"
+        self.socket= s.getSocket()
 
         self.percent1=0
         self.percent2=0
@@ -108,13 +109,13 @@ class Bridge(QObject):
                     self.percent1+=1
                     percent=self.percent1 #updates percentage field in GUI
                     command="#REG001/CW" #command to rotate clockwise by fixed number of steps
-                    telemetry.sendMsg(command)
+                    self.s.sendRegCmd(command)
             else:
                 if self.armedValues[name]=="ARMED":
                     self.percent1-=1
                     percent=self.percent1 #updates percentage field in GUI
                     command="#REG001/CCW" #command to rotate counterclockwise by fixed number of steps
-                    telemetry.sendMsg(command)
+                    self.s.sendRegCmd(command)
 
         if name=="PRH002": #second regulator commands (not used yet)
             if direction == "increase":

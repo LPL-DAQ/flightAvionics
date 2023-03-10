@@ -121,10 +121,10 @@ class Client:
                                 direction= received_reading[1]
                                 print("Received:", name, direction)
                                 if direction == "CW":
-                                    self.Regulators.motor_run(5, 1)
+                                    self.Regulators[name].motor_run(5, 1)
                                     print("COMMAND SENT")
                                 elif direction == "CCW":
-                                    self.Regulators.motor_run(5, 0)
+                                    self.Regulators[name].motor_run(5, 0)
                                     print("COMMAND SENT")
                                 else:
                                     print("Command error")

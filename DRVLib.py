@@ -11,10 +11,10 @@ class DRV8825():
     def __init__(self, _direction_pin, _step_pin):
         print("Initializing Regulator")
         #define GPIO pins on PI
-        self.direction_pin= _direction_pin # Direction (DIR) GPIO Pin
-        self.step_pin = _step_pin # STEP GPIO Pin
+        self.direction_pin=int(_direction_pin)# Direction (DIR) GPIO Pin
+        self.step_pin = int(_step_pin) # STEP GPIO Pin
         #self.MODE_pins= (14, 15, 18) #Step Mode GPIO pins
-        self.gpiopins=[self.direction, self.step, self.MODE, self.sensor]
+        #self.gpiopins=[self.direction_pin, self.step_pin, self.MODE, self.sensor]
 
         #constants
         self.wait=0.004
@@ -54,7 +54,7 @@ class DRV8825():
                 quit()
         try: 
             print("Running Motor")
-            GPIO.output(self.direction,DIR)
+            GPIO.output(self.direction_pin,DIR)
             #GPIO.output(self.MODE_pins, self.RESOLUTION[steptype])
             time.sleep(self.initdelay)
 
@@ -66,6 +66,7 @@ class DRV8825():
                     sleep(self.wait)
                     GPIO.output(self.step_pin, GPIO.LOW)
                     sleep(self.wait)
+                    print("step:", x)
 
 
         except self.StopMotorInterrupt:

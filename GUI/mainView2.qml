@@ -13,7 +13,7 @@ Item {
     width: 2560*dpi_scale
     height: 1440*dpi_scale
     visible: true
-    property real dpi_scale: 0.6
+    property real dpi_scale: 0.5
     scale: 1
 
     function updateElements() {

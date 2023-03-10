@@ -138,6 +138,9 @@ class Server:
         msg = "#" + valve + "/" + newState
         telemetry.sendMsg(self.getSocket(), msg)  
 
+    def sendRegCmd(self, command):
+        telemetry.sendMsg(self.getSocket(), command)
+        
     #theres more logic to this but ill do it sometime
     def verifyValve(self):
         valve = self.armedValve
