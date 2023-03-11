@@ -64,6 +64,8 @@ Item {
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
 
+        //Tank Tank Level
+        dpf201.fetchNewVal()
 
         svh001t.update()
         svh002t.update()
@@ -408,11 +410,12 @@ Item {
                     anchors.bottomMargin: 231
                 }
 
-                Rectangle {
-                    id: fuel_percentage
+                TankLevel {
+                    id: dpf201
+                    name: "DPF201"
                     width: 63
                     height: 22
-                    color: "#000000"
+                    y: 393
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
                     anchors.leftMargin: 1024

@@ -13,10 +13,16 @@ class Readings:
     def refreshAll(self):
         for PT_name in self.PTs:
             new_reading = dict()
-            new_reading['value']= "{:0>7.2f}".format(self.PTs[PT_name].pressure)
-            new_reading['time']= self.PTs[PT_name].timeStamp
-            new_reading['type']= 'PT'
-            self.readings[PT_name] = new_reading
+            if PT_name[:2] != "DP":
+                new_reading['value']= "{:0>7.2f}".format(self.PTs[PT_name].pressure)
+                new_reading['time']= self.PTs[PT_name].timeStamp
+                new_reading['type']= 'PT'
+                self.readings[PT_name] = new_reading
+            else:
+                new_reading['value']= "{:0>7.2f}".format(self.PTs[PT_name].percentage_fill)
+                new_reading['time']= self.PTs[PT_name].timeStamp
+                new_reading['type']= 'PT'
+                self.readings[PT_name] = new_reading
 
         for TC_name in self.TCs:
             new_reading = dict()

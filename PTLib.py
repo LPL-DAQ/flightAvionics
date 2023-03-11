@@ -42,6 +42,17 @@ class PT:
         self.pressure = self.voltsToPSI(self.voltage)
         return self.pressure
 
+class DP(PT):
+    tank_ht: float = 0
+    density: float = 0
+    percentage_fill: float = 0
+
+    def get_fill(self):
+        self.updatePressure()
+        height = self.pressure / (self.density * 9.81) #find height of fluid in the tank 
+        self.percentage_fill = height/self.tank_ht #find percentange out of maximum height
+        return self.percentage_fill
+    
 def openSPI(channel, chip, frequency):
     #opens an SPI channel
     spi = spidev.SpiDev()
@@ -89,15 +100,25 @@ def parsePTini(PTfile: str):
         PToffset = float(PTparser[PTname]['offset'])
         #hard coded values for ADC initializations 
         #should check for validity here
-        if PTport[0] == 'A':
-            PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
-        elif PTport[0] == 'B':
-            PTs[PTname] = PT(PTname, ADC1, PTchannel, PToffset, PTslope)
-        elif PTport[0] == 'C':
-            PTs[PTname] = PT(PTname, ADC2, PTchannel, PToffset, PTslope)
-        elif PTport[0]== 'D':
-            PTs[PTname] = PT(PTname, ADC3, PTchannel, PToffset, PTslope)
-            
+        if PTname[:2] != "DP":
+            if PTport[0] == 'A':
+                PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'B':
+                PTs[PTname] = PT(PTname, ADC1, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'C':
+                PTs[PTname] = PT(PTname, ADC2, PTchannel, PToffset, PTslope)
+            elif PTport[0]== 'D':
+                PTs[PTname] = PT(PTname, ADC3, PTchannel, PToffset, PTslope)
+        else:
+            if PTport[0] == 'A':
+                PTs[PTname] = DP(PTname, ADC0, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'B':
+                PTs[PTname] = DP(PTname, ADC1, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'C':
+                PTs[PTname] = DP(PTname, ADC2, PTchannel, PToffset, PTslope)
+            elif PTport[0]== 'D':
+                PTs[PTname] = DP(PTname, ADC3, PTchannel, PToffset, PTslope)
+
         PTLoadCount += 1
         #print loading bar
     print("Successfully configured", PTLoadCount, "to the PI")
@@ -109,7 +130,10 @@ def refreshPTs(PT_dict: dict(), PT_freq_Hz: float):
     PT_period = 1/PT_freq_Hz #seconds
     while True:
         for PT_name in PT_dict:
-            PT_dict[PT_name].updatePressure()
+            if PT_name[:2] == "DP": #if DP sensor, find infill percentage
+                PT_dict[PT_name].get_fill() 
+            else:
+                PT_dict[PT_name].updatePressure()
             #print(PT_dict[PT_name].getName() + " " + str(v1)) debug lines for value
             time.sleep(PT_period)
 
