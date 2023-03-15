@@ -102,7 +102,13 @@ class Client:
                     while len(data) != 0:
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
-                            if len(received_reading) == 2:
+                            print()
+                            if received_reading[0] == "GM1": #ground command
+                                print("Received ignition command")
+                                timer= int(received_reading[2])
+                                time.sleep(timer)
+                                SVLib.groundCommands("IGNITION")
+                            elif len(received_reading) == 2:
                                 name = received_reading[0]
                                 value = received_reading[1]
                                 print("Received:", name, value)
@@ -114,22 +120,13 @@ class Client:
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 messengerLock.release()
                                 print("MSG SENT")
-                            if len(received_reading) == 5: #timing sequence
+                            elif len(received_reading) == 5: #timing sequence
                                 print("Received Timing")
                                 igniter= received_reading[2]
                                 lox= received_reading[3]
                                 fuel= received_reading[4]
                                 timing=[igniter, lox, fuel]
                                 SVLib.timingSequence(timing)
-
-                            if len(received_reading[0]) == "GM1": #ground command
-                                print("Received ignition command")
-                                timer= int(received_reading[2])
-                                time.sleep(timer)
-                                SVLib.groundCommands("IGNITION")
-
-                            
-                                
 
                             else:
                                 print("FUCKED UP MSG :)")

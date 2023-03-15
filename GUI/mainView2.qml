@@ -13,7 +13,7 @@ Item {
     width: 2560*dpi_scale
     height: 1440*dpi_scale
     visible: true
-    property real dpi_scale: 0.5
+    property real dpi_scale: 0.7
     scale: 1
 
     function updateElements() {
@@ -1224,7 +1224,7 @@ Item {
                         y: 1150
                         text: "IGNITION"
                         height: 76  
-                        visible: false
+                        visible: true
                         anchors.left: rectangle3.left
                         anchors.leftMargin: 33
                         anchors.right: rectangle3.right
