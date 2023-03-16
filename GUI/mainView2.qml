@@ -1004,7 +1004,7 @@ Item {
                                         visible: true
                                         color: "#26bd2e"
                                         readOnly: false
-                                        text: "30"
+                                        text: "10"
                                         anchors.fill: parent
                                         font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
@@ -1072,7 +1072,7 @@ Item {
                                         visible: true
                                         color: "#26bd2e"
                                         readOnly: false
-                                        text: "30"
+                                        text: "20"
                                         anchors.fill: parent
                                         font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
@@ -1224,7 +1224,7 @@ Item {
                         y: 1150
                         text: "IGNITION"
                         height: 76  
-                        visible: true
+                        visible: false
                         anchors.left: rectangle3.left
                         anchors.leftMargin: 33
                         anchors.right: rectangle3.right
