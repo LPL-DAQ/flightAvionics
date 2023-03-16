@@ -26,7 +26,7 @@ def send_data(ser1, data_to_send):
     RETURN: None
     """
     send_data_list = list(data_to_send)
-    print(send_data_list)
+    #print(send_data_list)
     for data_byte in send_data_list:
         ser1.write(data_byte.encode('ascii'))
         
@@ -86,9 +86,9 @@ def timingSequence(timing):
     while(i<3):
         tmp = "00000"
         times = str(timing[i])
-        print(tmp[:(5 - len(str(timing[i])))])
+        #print(tmp[:(5 - len(str(timing[i])))])
         new = tmp[:(5 - len(str(timing[i])))] + times
-        print(new)
+        #print(new)
         msg = "#T0"+ str(i) + "/" + new + "\n"
         print(msg)
         send_data(ser,msg)
@@ -97,11 +97,12 @@ def timingSequence(timing):
 
 def groundCommands(command):
     if command == "IGNITION":
-        print("received ignition command")
+        print("sending ignition command")
         msg= "#GM1/SNDIT"
-    if command == "ABORT":
-        print("received abort command")
+    elif command == "ABORT":
+        print("sending abort command")
         msg= "#GM1/ABORT"
     send_data(ser,msg)
+    print("GROUND COMMAND SENT")
 
 
