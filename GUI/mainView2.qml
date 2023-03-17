@@ -65,7 +65,7 @@ Item {
         ptc406.fetchNewVal()
 
         //Tank Tank Level
-        dpf201.fetchNewVal()
+        dpf001.fetchNewVal()
 
         svh001t.update()
         svh002t.update()
@@ -411,8 +411,8 @@ Item {
                 }
 
                 TankLevel {
-                    id: dpf201
-                    name: "DPF201"
+                    id: dpf001
+                    name: "DPF001"
                     width: 63
                     height: 22
                     y: 393

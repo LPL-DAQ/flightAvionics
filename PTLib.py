@@ -43,14 +43,14 @@ class PT:
         return self.pressure
 
 class DP(PT):
-    tank_ht: float = 0
-    density: float = 0
+    tank_ht: float = 0.6 #m
+    density: float = 997 #kg/m3 water 
     percentage_fill: float = 0
 
     def get_fill(self):
         self.updatePressure()
-        height = self.pressure / (self.density * 9.81) #find height of fluid in the tank 
-        self.percentage_fill = height/self.tank_ht #find percentange out of maximum height
+        height = 6894.76*self.pressure / (self.density * 9.81)
+        self.percentage_fill = (height/self.tank_ht) * 100
         return self.percentage_fill
     
 def openSPI(channel, chip, frequency):
@@ -76,13 +76,13 @@ def parsePTini(PTfile: str):
     #PI commands ... ignore for now
     SPI0 = openSPI(0, 0, 1000)
     SPI1 = openSPI(0, 1, 1000)
-    SPI2= openSPI(1,0,1000) 
-    SPI3= openSPI(1,1,1000)
+    #SPI2= openSPI(1,0,1000) 
+    #SPI3= openSPI(1,1,1000)
 
     ADC0 = MCP3008.MCP3008(SPI0)
     ADC1 = MCP3008.MCP3008(SPI1)
-    ADC2= MCP3008.MCP3008(SPI2)
-    ADC3= MCP3008.MCP3008(SPI3) 
+    #ADC2= MCP3008.MCP3008(SPI2)
+    #ADC3= MCP3008.MCP3008(SPI3) 
 
     #dummy variables to run only on PC
     # ADC0 = 0
@@ -110,6 +110,7 @@ def parsePTini(PTfile: str):
             elif PTport[0]== 'D':
                 PTs[PTname] = PT(PTname, ADC3, PTchannel, PToffset, PTslope)
         else:
+            print("1 DP Found")
             if PTport[0] == 'A':
                 PTs[PTname] = DP(PTname, ADC0, PTchannel, PToffset, PTslope)
             elif PTport[0] == 'B':
