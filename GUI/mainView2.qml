@@ -1,6 +1,7 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts
+import QtQml
 import "content/Images"
 import "content/QML objects/Gage"
 import "content/QML objects/Valve"
@@ -1492,6 +1493,8 @@ Item {
                 anchors.rightMargin: 33
             }
 
+            Timer { id: timer }
+
             Image {
                 id: upArrow
                 x: 186
@@ -1501,7 +1504,27 @@ Item {
                 source: "content/Images/UpArrow.png"
                 fillMode: Image.PreserveAspectFit
                 
-                MouseArea { anchors.fill: parent; onClicked: bridge.regCommand("PRH001","increase") }
+                MouseArea { anchors.fill: parent; 
+                    onClicked: {
+                        console.log("clicked")
+                        upArrow.enabled = false;
+                        downArrow.enabled = false;
+                        upArrow.source= "content/Images/UpArrowDeactivated.png"
+                        downArrow.source= "content/Images/DownArrowDeactivated.png"
+                        timer.interval = 1000  // a short delay, enabled status would change properly.
+                        timer.triggered.connect(callback)
+                        timer.start()
+                       
+                    }
+                    function callback() {
+                        bridge.regCommand("PRH001","increase")
+                        upArrow.enabled = true;
+                        downArrow.enabled = true;
+                        upArrow.source= "content/Images/UpArrow.png"
+                        downArrow.source= "content/Images/DownArrow.png"
+                    }
+                }
+                
             }
 
             Image {
@@ -1512,7 +1535,26 @@ Item {
                 height: 50
                 source: "content/Images/DownArrow.png"
                 fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent; onClicked: bridge.regCommand("PRH001","decrease") }
+                MouseArea { anchors.fill: parent;
+                    onClicked: {
+                        console.log("clicked")
+                        downArrow.enabled = false;
+                        upArrow.enabled = false;
+                        timer.interval = 1000  // a short delay, enabled status would change properly.
+                        upArrow.source= "content/Images/UpArrowDeactivated.png"
+                        downArrow.source= "content/Images/DownArrowDeactivated.png"
+                        timer.triggered.connect(callback)
+                        timer.start()
+                       
+                    }
+                    function callback() {
+                        bridge.regCommand("PRH001","decrease")
+                        downArrow.enabled = true;
+                        upArrow.enabled = true;
+                        upArrow.source= "content/Images/UpArrow.png"
+                        downArrow.source= "content/Images/DownArrow.png"
+                    }
+                 }
             }
 
             Image {
@@ -1523,7 +1565,25 @@ Item {
                 height: 48
                 source: "content/Images/UpArrow.png"
                 fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent; onClicked: bridge.regCommand("PRH002","increase") }
+                MouseArea { anchors.fill: parent;
+                    onClicked: {
+                        console.log("clicked")
+                        upArrow1.enabled = false;
+                        timer.interval = 1000  // a short delay, enabled status would change properly.
+                        upArrow1.source= "content/Images/UpArrowDeactivated.png"
+                        downArrow1.source= "content/Images/DownArrowDeactivated.png"
+                        timer.triggered.connect(callback)
+                        timer.start()
+                       
+                    }
+                    function callback() {
+                        bridge.regCommand("PRH002","increase")
+                        upArrow1.enabled = true;
+                        downArrow1.enabled = true;
+                        upArrow1.source= "content/Images/UpArrow.png"
+                        downArrow1.source= "content/Images/DownArrow.png"
+                    }
+                }
             }
 
 
@@ -1535,7 +1595,25 @@ Item {
                 height: 50
                 source: "content/Images/DownArrow.png"
                 fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent; onClicked: bridge.regCommand("PRH002","decrease") }
+                MouseArea { anchors.fill: parent;
+                    onClicked: {
+                        console.log("clicked")
+                        downArrow1.enabled = false;
+                        timer.interval = 1000  // a short delay, enabled status would change properly.
+                        upArrow1.source= "content/Images/UpArrowDeactivated.png"
+                        downArrow1.source= "content/Images/DownArrowDeactivated.png"
+                        timer.triggered.connect(callback)
+                        timer.start()
+                       
+                    }
+                    function callback() {
+                        bridge.regCommand("PRH002","decrease")
+                        downArrow1.enabled = true;
+                        upArrow1.enabled = true;
+                        upArrow1.source= "content/Images/UpArrow.png"
+                        downArrow1.source= "content/Images/DownArrow.png"
+                    }
+                 }
 
             }
 
@@ -1714,6 +1792,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             text: qsTr("T-30")
             placeholderText: qsTr("T-30")
+            visible: false
             topPadding: 10
             leftPadding: 20
             background:Rectangle{
