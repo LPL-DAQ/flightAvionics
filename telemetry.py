@@ -19,9 +19,10 @@ class Readings:
                 new_reading['type']= 'PT'
                 self.readings[PT_name] = new_reading
             else:
-                new_reading['value']= "{:0>7.2f}".format(self.PTs[PT_name].percentage_fill)
+                new_reading['value']= "{:0>.2f}".format(self.PTs[PT_name].percentage_fill)
                 new_reading['time']= self.PTs[PT_name].timeStamp
                 new_reading['type']= 'PT'
+                print(new_reading['value'])
                 self.readings[PT_name] = new_reading
 
         for TC_name in self.TCs:

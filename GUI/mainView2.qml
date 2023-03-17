@@ -13,7 +13,7 @@ Item {
     width: 2560*dpi_scale
     height: 1440*dpi_scale
     visible: true
-    property real dpi_scale: 0.6
+    property real dpi_scale: 0.8
     scale: 1
 
     function updateElements() {
@@ -1713,6 +1713,7 @@ Item {
             width: 424
             height: 107
             color: "#FFFFFF"
+            visible: false
             font.pointSize: 50
             horizontalAlignment: Text.AlignHCenter
             text: qsTr("T-30")
