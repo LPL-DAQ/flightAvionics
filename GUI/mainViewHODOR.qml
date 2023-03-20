@@ -759,7 +759,7 @@ ApplicationWindow {
                                                 visible: true
                                                 color: "#26bd2e"
                                                 readOnly: false
-                                                text: "30"
+                                                text: "10"
                                                 anchors.fill: parent
                                                 font.pixelSize: 25
                                                 horizontalAlignment: Text.AlignHCenter
@@ -827,7 +827,7 @@ ApplicationWindow {
                                                 visible: true
                                                 color: "#26bd2e"
                                                 readOnly: false
-                                                text: "30"
+                                                text: "20"
                                                 anchors.fill: parent
                                                 font.pixelSize: 25
                                                 horizontalAlignment: Text.AlignHCenter
@@ -1357,6 +1357,54 @@ ApplicationWindow {
 
                     }
                     }
+
+                     Rectangle {
+                        id: countdown_box
+                        x: 932
+                        width: 453
+                        height: 241
+                        color: "#000000"
+                        border.color: "#ffffff"
+                        anchors.top: rectangle1.bottom
+                        anchors.topMargin: 0
+                        Rectangle {
+                            id: rectangle130
+                            height: 45
+                            color: "#206e67"
+                            border.color: "#ffffff"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.top: parent.top
+                            Text {
+                                id: text110
+                                width: 248
+                                height: 29
+                                color: "#ffffff"
+                                text: qsTr("COUNTDOWN")
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pixelSize: 23
+                                horizontalAlignment: Text.AlignHCenter
+                                font.bold: true
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                            anchors.topMargin: 0
+                            anchors.rightMargin: 0
+                            anchors.leftMargin: 0
+
+                            TextEdit {
+                                id: textEdit200
+                                x: 39
+                                y: 77
+                                width: 368
+                                height: 129
+                                color: "#ffffff"
+                                text: qsTr("T-30")
+                                font.pixelSize: 80
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+                    }
                 }
                 
                 Button{
@@ -1403,14 +1451,14 @@ ApplicationWindow {
                 
                 TextArea {
                     id: textArea
-                    x: 38
-                    y: 1026
-                    width: 1067
+                    x: 28
+                    width: 932
                     height: 300
                     readOnly: true
                     leftPadding: 20
                     topPadding: 10
                     font.pointSize: 30
+                    anchors.top: rectangle1.bottom
                     color: "#ffffff"
                     placeholderText: qsTr("Text Area")
                             Text {
@@ -1461,11 +1509,11 @@ ApplicationWindow {
 
                 Button {
                     id: abort_button
-                    x: 1180
-                    y: 1026
+                    x: 980
+                    y: 1270
                     text: "ABORT"
                     height: 95  
-                    width: 200
+                    width: 400
                     
                                                                 
                     contentItem: Text {
