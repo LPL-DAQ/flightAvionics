@@ -1,4 +1,10 @@
-
+import QtQuick 6.2
+import QtQuick.Controls 6.2
+import QtQuick.Layouts
+import "content/Images"
+import "content/QML objects/Gage"
+import "content/QML objects/Valve"
+import "content/QML objects/visual elements"
 
 
 ApplicationWindow {
@@ -51,6 +57,8 @@ ApplicationWindow {
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
 
+        // Tank Level
+        dpf001.fetchNewVal()
         
         svn001t.update()
         svn002t.update()
@@ -547,13 +555,13 @@ ApplicationWindow {
                         y: 212
                         }
 
-                        Rectangle {
-                        id: fuel_level
+                        TankLevel {
+                        id: dpf001
+                        name: "DPF001"
                         x: 1031
                         y: 380
-                        width: 78
-                        height: 24
-                        color: "#000000"
+                        width: 63
+                        height: 22
                         }
                     
                         Rectangle {

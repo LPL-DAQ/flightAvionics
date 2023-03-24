@@ -64,7 +64,7 @@ Item {
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
 
-        //Tank Tank Level
+        // Tank Level
         dpf001.fetchNewVal()
 
         svh001t.update()
