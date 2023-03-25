@@ -110,7 +110,7 @@ class TC():
             
             raw_temperature = slave_file_contents[1].strip()[temperature_index + 2:]
             self.timeStamp = timing.missionTime()
-            c_temp = float(raw_temperature) / 1000.0 + self.offset.get('c') - self.ref.get('c')
+            c_temp = float(raw_temperature) / 1000.0 + self.offset - self.ref.get('c')
             #print(c_temp)
             self.temperature.push(c_temp ,'c')
             
