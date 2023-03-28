@@ -9,6 +9,7 @@ import timing
 import PTLib
 import TCLib
 import SVLib
+import LCLib
 import clientFunc
 
 def main():
@@ -18,13 +19,15 @@ def main():
     #initialization using the ini files in the config folder
     print("Initializing PT Config...")
     PTs = PTLib.parsePTini("configFiles/PT_Config_FV.ini")
-    print("Initializing PT Config...")
+    print("Initializing TC Config...")
     TCs = TCLib.TC_Initialization("configFiles/TC_Config_FV.ini")
-    print("Initializing PT Config...")
+    print("Initializing SV Config...")
     SVs = SVLib.initialiseValves("configFiles/SV_Config_FV.ini")
+    print("Initializing LC Config...")
+    LCs= LCLib.initialiseValves("configFiles/LC_Config_FV.ini")
     
     #readings class
-    FVreadings = telemetry.Readings(PTs,TCs)
+    FVreadings = telemetry.Readings(PTs,TCs,LCs)
     #valve state class
     FVstates = telemetry.valveStates(SVs)
 
@@ -34,6 +37,7 @@ def main():
     
         executor.submit(PTLib.refreshPTs, PTs, client.getPTPoll()) #PT interogation thread
         executor.submit(TCLib.refreshTCs,TCs)#TC interogation thread
+        executor.submit(LCLib.refreshLCs, LCs) #LC interogation thread
         executor.submit(client.runClient)#persistant connection
         executor.submit(client.receiveNExecute)#valve receive and listen
 

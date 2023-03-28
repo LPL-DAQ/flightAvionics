@@ -1,15 +1,10 @@
-#!/usr/bin/env 
-
 import time
 import socket
 import spidev
 from configparser import ConfigParser
 import logging
-
-
-# import GPIO
+import timing
 import RPi.GPIO as GPIO      
-# import the class HX711         
 from hx711 import HX711    
 
 
@@ -22,37 +17,36 @@ class LC:
     reading= -1.0
     pounds= -1.0
     timeStamp= " "
+    voltage= -1.0
 
     #linear fit variables
-    offset = -107899
+    offset = 0
     slope = 1
 
-    def __init__(self, ADC_init: HX711):  
+    def __init__(self, ADC_init: HX711, offset, slope):  
         # the ADC chip the LC is connected to
         self.ADC = ADC_init
+        self.offset= offset
+        self.slope = slope
         # the channel the LC is connected to on the ADC val=0...7
 
 
     # Assumes voltage is given in mV
-    def __getWeight(self,reading):
-        #ADCgain = ADC._gain_channel_A
-        #excitationVoltage = 5 #volts <- already accounted for in the vout signal
-        pounds = abs(self.slope*reading+ self.offset)
+    def __getWeight(self,voltage):
+        pounds = abs(self.slope*voltage+ self.offset)
         
         return pounds
+    
+    def __countsToVolts(self, reading):
+        volts= 0.976858537*reading/(2^23) #converts from ADC counts to voltage based on 24 bit ADC (-1 for the sign)
 
+        return volts
 
     def getPounds(self):
         self.reading = self.ADC.get_data_mean()
-        #print(self.reading)
-        self.pounds = self.__getWeight(self.reading)
-        print(self.pounds)
-        #self.timeStamp = timing.missionTime()
-
-
-    
-
-        #print(self.channel,':',self.voltage)
+        self.voltage= self.__countsToVolts(self.reading)
+        self.pounds = self.__getWeight(self.voltage)
+        self.timeStamp= timing.missionTime()
         return self.pounds
 
 
@@ -72,15 +66,16 @@ def LCs_init(cfg_file_name: str):
 
     #Generate LC Objects from the cfg file and store them in the LC dictionary
     for LC_name in LCsCfg.sections():
-        LC_port = LCsCfg[LC_name]['port']
+        LC_port = LCsCfg[LC_name]['port'] 
+        slope = float(LCsCfg[LC_name]['slope'])
+        offset = float(LCsCfg[LC_name]['offset'])
 
         if LC_port[0] == 'A':
-            LCs[LC_name] = LC(ADC)
+            LCs[LC_name] = LC(ADC, slope, offset)
         #elif LC_port[0] == 'B':
             #LCs[LC_name] = LC(ADC1,LC_channel)
 
-        LCs[LC_name].slope = float(LCsCfg[LC_name]['slope'])
-        LCs[LC_name].offset = float(LCsCfg[LC_name]['offset'])
+        
         
         
 
@@ -89,14 +84,12 @@ def LCs_init(cfg_file_name: str):
     return LCs
     
 
-def refreshLCs(LC_dict: dict(), LC_freq_Hz: float):
+def refreshLCs(LC_dict: dict()):
     #The time between reading from LC(n) and LC(n+1)
+    LC_freq_Hz= 10
     LC_period = 1/LC_freq_Hz #seconds
     while True:
         for LC_name in LC_dict:
             pounds= LC_dict[LC_name].getPounds()
-            #p1 = LC_dict[LC_name].pounds
-            #v1 = LC_dict[LC_name].voltage
-            #formatedText = "[{}]: {:0>7.2f} Pounds | {:0>4.2f} V".format(LC_name,p1,v1)
-            #print(formatedText)
+            print(pounds) #debugging
             time.sleep(LC_period)
