@@ -22,7 +22,7 @@ Rectangle {
         anchors.top: parent.top
         font.pixelSize: 18
         horizontalAlignment: Text.AlignHCenter
-        anchors.topMargin: 0
+        anchors.topMargin: 2
         font.bold: false
         }
 
@@ -37,7 +37,7 @@ Rectangle {
         font.pixelSize: 18
         horizontalAlignment: Text.AlignHCenter
         anchors.bottomMargin: 0
-        anchors.topMargin: 35
+        anchors.topMargin: 32
         font.bold: false
         }
 

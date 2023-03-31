@@ -6,8 +6,8 @@ Rectangle {
     id: rectangle
     x: 195
     y: 356
-    width: 50
-    height: 50
+    width: 51
+    height: 37
     color: "#00ffffff"
     radius: width
     border.width: 0
@@ -58,6 +58,8 @@ Rectangle {
         source: "ArmedBall.png"
         rotation: parent.ang_Open
         fillMode: Image.PreserveAspectFit
+        width: 51
+        height: 37
     }
 }
 

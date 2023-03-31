@@ -58,6 +58,8 @@ Rectangle {
         source: "ArmedBall.png"
         rotation: parent.ang_Open
         fillMode: Image.PreserveAspectFit
+        width: 61
+        height: 32
     }
 }
 
