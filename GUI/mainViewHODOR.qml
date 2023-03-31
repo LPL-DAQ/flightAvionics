@@ -179,6 +179,7 @@ ApplicationWindow {
                         name: "TCN001"
                         x: 473
                         y: 274
+                        unit: "°C"
                         }
 
                         Gage {
@@ -193,6 +194,7 @@ ApplicationWindow {
                         name: "TCF201"
                         x: 885
                         y: 225
+                        unit: "°C"
                         }
 
                         Gage {
@@ -207,6 +209,7 @@ ApplicationWindow {
                         name: "TCF202"
                         x: 1555
                         y: 310
+                        unit: "°C"
                         }
 
                         Gage {
@@ -235,6 +238,7 @@ ApplicationWindow {
                         name: "TCO102"
                         x: 1585
                         y: 724
+                        unit: "°C"
                         }
 
                         Gage {
@@ -249,6 +253,7 @@ ApplicationWindow {
                         name: "TCO101"
                         x: 884
                         y: 516
+                        unit: "°C"
                         }
 
                         Gage {
@@ -263,6 +268,7 @@ ApplicationWindow {
                         name: "TCN002"
                         x: 466
                         y: 568
+                        unit: "°C"
                         }
 
                         Gage {
@@ -277,6 +283,7 @@ ApplicationWindow {
                         name: "TCF403"
                         x: 1488
                         y: 454
+                        unit: "°C"
                         }
 
                         Gage {
@@ -291,6 +298,7 @@ ApplicationWindow {
                         name: "TCO404"
                         x: 1488
                         y: 514
+                        unit: "°C"
                         }
 
                         Gage {
@@ -312,6 +320,7 @@ ApplicationWindow {
                         name: "TCF401"
                         x: 1775
                         y: 267
+                        unit: "°C"
                         }
 
                         Gage {
@@ -319,6 +328,7 @@ ApplicationWindow {
                         name: "TCF402"
                         x: 1775
                         y: 298
+                        unit: "°C"
                         }
 
                         Gage {
@@ -333,6 +343,7 @@ ApplicationWindow {
                         name: "TCO103"
                         x: 1222
                         y: 762
+                        unit: "°C"
                         }
 
                         ValveState {
