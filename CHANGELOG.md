@@ -15,6 +15,7 @@ Quick update this time around just in time for the first cold flow on the fuel s
 - Stepper motor base implementation
 - Value error handling on PT ini file
 - Added some descriptive comments to the code
+- Spam-proofed the reg buttons (for all you trigger happy folks)
 
 ### Bug Fixes
 - Removed some unnecessary print statements on startup
