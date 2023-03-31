@@ -600,7 +600,7 @@ ApplicationWindow {
                 x: 270
                 y: 55
                 color: "#ffffff"
-                text: qsTr("MISSION CONTORL")
+                text: qsTr("MISSION CONTROL")
                 font.pixelSize: 38
             }
 
