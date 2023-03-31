@@ -9,7 +9,7 @@ Useful links:
 [Start Up Procedure:](https://docs.google.com/document/d/1HFaLLYg40X4o-dengaRjggNb5vt6SatAqXU8YXTvmBo/edit?usp=sharing)
 
 ## [1.1.0] - 2023-3-31
-Quick update this time around just in time for the first cold flow on the fuel side (what a coincidence). Lodecell implementation and console access will be in the upcoming patch. Special thanks to Galkathe for their contribute to this update.
+Quick update this time around just in time for the first cold flow on the fuel side (what a coincidence). Lodecell implementation and console access will be in the near future. Special thanks to Galkathe for their contribute to this update.
 
 ### What's New
 - Stepper motor base implementation
