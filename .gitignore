@@ -54,3 +54,4 @@ __pycache__
 data
 GUI/*.autosave
 
+GUI/content/QML objects/.DS_Store
