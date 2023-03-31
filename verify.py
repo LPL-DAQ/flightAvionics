@@ -92,10 +92,11 @@ def verifyClientIni(filepath:str):
         valid = False
     else:
         try:
-            if parser["pt_poll"] == 0: #divide by 0 error
+            parsedVal = float(parser["pt_poll"])
+            if parsedVal == 0: #divide by 0 error
                 clientDict["pt_poll"] = 0
             else: #converts freq to period
-                clientDict["pt_poll"] = 1.0 / float(parser["pt_poll"]) 
+                clientDict["pt_poll"] = 1.0 / parsedVal 
         except:
             print("ERROR: [pt_poll] must be a float")
             valid = False
@@ -103,11 +104,13 @@ def verifyClientIni(filepath:str):
         valid = False
     else:
         try:
-            if clientDict["sendrate"] == 0: #divide by 0 error
+            parsedVal = float(parser["sendrate"])
+            if parsedVal == 0: #divide by 0 error
                 clientDict["sendrate"] = 0
             else: #converts freq to period
-                clientDict["sendrate"] = 1.0 / float(parser["sendrate"]) 
-        except:
+                clientDict["sendrate"] = 1.0 / parsedVal
+        except Exception as e:
+            print(e)
             print("ERROR: [sendrate] must be a float")
             valid = False
     if not valid:
