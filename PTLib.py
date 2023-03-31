@@ -25,18 +25,12 @@ class PT:
         self.channel = channel_init
         self.offset = offset
         self.slope = slope
-        #self.socket = s
 
     def __str__(self) -> str: #debugging purposes
         return "[" + self.name + "]\nVoltage: " + str(self.voltage) + "\nPressure: " + str(self.pressure) + "\nOffset: " + str(self.offset) + "\nSlope: " + str(self.slope) + "\n"
 
     def getName(self):
         return self.name
-    
-    # def updateVoltage(self):
-    #     self.voltage, _ = self.ADC.interogate(self.channel)
-    #     self.timeStamp = timing.missionTime()
-    #     return self.voltage
     
         #converts volts to PSI
     def voltsToPSI(self, voltage:float):
@@ -79,7 +73,7 @@ def parsePTini(PTfile: str):
     #ADC2= MCP3008.MCP3008(SPI2)
     #ADC3= MCP3008.MCP3008(SPI3) 
 
-    #dummy variables to run on PC
+    #dummy variables to run only on PC
     # ADC0 = 0
     # ADC1 = 1
 

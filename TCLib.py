@@ -9,6 +9,8 @@ from configparser import ConfigParser
 
 # Initialize 1-wire protocol drivers
 os.system('modprobe w1-gpio')
+
+#needs debugging
 os.system('modprobe w1-therm')
 
 class Temperature():
