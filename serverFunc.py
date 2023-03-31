@@ -57,7 +57,6 @@ class Server:
 
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("TESTING")
         print(f"IP address: '{ip}' Port {port}")
         s.bind((ip, port))
         return s
