@@ -186,7 +186,7 @@ def guiThreadFunc(s:serverFunc.Server):
     timer = QTimer()
     timer.start(10)
 
-    engine= QQmlApplicationEngine("GUI/mainViewHODOR.qml")
+    engine= QQmlApplicationEngine("GUI/mainView2.qml")
 
     root = engine.rootObjects()[0]
 
