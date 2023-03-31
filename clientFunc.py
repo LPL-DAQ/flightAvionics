@@ -5,18 +5,21 @@ import threading
 import verify
 import telemetry
 import timing 
-
+import DRVLib
 
 messengerLock = threading.Lock()
 
 
 class Client:
-    def __init__(self, filepath:str, FVreadings:telemetry.Readings, FVstates:telemetry.valveStates) -> None:
-        
-        #sensor readings
+
+    def __init__(self, filepath:str, FVreadings:telemetry.Readings, FVstates:telemetry.valveStates, Regulators:DRVLib.DRV8825) -> None:
+        #TODO
+        #self.clientIni = verify.verifyClientIni(filepath)
+
         self.FVreadings = FVreadings
         #valve states
         self.FVstates = FVstates
+        self.Regulators= Regulators
         #pt_poll, sendrate
         self.clientIni = verify.verifyClientIni(filepath)
         
@@ -101,7 +104,9 @@ class Client:
                     while len(data) != 0:
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
-                            if len(received_reading) == 2: #name/state
+                            tag= received_reading[0] #find which item command corresponds to
+                            type= tag[0] #find if "S" for solenoids or "R" for regulators 
+                            if type == "S": 
                                 name = received_reading[0]
                                 value = received_reading[1]
 
@@ -111,7 +116,19 @@ class Client:
                                 messengerLock.acquire()
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 messengerLock.release()
-                                #print("MSG SENT")
+                                print("MSG SENT")
+                            elif type == "R":
+                                name= received_reading[0]
+                                direction= received_reading[1]
+                                print("Received:", name, direction)
+                                if direction == "CW":
+                                    self.Regulators[name].motor_run(5, 1)
+                                    print("COMMAND SENT")
+                                elif direction == "CCW":
+                                    self.Regulators[name].motor_run(5, 0)
+                                    print("COMMAND SENT")
+                                else:
+                                    print("Command error")
                             else:
                                 print("FUCKED UP MSG :)")
                         data.remove(data[0])
