@@ -103,7 +103,7 @@ def verifyClientIni(filepath:str):
         valid = False
     else:
         try:
-            if clientDict["sendrate"]: #divide by 0 error
+            if clientDict["sendrate"] == 0: #divide by 0 error
                 clientDict["sendrate"] = 0
             else: #converts freq to period
                 clientDict["sendrate"] = 1.0 / float(parser["sendrate"]) 
