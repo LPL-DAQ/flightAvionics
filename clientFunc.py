@@ -66,7 +66,7 @@ class Client:
                 time.sleep(5)
 
     def clientIO(self): #client send data function 
-        period = 1/self.clientIni["sendrate"] #gets the period 1/freq
+        period = self.clientIni["sendrate"] #gets the period
         print("Starting data stream...")
         while True:
             self.FVreadings.refreshAll() #polls all values sequentially...might be able to optimize

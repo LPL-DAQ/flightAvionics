@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+import os
 
 import timing
 #returns a dict of the consoleType members if the file is valid and None if the file does not exist
@@ -64,10 +65,13 @@ def verifyServerIni(filepath:str):
         if "savefile" not in parser:
             valid = False
             print("ERROR: savefile not specified")
-        else:   
+        else:
+            if not os.path.exists("data"):
+                print("WARNING: 'data' directory does not exist. Generating directory...")
+                os.makedirs("data")
             serverDict["fp"] = open("data/" + parser["savefile"] + str(timing.missionTime()), 'w')
     except:
-        print("ERROR: Invalid file name or data file is missing")
+        print("ERROR: Invalid file name.")
         valid = False
     serverDict["ip"], serverDict["port"] = getIPAddress(filepath)
     if serverDict["ip"] == None or serverDict["port"] == None:
@@ -88,7 +92,10 @@ def verifyClientIni(filepath:str):
         valid = False
     else:
         try:
-            clientDict["pt_poll"] = float(parser["pt_poll"]) 
+            if parser["pt_poll"] == 0: #divide by 0 error
+                clientDict["pt_poll"] = 0
+            else: #converts freq to period
+                clientDict["pt_poll"] = 1.0 / float(parser["pt_poll"]) 
         except:
             print("ERROR: [pt_poll] must be a float")
             valid = False
@@ -96,7 +103,10 @@ def verifyClientIni(filepath:str):
         valid = False
     else:
         try:
-            clientDict["sendrate"] = float(parser["sendrate"]) 
+            if clientDict["sendrate"]: #divide by 0 error
+                clientDict["sendrate"] = 0
+            else: #converts freq to period
+                clientDict["sendrate"] = 1.0 / float(parser["sendrate"]) 
         except:
             print("ERROR: [sendrate] must be a float")
             valid = False
