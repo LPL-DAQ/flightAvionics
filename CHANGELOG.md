@@ -19,7 +19,7 @@ Quick update this time around just in time for the first cold flow on the fuel s
 ### Bug Fixes
 - Removed some unnecessary print statements on startup
 - Fixed a divide by 0 error if pt_poll or sendrate in config.ini were set to 0 (will set the sleep to 0 instead)
-- Autogenerate data directory if it is not in the source code
+- Autogenerates data directory if it is not in the source code
 
 ## [1.0.0] - 2023-03-06
 First working version of the DAQ!!! 🥳🥳🥳
