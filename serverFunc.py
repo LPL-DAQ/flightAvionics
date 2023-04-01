@@ -57,7 +57,6 @@ class Server:
 
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("TESTING")
         print(f"IP address: '{ip}' Port {port}")
         s.bind((ip, port))
         return s
@@ -127,6 +126,9 @@ class Server:
         msg = "#" + valve + "/" + newState
         telemetry.sendMsg(self.getSocket(), msg)  
 
+    def sendRegCmd(self, command):
+        telemetry.sendMsg(self.getSocket(), command)
+        
     #theres more logic to this but ill do it sometime
     def verifyValve(self):
         valve = self.armedValve
