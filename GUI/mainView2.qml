@@ -356,9 +356,8 @@ ApplicationWindow {
                     name: "DPF001"
                     width: 63
                     height: 22
-                    y: 0
+                    y: 420
                     anchors.left: parent.left
-                    anchors.bottom: parent.bottom
                     anchors.leftMargin: 1024
 
                 }
@@ -431,6 +430,13 @@ ApplicationWindow {
                         x: 670
                         y: 569
                 }
+
+                        ValveState {
+                                id: svn001_state
+                                name: "SVN001"
+                                x: 670
+                                y: 275
+                        }
 
                         ValveState {
                         id: svn003_state
@@ -1003,8 +1009,8 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                            id: svn002t
-                            name: "SVN002"
+                    id: svn002t
+                    name: "SVN002"
                     x: 280
                     y: 96
                     anchors.right: parent.right
