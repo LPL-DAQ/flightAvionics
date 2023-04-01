@@ -30,7 +30,7 @@ class Readings:
 
         for TC_name in self.TCs:
             new_reading = dict()
-            temp = self.TCs[TC_name].temperature.get('f')
+            temp = self.TCs[TC_name].temperature.get('c')
             new_reading['value']= "{:0>7.2f}".format(temp)
             new_reading['time']= self.TCs[TC_name].timeStamp
             new_reading['type']= 'TC'
