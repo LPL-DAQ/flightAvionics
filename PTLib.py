@@ -73,12 +73,13 @@ def parsePTini(PTfile: str):
     
 
 
-    #PI commands ... ignore for now
+    #SPI bus initializations 
     SPI0 = openSPI(0, 0, 1000)
     SPI1 = openSPI(0, 1, 1000)
     #SPI2= openSPI(1,0,1000) 
     #SPI3= openSPI(1,1,1000)
 
+    #ADC chip initializations
     ADC0 = MCP3008.MCP3008(SPI0)
     ADC1 = MCP3008.MCP3008(SPI1)
     #ADC2= MCP3008.MCP3008(SPI2)
@@ -96,10 +97,27 @@ def parsePTini(PTfile: str):
     for PTname in PTparser.sections():
         PTport = PTparser[PTname]['port']
         PTchannel = int(PTport[1])-1
-        PTslope = float(PTparser[PTname]['slope'])
-        PToffset = float(PTparser[PTname]['offset'])
+        try:
+            PTchannel = int(PTport[1])-1
+        except Exception as e:
+            print("WARNING: Ignoring ", PTname, "with an invalid PTChannel of:", PTport[1])
+            continue
+        try:
+            PTslope = float(PTparser[PTname]['slope'])
+        except Exception as e:
+            print("WARNING: Ignoring ", PTname, "with an invalid slope of:", PTparser[PTname]['slope'])
+            continue
+        if PTslope <= 0:
+            print("WARNING: Ignoring ", PTname, "with an negative slope of:", PTslope)
+            continue 
+        try:
+            PToffset = float(PTparser[PTname]['offset'])
+        except Exception as e:
+            print("WARNING: Ignoring ", PTname, "with an invalid offset of:", PTparser[PTname]['offset'])
+            continue
         #hard coded values for ADC initializations 
         #should check for validity here
+
         if PTname[:2] != "DP":
             if PTport[0] == 'A':
                 PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
@@ -121,14 +139,14 @@ def parsePTini(PTfile: str):
                 PTs[PTname] = DP(PTname, ADC3, PTchannel, PToffset, PTslope)
 
         PTLoadCount += 1
-        #print loading bar
-    print("Successfully configured", PTLoadCount, "to the PI")
+        #print loading bar here
+    print("Successfully configured", PTLoadCount, "PT(s) to the PI")
     return PTs
 
 #refreshes all PT values sequentially -> not recommened for true multi-threading 
-def refreshPTs(PT_dict: dict(), PT_freq_Hz: float):
+def refreshPTs(PT_dict: dict(), PT_delay: float):
     #The time between reading from PT(n) and PT(n+1)
-    PT_period = 1/PT_freq_Hz #seconds
+    PT_period = PT_delay #seconds
     while True:
         for PT_name in PT_dict:
             if PT_name[:2] == "DP": #if DP sensor, find infill percentage
