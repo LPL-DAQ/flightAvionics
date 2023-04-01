@@ -15,7 +15,6 @@ ApplicationWindow {
     visible: true
 
     property real dpi_scale: 0.8
-    scale: 1
 
 
     function updateElements() {
@@ -357,11 +356,10 @@ ApplicationWindow {
                     name: "DPF001"
                     width: 63
                     height: 22
-                    y: 393
+                    y: 0
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
                     anchors.leftMargin: 1024
-                    anchors.bottomMargin: 418
 
                 }
                         ValveState {
@@ -996,8 +994,8 @@ ApplicationWindow {
                 
 
                 ValveToggle {
-                            id: svn001t
-                            name: "SVN001"
+                    id: svn001t
+                    name: "SVN001"
                     y: 96
                     anchors.left: parent.left
                     anchors.leftMargin: 33
@@ -1599,7 +1597,6 @@ ApplicationWindow {
             horizontalAlignment: Text.AlignHCenter
             text: qsTr("T-30")
             placeholderText: qsTr("T-30")
-            visible: false
             topPadding: 10
             leftPadding: 20
             background:Rectangle{
