@@ -13,7 +13,9 @@ ApplicationWindow {
     width: maximumWidth
     height: maximumHeight
     visible: true
-    property real dpi_scale: 0.7
+
+    property real dpi_scale: 0.8
+
 
     function updateElements() {
 
@@ -58,6 +60,8 @@ ApplicationWindow {
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
 
+        // Tank Level
+        dpf001.fetchNewVal()
 
         svn001t.update()
         svn002t.update()
@@ -346,13 +350,17 @@ ApplicationWindow {
                         unit: "°C"
                 }
 
-                        ValveState {
-                        id: svn001_state
-                        name: "SVN001"
-                        x: 670
-                        y: 275
-                }
 
+                TankLevel {
+                    id: dpf001
+                    name: "DPF001"
+                    width: 63
+                    height: 22
+                    y: 420
+                    anchors.left: parent.left
+                    anchors.leftMargin: 1024
+
+                }
                         ValveState {
                         id: svf201_state
                         name: "SVF201"
@@ -422,6 +430,13 @@ ApplicationWindow {
                         x: 670
                         y: 569
                 }
+
+                        ValveState {
+                                id: svn001_state
+                                name: "SVN001"
+                                x: 670
+                                y: 275
+                        }
 
                         ValveState {
                         id: svn003_state
@@ -985,8 +1000,8 @@ ApplicationWindow {
                 
 
                 ValveToggle {
-                            id: svn001t
-                            name: "SVN001"
+                    id: svn001t
+                    name: "SVN001"
                     y: 96
                     anchors.left: parent.left
                     anchors.leftMargin: 33
@@ -994,8 +1009,8 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                            id: svn002t
-                            name: "SVN002"
+                    id: svn002t
+                    name: "SVN002"
                     x: 280
                     y: 96
                     anchors.right: parent.right
@@ -1583,11 +1598,11 @@ ApplicationWindow {
             width: 424
             height: 107
             color: "#FFFFFF"
+            visible: false
             font.pointSize: 50
             horizontalAlignment: Text.AlignHCenter
             text: qsTr("T-30")
             placeholderText: qsTr("T-30")
-            visible: false
             topPadding: 10
             leftPadding: 20
             background:Rectangle{
