@@ -14,7 +14,6 @@ ApplicationWindow {
     height: maximumHeight
     visible: true
     property real dpi_scale: 0.6
-    scale: 1
 
     function updateElements() {
 
