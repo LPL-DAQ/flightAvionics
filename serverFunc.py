@@ -15,16 +15,15 @@ class Server:
         self.ip, self.port = verify.getIPAddress(filepath)
         self.socket = None
         self.address = None
-        self.connect = False
+        self.connect = False #flag to determine if there is a secure connection
         #PT and TC data
         self.dataReadings = dict()
         #SV control data
         self.valveReadings = dict()
         #name timestamp
         self.armedValve = ("None", "")
-        #self.pendingValves = dict()
-        self.armedValves = dict()
-        #self.commandQ = queue.Queue()
+
+        self.armedValves = dict()#check if still used
         
         self.pendLock = threading.Lock()
 
@@ -47,10 +46,6 @@ class Server:
         return self.valveReadings
     def getArmedValves(self):
         return self.armedValves
-    # def getCommandQ(self):
-    #     return self.commandQ  
-    # def getPendingValves(self):
-    #     return self.pendingValves
     def getPendLock(self):
         return self.pendLock
 
@@ -62,7 +57,6 @@ class Server:
 
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("TESTING")
         print(f"IP address: '{ip}' Port {port}")
         s.bind((ip, port))
         return s
@@ -71,27 +65,21 @@ class Server:
         self.socket.close()
         self.connect = False
 
+    #waits for connection with client
     def establishConnection(self):
-        # try:
-        #     s.bind((self.ip,self.port))
-        # except:
-        #     print("Error: Invalid ip address please change the ini file")
         s = self.establishAddress(self.ip, self.port)
         while not self.connect:
             print("Awaiting connection from client")
             s.listen(1)
             clientsocket, address = s.accept()
             
-            #self.sockLock.acquire()
             self.socket = clientsocket
             self.connect = True
-            #self.sockLock.release()
 
             print(f"Connection from {address} has been established.")
     
+    #recieves all data from the PI
     def receiveData(self):
-
-        
         msg = self.socket.recv(1024)
         msg = msg.decode("utf-8")
         data = msg.split("#")
@@ -99,21 +87,20 @@ class Server:
             while data:
                 if len(data[0]) != 0: #value
                     received_reading = data[0].split("/")
-                    #print(received_reading)
-                    if len(received_reading) == 3:
+                    #print(received_reading) #print line for all received readings
+                    if len(received_reading) == 3: #sensor reading
                         sensorName = received_reading[0]
                         sensorValue = received_reading[1]
                         time = received_reading[2]
                         self.dataReadings[sensorName] = sensorValue
                         self.fp.write(sensorName + " " + sensorValue + " " + time + "\n")
                         #print(name + " " + value + " " + time)
-                    elif len(received_reading) == 2:
-                        print("THis triggered")
+
+                    elif len(received_reading) == 2: #valve confirmation
                         valveName = received_reading[0]
                         valveState = received_reading[1]
-                        #add this later :)
+                        #needs to be implemented 
                         self.verifyValve()
-                        #self.removeValve(valveName)
                         self.valveReadings[valveName] = valveState
                     else:
                         print("WARNING: Malformed message received", data[0])
@@ -135,6 +122,7 @@ class Server:
         else:#test msg for debug purposes :3
             print("FUCKED UP VALVE CMD MSG BUDDY")
             print("State:", state)
+            return
         msg = "#" + valve + "/" + newState
         telemetry.sendMsg(self.getSocket(), msg)  
 
@@ -158,7 +146,7 @@ class Server:
         valve = self.armedValve
         print(valve[0], "command received in", timing.getTimeDiff(valve[1], timing.missionTime()))
              
-
+    #code for multi valve command...needs some fix
     # def removeValve(self, valveName:str):
     #     if valveName in self.pendingValves:
     #         self.pendLock.acquire()

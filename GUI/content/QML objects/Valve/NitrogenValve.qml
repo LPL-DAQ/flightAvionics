@@ -23,7 +23,7 @@ Rectangle {
         },
         State {
             name: "OD"
-            PropertyChanges { target: icon_image; source: "OpenedValve_Helium.png"}
+            PropertyChanges { target: icon_image; source: "NitrogenOpen.png"}
         },
         State {
             name: "CA"
@@ -57,7 +57,8 @@ Rectangle {
         y: 0
         source: "ArmedBall.png"
         rotation: parent.ang_Open
-        fillMode: Image.PreserveAspectFit
+        width: 57
+        height: 36
     }
 }
 

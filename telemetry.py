@@ -9,14 +9,24 @@ class Readings:
         self.readings = dict()
         self.refreshAll()
         
-    #updates the value and timestamp for each value sequentially
+    #updates the value and timestamp for each value sequentially (HW limitation)
     def refreshAll(self):
         for PT_name in self.PTs:
             new_reading = dict()
-            new_reading['value']= "{:0>7.2f}".format(self.PTs[PT_name].pressure)
-            new_reading['time']= self.PTs[PT_name].timeStamp
-            new_reading['type']= 'PT'
-            self.readings[PT_name] = new_reading
+            if PT_name[:2] != "DP":
+                new_reading['value']= "{:0>7.2f}".format(self.PTs[PT_name].pressure)
+                new_reading['time']= self.PTs[PT_name].timeStamp
+                new_reading['type']= 'PT'
+                self.readings[PT_name] = new_reading
+            else:
+                new_reading['value']= "{:0>.2f}".format(self.PTs[PT_name].percentage_fill)
+                new_reading['time']= self.PTs[PT_name].timeStamp
+                new_reading['type']= 'PT'
+                voltage: self.PTs[PT_name].voltage
+                pressure:  self.PTs[PT_name].pressure
+                percent: self.PTs[PT_name].percentage_fill
+                print("Voltage: ", voltage, "Pressure: ", pressure, "Percent: ", percent)
+                self.readings[PT_name] = new_reading
 
         for TC_name in self.TCs:
             new_reading = dict()
@@ -46,9 +56,6 @@ class valveStates:
 
     #updates the state of a sensor
     def update(self,name:str,value:str):
-        # new_reading = dict()
-        # # new_reading['value']= value
-        # # new_reading['type']= name[0:2]
         self.states[name] = value
     
     #execute valve command...needs error check
@@ -73,6 +80,7 @@ def sendMsg(socket, msg):
     msg = str.encode(msg)
     socket.sendall(msg)
 
+#sends a reading to a socket
 def sendReading(name:str, reading:dict, socket: socket.socket):
     value = reading['value']
     time =  reading['time']

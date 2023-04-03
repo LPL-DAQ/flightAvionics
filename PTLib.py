@@ -25,18 +25,12 @@ class PT:
         self.channel = channel_init
         self.offset = offset
         self.slope = slope
-        #self.socket = s
 
     def __str__(self) -> str: #debugging purposes
         return "[" + self.name + "]\nVoltage: " + str(self.voltage) + "\nPressure: " + str(self.pressure) + "\nOffset: " + str(self.offset) + "\nSlope: " + str(self.slope) + "\n"
 
     def getName(self):
         return self.name
-    
-    # def updateVoltage(self):
-    #     self.voltage, _ = self.ADC.interogate(self.channel)
-    #     self.timeStamp = timing.missionTime()
-    #     return self.voltage
     
         #converts volts to PSI
     def voltsToPSI(self, voltage:float):
@@ -48,10 +42,21 @@ class PT:
         self.pressure = self.voltsToPSI(self.voltage)
         return self.pressure
 
-def openSPI(chip, frequency):
+class DP(PT):
+    tank_ht: float = 0.6 #m
+    density: float = 997 #kg/m3 water 
+    percentage_fill: float = 0
+
+    def get_fill(self):
+        self.updatePressure()
+        height = 6894.76*self.pressure / (self.density * 9.81)
+        self.percentage_fill = (height/self.tank_ht) * 100
+        return self.percentage_fill
+    
+def openSPI(channel, chip, frequency):
     #opens an SPI channel
     spi = spidev.SpiDev()
-    spi.open(0,chip)
+    spi.open(channel,chip)
     spi.max_speed_hz = frequency
     return spi
 
@@ -68,15 +73,19 @@ def parsePTini(PTfile: str):
     
 
 
-    #PI commands ... ignore for now
-    SPI0 = openSPI(0, 1000)
-    SPI1 = openSPI(1, 1000)
+    #SPI bus initializations 
+    SPI0 = openSPI(0, 0, 1000)
+    SPI1 = openSPI(0, 1, 1000)
+    #SPI2= openSPI(1,0,1000) 
+    #SPI3= openSPI(1,1,1000)
 
-
+    #ADC chip initializations
     ADC0 = MCP3008.MCP3008(SPI0)
     ADC1 = MCP3008.MCP3008(SPI1)
+    #ADC2= MCP3008.MCP3008(SPI2)
+    #ADC3= MCP3008.MCP3008(SPI3) 
 
-    #dummy variables to run on PC
+    #dummy variables to run only on PC
     # ADC0 = 0
     # ADC1 = 1
 
@@ -88,27 +97,62 @@ def parsePTini(PTfile: str):
     for PTname in PTparser.sections():
         PTport = PTparser[PTname]['port']
         PTchannel = int(PTport[1])-1
-        PTslope = float(PTparser[PTname]['slope'])
-        PToffset = float(PTparser[PTname]['offset'])
+        try:
+            PTchannel = int(PTport[1])-1
+        except Exception as e:
+            print("WARNING: Ignoring ", PTname, "with an invalid PTChannel of:", PTport[1])
+            continue
+        try:
+            PTslope = float(PTparser[PTname]['slope'])
+        except Exception as e:
+            print("WARNING: Ignoring ", PTname, "with an invalid slope of:", PTparser[PTname]['slope'])
+            continue
+        if PTslope <= 0:
+            print("WARNING: Ignoring ", PTname, "with an negative slope of:", PTslope)
+            continue 
+        try:
+            PToffset = float(PTparser[PTname]['offset'])
+        except Exception as e:
+            print("WARNING: Ignoring ", PTname, "with an invalid offset of:", PTparser[PTname]['offset'])
+            continue
         #hard coded values for ADC initializations 
         #should check for validity here
-        if PTport[0] == 'A':
-            PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
-        elif PTport[0] == 'B':
-            PTs[PTname] = PT(PTname, ADC1, PTchannel, PToffset, PTslope)
+
+        if PTname[:2] != "DP":
+            if PTport[0] == 'A':
+                PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'B':
+                PTs[PTname] = PT(PTname, ADC1, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'C':
+                PTs[PTname] = PT(PTname, ADC2, PTchannel, PToffset, PTslope)
+            elif PTport[0]== 'D':
+                PTs[PTname] = PT(PTname, ADC3, PTchannel, PToffset, PTslope)
+        else:
+            print("1 DP Found")
+            if PTport[0] == 'A':
+                PTs[PTname] = DP(PTname, ADC0, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'B':
+                PTs[PTname] = DP(PTname, ADC1, PTchannel, PToffset, PTslope)
+            elif PTport[0] == 'C':
+                PTs[PTname] = DP(PTname, ADC2, PTchannel, PToffset, PTslope)
+            elif PTport[0]== 'D':
+                PTs[PTname] = DP(PTname, ADC3, PTchannel, PToffset, PTslope)
 
         PTLoadCount += 1
-        #print loading bar
-    print("Successfully configured", PTLoadCount, "to the PI")
+        #print loading bar here
+    print("Successfully configured", PTLoadCount, "PT(s) to the PI")
     return PTs
 
 #refreshes all PT values sequentially -> not recommened for true multi-threading 
-def refreshPTs(PT_dict: dict(), PT_freq_Hz: float):
+def refreshPTs(PT_dict: dict(), PT_delay: float):
     #The time between reading from PT(n) and PT(n+1)
-    PT_period = 1/PT_freq_Hz #seconds
+    PT_period = PT_delay #seconds
     while True:
         for PT_name in PT_dict:
-            PT_dict[PT_name].updatePressure()
+            if PT_name[:2] == "DP": #if DP sensor, find infill percentage
+                PT_dict[PT_name].get_fill() 
+            else:
+                PT_dict[PT_name].updatePressure()
             #print(PT_dict[PT_name].getName() + " " + str(v1)) debug lines for value
             time.sleep(PT_period)
 

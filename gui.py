@@ -8,23 +8,11 @@ import serverFunc
 import sys
 
 from PySide6 import QtWidgets, QtQuick
-from PySide6.QtQml import QmlElement
+from PySide6.QtQml import QmlElement, QQmlApplicationEngine
 from PySide6.QtCore import QObject, Slot, QTimer
 
 QML_IMPORT_NAME = "GUI2"
 QML_IMPORT_MAJOR_VERSION = 1
-
-#not sure what this does...
-# class myClass():
-
-#     myprop:int = 0
-
-#     def someMeth(self):
-#         #return math.sin(time.time())
-#         self.myprop = self.myprop + 1
-#         return self.myprop
-
-
  
 @QmlElement
 class Bridge(QObject):
@@ -36,6 +24,8 @@ class Bridge(QObject):
         self.guiReadings = s.getDataReadings()
         self.valveStates = s.getValveReadings()
         self.serverStatus = s.isConnected()
+        self.statusMessages= "none"
+        self.socket= s.getSocket()
 
         self.percent1=0
         self.percent2=0
@@ -101,31 +91,55 @@ class Bridge(QObject):
             return False
     @Slot(str,str, result=int)        
     def regCommand(self, name:str, direction:str):
-        if name=="PRH001": 
+        if name=="PRH001": #regulator 1
             if direction == "increase":
-                if self.armedValues[name]=="ARMED":
+                if (self.armedValues[name]=="ARMED"):
                     self.percent1+=1
-                    percent=self.percent1
+                    percent=self.percent1 #updates percentage field in GUI
+                    command="#REG001/CW" #command to rotate clockwise by fixed number of steps
+                    self.s.sendRegCmd(command)
+                else:
+                    print("Regulator not Armed")
             else:
                 if self.armedValues[name]=="ARMED":
-                    self.percent1-=1
-                    percent=self.percent1
+                    if self.percent1==0:
+                        self.percent1=0;
+                        return
+                    else:
+                        self.percent1-=1
+                    percent=self.percent1 #updates percentage field in GUI
+                    command="#REG001/CCW" #command to rotate counterclockwise by fixed number of steps
+                    self.s.sendRegCmd(command)
+                else:
+                    print("Regulator not Armed")
 
-        if name=="PRH002":
+        elif name=="PRH002": #second regulator commands (not used yet)
             if direction == "increase":
                 if self.armedValues[name]=="ARMED":
                     self.percent2+=1
                     percent=self.percent2
+                    command="#REG002/CW" #command to rotate clockwise by fixed number of steps
+                    self.s.sendRegCmd(command)
+                else:
+                    print("Regulator not Armed")
             else:
                 if self.armedValues[name]=="ARMED":
-                    self.percent2-=1
+                    if self.percent2==0:
+                        self.percent2=0
+                        return
+                    else:
+                        self.percent2-=1
                     percent=self.percent2
-        
-        print(name, "open percent: ", percent )
+                    command="#REG002/CCW" #command to rotate counterclockwise by fixed number of steps
+                    self.s.sendRegCmd(command)
+                else:
+                    print("Regulator not Armed")
+            
         return percent
     
     @Slot(str,result=str)        
     def regState(self,name):
+        #provides current regulator open percentage 
         if name=="PRH001":
             return str(self.percent1)
         else:
@@ -165,18 +179,17 @@ def guiThreadFunc(s:serverFunc.Server):
     timer = QTimer()
     timer.start(10)
 
-    view.setSource("GUI/mainView2.qml")
+    engine= QQmlApplicationEngine("GUI/mainView2.qml")
 
-    root = view.rootObject()
+    root = engine.rootObjects()[0]
 
-    context = view.rootContext()
+    context = engine.rootContext()
     context.setContextProperty("bridge", bridge)
 
     timer.timeout.connect(root.updateElements)
-    timer.timeout.connect(root.server_status)
+    timer.timeout.connect(root.messagesBox)
 
     
-    view.show()
     
     sys.exit(app.exec())
     

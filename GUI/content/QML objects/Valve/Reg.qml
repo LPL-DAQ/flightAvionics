@@ -5,15 +5,15 @@ Rectangle {
     id: rectangle
     x: 195
     y: 356
-    width: 50
-    height: 50
+    width: 10
+    height: 56
     color: "#00ffffff"
     radius: width
     border.width: 0
     property real ang_Open: 0
     property string name: "SVH001"
 
-    state: "ARMED"
+    state: "NOTARMED"
 
     states: [
         State {
@@ -40,7 +40,8 @@ Rectangle {
         y: 0
         source: "Regulator.png"
         rotation: parent.ang_Open
-        fillMode: Image.PreserveAspectFit
+        height: 56
+        width: 42
     }
 }
 

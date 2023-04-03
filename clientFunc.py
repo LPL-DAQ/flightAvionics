@@ -6,17 +6,21 @@ import verify
 import telemetry
 import timing 
 import SVLib
-
+import DRVLib
 
 messengerLock = threading.Lock()
 
 
 class Client:
-    def __init__(self, filepath:str, FVreadings:telemetry.Readings, FVstates:telemetry.valveStates) -> None:
+
+    def __init__(self, filepath:str, FVreadings:telemetry.Readings, FVstates:telemetry.valveStates, Regulators:DRVLib.DRV8825) -> None:
         #TODO
         #self.clientIni = verify.verifyClientIni(filepath)
+
         self.FVreadings = FVreadings
+        #valve states
         self.FVstates = FVstates
+        self.Regulators= Regulators
         #pt_poll, sendrate
         self.clientIni = verify.verifyClientIni(filepath)
         
@@ -27,6 +31,7 @@ class Client:
 
         self.messengerLock = threading.Lock()
         
+    #standard getter methods
     def getFVReadings(self):
         return self.FVreadings
     def getFVStates(self):
@@ -44,52 +49,50 @@ class Client:
     def getSocket(self):
         return self.clientSocket
 
+    #attempts to establish a connection with the server.
     def findConnection(self):
         while True:
             try:
                 print("Looking for server")
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect((self.ip, self.port))
-                s.setblocking(1) #might change to settimeout
+                s.setblocking(1)
                 
                 self.connected = True
                 
                 print("Connection established with server. IP:{}    port:{}".format(self.ip , self.port))
                 return s
-            except Exception as e:
-                print(e)
+            except Exception as e:#If connection fails try again in 5 seconds
                 print("Could not connect...retrying in 5 seconds")
                 time.sleep(5)
 
-    def clientIO(self):
-        period = 1/self.clientIni["sendrate"]
+    def clientIO(self): #client send data function 
+        period = self.clientIni["sendrate"] #gets the period
         print("Starting data stream...")
         while True:
-            self.FVreadings.refreshAll()
+            self.FVreadings.refreshAll() #polls all values sequentially...might be able to optimize
             try:
-                for sensorName in self.FVreadings.readings:
+                for sensorName in self.FVreadings.readings:#sends the reading
                     messengerLock.acquire()
                     telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
                     messengerLock.release()
                     time.sleep(period)
             except Exception as e:
-                #remove this ltr
-                print(e)
                 self.connected = False
                 self.clientSocket.close()
                 print("WARNING: Client has lost connection to the server")
                 break
 
-    def runClient(self):
+    def runClient(self):#persistant connection
         while True:
             try:
                 self.clientIO()
                 self.clientSocket = self.findConnection()
             except Exception as e:
                 print(e)
-                print("something unexpected occurred ¯\_(ツ)_/¯")
+                print("Something unexpected occurred ¯\_(ツ)_/¯")
 
-    def receiveNExecute(self):
+    def receiveNExecute(self):#receives and executes a valve command
         while True:
             if self.connected:
                 
@@ -98,7 +101,7 @@ class Client:
                 msg = msg.decode("utf-8")
                 data = msg.split("#")
                 try:
-                    print(msg)
+                    #print(msg) print line for received readings
                     while len(data) != 0:
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
@@ -111,11 +114,10 @@ class Client:
                             elif len(received_reading) == 2:
                                 name = received_reading[0]
                                 value = received_reading[1]
-                                print("Received:", name, value)
-                                self.FVstates.execute(name,value)
-                                print("SENDING")
+
+                                self.FVstates.execute(name,value)#executes valve cmd
                                 
-                                msg = "#" + name + "/" + self.FVstates.getValveState(name)
+                                msg = "#" + name + "/" + self.FVstates.getValveState(name)#creates confirmation msg
                                 messengerLock.acquire()
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 messengerLock.release()
