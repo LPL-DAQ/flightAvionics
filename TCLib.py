@@ -185,8 +185,12 @@ def refreshTCs(TC_dict: dict()):
     while True:
         for sensor in TC_dict:
             #rint('yoooooo')
-            TC_dict[sensor].getTemperature()
-            #output = "[{}]: {:0>7.2f} F".format(sensor, temp_reading)
-            #print(output)
+            try:
+                TC_dict[sensor].getTemperature()
+            #output = "[{}]: {:0>7.2f} F".format(sensor, TC_dict[sensor].get('c'))
+                print(sensor,TC_dict[sensor].get('c'))
             #print('yoooooo222')
+            except Exception as e:
+                print("Exception: ", e)
+                
 
