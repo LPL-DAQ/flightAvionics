@@ -13,7 +13,9 @@ ApplicationWindow {
     width: maximumWidth
     height: maximumHeight
     visible: true
-    property real dpi_scale: 0.7
+
+    property real dpi_scale: 0.8
+
 
     function updateElements() {
 
@@ -58,6 +60,8 @@ ApplicationWindow {
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
 
+        // Tank Level
+        dpf001.fetchNewVal()
 
         svn003t.update()
         svn004t.update()
@@ -354,6 +358,16 @@ ApplicationWindow {
                         nrm_Opn: false
                 }
 
+                TankLevel {
+                    id: dpf001
+                    name: "DPF001"
+                    width: 63
+                    height: 22
+                    y: 420
+                    anchors.left: parent.left
+                    anchors.leftMargin: 1024
+
+                }
                         ValveState {
                         id: svf201_state
                         name: "SVF201"
@@ -433,6 +447,8 @@ ApplicationWindow {
                         y: 569
                         nrm_Opn: false
                 }
+
+                        
 
                         ValveState {
                         id: svn006_state
@@ -1598,11 +1614,11 @@ ApplicationWindow {
             width: 424
             height: 107
             color: "#FFFFFF"
+            visible: false
             font.pointSize: 50
             horizontalAlignment: Text.AlignHCenter
             text: qsTr("T-30")
             placeholderText: qsTr("T-30")
-            visible: false
             topPadding: 10
             leftPadding: 20
             background:Rectangle{

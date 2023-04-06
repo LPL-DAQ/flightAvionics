@@ -13,7 +13,7 @@ Rectangle {
     property real ang_Open: 0
     property string name: "SVH001"
 
-    state: "ARMED"
+    state: "NOTARMED"
 
     states: [
         State {
