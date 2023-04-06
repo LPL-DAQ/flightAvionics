@@ -351,6 +351,7 @@ ApplicationWindow {
                         name: "SVN001"
                         x: 670
                         y: 275
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -358,6 +359,7 @@ ApplicationWindow {
                         name: "SVF201"
                         x: 865
                         y: 275
+                        nrm_Opn: true
                 }
 
                         ValveState {
@@ -365,6 +367,7 @@ ApplicationWindow {
                         name: "PBVF201"
                         x: 1265
                         y: 275
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -372,6 +375,7 @@ ApplicationWindow {
                         name:"SVF202"
                         x: 1250
                         y: 150
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -379,6 +383,7 @@ ApplicationWindow {
                         name: "CPF201"
                         x: 1180
                         y: 40
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -386,6 +391,7 @@ ApplicationWindow {
                         name: "SVN006"
                         x: 1470
                         y: 732
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -393,6 +399,7 @@ ApplicationWindow {
                         name: "EBVO102"
                         x: 1265
                         y: 680
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -400,6 +407,7 @@ ApplicationWindow {
                         name: "EBVO101"
                         x: 1032
                         y: 818
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -407,6 +415,7 @@ ApplicationWindow {
                         name: "SVO101"
                         x: 882
                         y: 689
+                        nrm_Opn: true
                 }
 
                         ValveState {
@@ -414,6 +423,7 @@ ApplicationWindow {
                         name: "SVN004"
                         x: 670
                         y: 770
+                        nrm_Opn: false
                 }
                     
                         ValveState {
@@ -421,6 +431,7 @@ ApplicationWindow {
                         name: "SVN002"
                         x: 670
                         y: 569
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -428,6 +439,7 @@ ApplicationWindow {
                         name: "SVN003"
                         x: 670
                         y: 477
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -435,6 +447,7 @@ ApplicationWindow {
                         name: "SVN005"
                         x: 1510
                         y: 198
+                        nrm_Opn: false
                 }
 
 
@@ -985,8 +998,8 @@ ApplicationWindow {
                 
 
                 ValveToggle {
-                            id: svn001t
-                            name: "SVN001"
+                    id: svn001t
+                    name: "SVN001"
                     y: 96
                     anchors.left: parent.left
                     anchors.leftMargin: 33
@@ -994,8 +1007,8 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                            id: svn002t
-                            name: "SVN002"
+                    id: svn002t
+                    name: "SVN002"
                     x: 280
                     y: 96
                     anchors.right: parent.right
@@ -1004,36 +1017,36 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                            id: svn003t
-                            name: "SVN003"
-                            y: 175
+                    id: svn003t
+                    name: "SVN003"
+                    y: 175
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
                 }
 
                 ValveToggle {
-                            id: svn004t
-                            name: "SVN004"
-                            y: 175
-                            anchors.right: parent.right
-                            anchors.rightMargin: 33
-                            nrml_Opn: false
-                        }
+                    id: svn004t
+                    name: "SVN004"
+                    y: 175
+                    anchors.right: parent.right
+                    anchors.rightMargin: 33
+                    nrml_Opn: false
+                     }
 
-                        ValveToggle {
-                            id: svn005t
-                            name: "SVN005"
-                            y: 253
-                            anchors.left: parent.left
-                            anchors.leftMargin: 33
-                            nrml_Opn: false
-                        }
+                ValveToggle {
+                    id: svn005t
+                    name: "SVN005"
+                    y: 253
+                    anchors.left: parent.left
+                    anchors.leftMargin: 33
+                    nrml_Opn: false
+                     }
 
-                        ValveToggle {
-                            id: svn006t
-                            name: "SVN006"
-                            y: 253
+                ValveToggle {
+                    id: svn006t
+                    name: "SVN006"
+                    y: 253
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
@@ -1042,17 +1055,17 @@ ApplicationWindow {
                 ValveToggle {
                     id: svo101t
                     name: "SVO101"
-                            y: 370
+                    y: 370
                     anchors.left: parent.left
                     anchors.leftMargin: 33
-                    nrml_Opn: false
+                    nrml_Opn: true
                 }
 
                 ValveToggle {
-                            id: ebvo101t
-                            name: "EBVO101"
+                    id: ebvo101t
+                    name: "EBVO101"
                     x: 246
-                            y: 370
+                    y: 370
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
@@ -1061,7 +1074,7 @@ ApplicationWindow {
                 ValveToggle {
                     id: ebvo102t 
                     name: "EBVO102"
-                            y: 447
+                    y: 447
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
@@ -1071,27 +1084,27 @@ ApplicationWindow {
                     id: bvo101t 
                     name: "BVO101"
                     x: 246
-                            y: 447
+                    y: 447
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
-                            visible: false
+                    visible: false
                 }
 
                 ValveToggle {
                     id: svf201t 
                     name: "SVF201"
-                            y: 567
+                    y: 567
                     anchors.left: parent.left
                     anchors.leftMargin: 33
-                    nrml_Opn: false
+                    nrml_Opn: true
                 }
 
                 ValveToggle {
-                            id: svf202t 
-                            name: "SVF202"
+                    id: svf202t 
+                    name: "SVF202"
                     x: 246
-                            y: 567
+                    y: 567
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false

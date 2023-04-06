@@ -63,7 +63,7 @@ class Bridge(QObject):
 
     @Slot(str, result=bool)
     def getValveState(self, valveName:str):
-        #return true if valve is open
+        #return true if valve is ON
         try:
             reading = self.valveStates[valveName]
             if reading == 'ON':

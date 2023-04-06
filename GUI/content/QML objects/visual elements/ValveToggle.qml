@@ -26,18 +26,20 @@ Rectangle {
         }
         
         if (bridge.getValveState(name)) {
-            opn_txt.state = "open"
+            pwr_txt.state = "on"
             if(valve_ctrl.nrml_Opn){
-                pwr_txt.state = "off"
+                opn_txt.state = "closed"
             }else{
-                pwr_txt.state = "on"
+                opn_txt.state = "open"
             }
+            
         }else{
+            pwr_txt.state = "off"
             opn_txt.state = "closed"
             if(valve_ctrl.nrml_Opn){
-                pwr_txt.state = "on"
+                opn_txt.state = "open"  
             }else{
-                pwr_txt.state = "off"
+                opn_txt.state = "closed"
             }
         }
         
@@ -84,7 +86,7 @@ Rectangle {
                     State {
                         name: "open"
                         PropertyChanges { target: opn_txt; color: "#2ad12f"}
-                        PropertyChanges { target: opn_txt; text: qsTr("OPEN")}
+                        PropertyChanges { target: opn_txt; text: qsTr("OPENED")}
                     },
                     State {
                         name: "closed"
