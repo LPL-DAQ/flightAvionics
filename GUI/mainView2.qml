@@ -113,10 +113,10 @@ ApplicationWindow {
         svf202_state.update()
         cpf201_state.update()
 
-        prh001.update()
-        prh002.update()
-        prh001_open.open_percentage()
-        prh002_open.open_percentage()
+        reg001.update()
+        reg002.update()
+        reg001_open.open_percentage()
+        reg002_open.open_percentage()
 
     }
     function messagesBox(){
@@ -454,15 +454,15 @@ ApplicationWindow {
 
 
                         Reg {
-                        id: prh001
-                        name: "PRH001"
+                        id: reg001
+                        name: "REG001"
                         x: 471
                         y: 326
                 }
 
                         Reg {
-                        id: prh002
-                        name: "PRH002"
+                        id: reg002
+                        name: "REG002"
                         x: 471
                         y: 619
                 }
@@ -1233,8 +1233,8 @@ ApplicationWindow {
                     }
                 }
             RegToggle {
-                id: prh001_toggle
-                name: "PRH001"
+                id: reg001_toggle
+                name: "REG001"
                 y: 81
                 width: 208
                 height: 65
@@ -1244,8 +1244,8 @@ ApplicationWindow {
             }
 
             RegToggle {
-                id: prh002_toggle
-                name: "PRH002"
+                id: reg002_toggle
+                name: "REG002"
                 x: 344
                 y: 81
                 width: 208
@@ -1279,7 +1279,7 @@ ApplicationWindow {
                        
                     }
                     function callback() {
-                        bridge.regCommand("PRH001","increase")
+                        bridge.regCommand("REG001","increase")
                         upArrow.enabled = true;
                         downArrow.enabled = true;
                         upArrow.source= "content/Images/UpArrow.png"
@@ -1310,7 +1310,7 @@ ApplicationWindow {
                        
                     }
                     function callback() {
-                        bridge.regCommand("PRH001","decrease")
+                        bridge.regCommand("REG001","decrease")
                         downArrow.enabled = true;
                         upArrow.enabled = true;
                         upArrow.source= "content/Images/UpArrow.png"
@@ -1339,7 +1339,7 @@ ApplicationWindow {
                        
                     }
                     function callback() {
-                        bridge.regCommand("PRH002","increase")
+                        bridge.regCommand("REG002","increase")
                         upArrow1.enabled = true;
                         downArrow1.enabled = true;
                         upArrow1.source= "content/Images/UpArrow.png"
@@ -1369,7 +1369,7 @@ ApplicationWindow {
                        
                     }
                     function callback() {
-                        bridge.regCommand("PRH002","decrease")
+                        bridge.regCommand("REG002","decrease")
                         downArrow1.enabled = true;
                         upArrow1.enabled = true;
                         upArrow1.source= "content/Images/UpArrow.png"
@@ -1380,7 +1380,7 @@ ApplicationWindow {
             }
 
             Rectangle {
-                id: prh001_open
+                id: reg001_open
                 y: 197
                 width: 132
                 height: 51
@@ -1389,7 +1389,7 @@ ApplicationWindow {
                 anchors.leftMargin: 33
                 border.color: "#ffffff"
                 Text{
-                    id: prh001_text
+                    id: reg001_text
                     width: 74
                     color: "#ffffff"
                     font.pixelSize: 30
@@ -1415,12 +1415,12 @@ ApplicationWindow {
                 }
 
                 function open_percentage() {
-                    prh001_text.text=qsTr(bridge.regState("PRH001"))
+                    reg001_text.text=qsTr(bridge.regState("REG001"))
                 }
             }
 
             Rectangle {
-                id: prh002_open
+                id: reg002_open
                 y: 197
                 width: 132
                 height: 51
@@ -1429,7 +1429,7 @@ ApplicationWindow {
                 anchors.leftMargin: 344
                 border.color: "#ffffff"
                 Text{
-                    id: prh002_text
+                    id: reg002_text
                     width: 74
                     color: "#ffffff"
                     font.pixelSize: 30
@@ -1455,7 +1455,7 @@ ApplicationWindow {
                 }
 
                 function open_percentage() {
-                    prh002_text.text=qsTr(bridge.regState("PRH002"))
+                    reg002_text.text=qsTr(bridge.regState("REG002"))
                 }
 
                     }
