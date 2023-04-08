@@ -63,14 +63,14 @@ ApplicationWindow {
         // Tank Level
         dpf001.fetchNewVal()
 
-        svn001t.update()
-        svn002t.update()
         svn003t.update()
         svn004t.update()
         svn005t.update()
         svn006t.update()
+        svn007t.update()
+        svn008t.update()
 
-        svo101t.update()
+        svo102t.update()
         ebvo102t.update()
         ebvo101t.update()
 
@@ -80,14 +80,14 @@ ApplicationWindow {
         cpf201t.update()
 
 
-        svn001.update()
-        svn002.update()
         svn003.update()
         svn004.update()
         svn005.update()
         svn006.update()
+        svn007.update()
+        svn008.update()
         
-        svo101.update()
+        svo102.update()
         ebvo102.update()
         ebvo101.update()
 
@@ -96,15 +96,15 @@ ApplicationWindow {
         svf202.update()
         cpf201.update()
 
-        svn001_state.update()
-        svn002_state.update()
         svn003_state.update()
         svn004_state.update()
         svn005_state.update()
         svn006_state.update()
+        svn007_state.update()
+        svn008_state.update()
 
         
-        svo101_state.update()
+        svo102_state.update()
         ebvo102_state.update()
         ebvo101_state.update()
 
@@ -165,8 +165,8 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
 
                 Gage {
-                        id: ptn001
-                        name: "PTN001"
+                        id: ptn002
+                        name: "PTN002"
                         x: 246
                         y: 249
                 }
@@ -336,8 +336,8 @@ ApplicationWindow {
                 }
 
                         Gage {
-                        id: ptn002
-                        name: "PTN002"
+                        id: ptn001
+                        name: "PTN001"
                         x: 246
                         y: 540
                 }
@@ -350,6 +350,13 @@ ApplicationWindow {
                         unit: "°C"
                 }
 
+                        ValveState {
+                        id: svn004_state
+                        name: "SVN004"
+                        x: 670
+                        y: 275
+                        nrm_Opn: false
+                }
 
                 TankLevel {
                     id: dpf001
@@ -366,6 +373,7 @@ ApplicationWindow {
                         name: "SVF201"
                         x: 865
                         y: 275
+                        nrm_Opn: true
                 }
 
                         ValveState {
@@ -373,6 +381,7 @@ ApplicationWindow {
                         name: "PBVF201"
                         x: 1265
                         y: 275
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -380,6 +389,7 @@ ApplicationWindow {
                         name:"SVF202"
                         x: 1250
                         y: 150
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -387,13 +397,15 @@ ApplicationWindow {
                         name: "CPF201"
                         x: 1180
                         y: 40
+                        nrm_Opn: false
                 }
 
                         ValveState {
-                        id: svn006_state
-                        name: "SVN006"
+                        id: svn007_state
+                        name: "SVN007"
                         x: 1470
                         y: 732
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -401,6 +413,7 @@ ApplicationWindow {
                         name: "EBVO102"
                         x: 1265
                         y: 680
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -408,48 +421,49 @@ ApplicationWindow {
                         name: "EBVO101"
                         x: 1032
                         y: 818
+                        nrm_Opn: false
                 }
 
                         ValveState {
-                        id: svo101_state
-                        name: "SVO101"
+                        id: svo102_state
+                        name: "SVO102"
                         x: 882
                         y: 689
-                }
-
-                        ValveState {
-                        id: svn004_state
-                        name: "SVN004"
-                        x: 670
-                        y: 770
-                }
-                    
-                        ValveState {
-                        id: svn002_state
-                        name: "SVN002"
-                        x: 670
-                        y: 569
-                }
-
-                        ValveState {
-                                id: svn001_state
-                                name: "SVN001"
-                                x: 670
-                                y: 275
-                        }
-
-                        ValveState {
-                        id: svn003_state
-                        name: "SVN003"
-                        x: 670
-                        y: 477
+                        nrm_Opn: true
                 }
 
                         ValveState {
                         id: svn005_state
                         name: "SVN005"
+                        x: 670
+                        y: 770
+                        nrm_Opn: false
+                }
+                    
+                        ValveState {
+                        id: svn003_state
+                        name: "SVN003"
+                        x: 670
+                        y: 569
+                        nrm_Opn: false
+                }
+
+                        
+
+                        ValveState {
+                        id: svn006_state
+                        name: "SVN006"
+                        x: 670
+                        y: 477
+                        nrm_Opn: false
+                }
+
+                        ValveState {
+                        id: svn008_state
+                        name: "SVN008"
                         x: 1510
                         y: 198
+                        nrm_Opn: false
                 }
 
 
@@ -468,8 +482,8 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn001
-                        name: "SVN001"
+                        id: svn004
+                        name: "SVN004"
                         x: 680
                         y: 346
                         width: 57
@@ -477,8 +491,8 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn003
-                        name: "SVN003"
+                        id: svn006
+                        name: "SVN006"
                         x: 678
                         y: 433
                         width: 57
@@ -486,8 +500,8 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn002
-                        name: "SVN002"
+                        id: svn003
+                        name: "SVN003"
                         x: 681
                         y: 639
                         width: 57
@@ -495,33 +509,35 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn004
-                        name: "SVN004"
+                        id: svn005
+                        name: "SVN005"
                         x: 679
                         y: 726
                         width: 57
                         height: 36
                 }
 
-                        FuelValve {
+                        NitrogenValve {
                         id: svf201
                         name: "SVF201"
                         ang_Open: 90
                         x: 811
                         y: 288
-                }
-
-                        LoxValve {
-                        id: svo101
-                        name: "SVO101"
-                        ang_Open: 90
-                        x: 828
-                        y: 701
+                        nrm_Opn: true
                 }
 
                         NitrogenValve {
-                        id: svn006
-                        name: "SVN006"
+                        id: svo102
+                        name: "SVO102"
+                        ang_Open: 90
+                        x: 828
+                        y: 701
+                        nrm_Opn: true
+                }
+
+                        NitrogenValve {
+                        id: svn007
+                        name: "SVN007"
                         ang_Open: 90
                         x: 1412
                         y: 746
@@ -564,8 +580,8 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn005
-                        name: "SVN005"
+                        id: svn008
+                        name: "SVN008"
                         ang_Open: 90
                         x: 1451
                         y: 211
@@ -1000,8 +1016,8 @@ ApplicationWindow {
                 
 
                 ValveToggle {
-                    id: svn001t
-                    name: "SVN001"
+                    id: svn004t
+                    name: "SVN004"
                     y: 96
                     anchors.left: parent.left
                     anchors.leftMargin: 33
@@ -1009,8 +1025,8 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                    id: svn002t
-                    name: "SVN002"
+                    id: svn003t
+                    name: "SVN003"
                     x: 280
                     y: 96
                     anchors.right: parent.right
@@ -1019,55 +1035,55 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                            id: svn003t
-                            name: "SVN003"
-                            y: 175
+                    id: svn006t
+                    name: "SVN006"
+                    y: 175
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
                 }
 
                 ValveToggle {
-                            id: svn004t
-                            name: "SVN004"
-                            y: 175
-                            anchors.right: parent.right
-                            anchors.rightMargin: 33
-                            nrml_Opn: false
-                        }
+                    id: svn005t
+                    name: "SVN005"
+                    y: 175
+                    anchors.right: parent.right
+                    anchors.rightMargin: 33
+                    nrml_Opn: false
+                     }
 
-                        ValveToggle {
-                            id: svn005t
-                            name: "SVN005"
-                            y: 253
-                            anchors.left: parent.left
-                            anchors.leftMargin: 33
-                            nrml_Opn: false
-                        }
+                ValveToggle {
+                    id: svn008t
+                    name: "SVN008"
+                    y: 253
+                    anchors.left: parent.left
+                    anchors.leftMargin: 33
+                    nrml_Opn: false
+                     }
 
-                        ValveToggle {
-                            id: svn006t
-                            name: "SVN006"
-                            y: 253
+                ValveToggle {
+                    id: svn007t
+                    name: "SVN007"
+                    y: 253
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
                 }
 
                 ValveToggle {
-                    id: svo101t
-                    name: "SVO101"
-                            y: 370
+                    id: svo102t
+                    name: "SVO102"
+                    y: 370
                     anchors.left: parent.left
                     anchors.leftMargin: 33
-                    nrml_Opn: false
+                    nrml_Opn: true
                 }
 
                 ValveToggle {
-                            id: ebvo101t
-                            name: "EBVO101"
+                    id: ebvo101t
+                    name: "EBVO101"
                     x: 246
-                            y: 370
+                    y: 370
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
@@ -1076,7 +1092,7 @@ ApplicationWindow {
                 ValveToggle {
                     id: ebvo102t 
                     name: "EBVO102"
-                            y: 447
+                    y: 447
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
@@ -1086,27 +1102,27 @@ ApplicationWindow {
                     id: bvo101t 
                     name: "BVO101"
                     x: 246
-                            y: 447
+                    y: 447
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
-                            visible: false
+                    visible: false
                 }
 
                 ValveToggle {
                     id: svf201t 
                     name: "SVF201"
-                            y: 567
+                    y: 567
                     anchors.left: parent.left
                     anchors.leftMargin: 33
-                    nrml_Opn: false
+                    nrml_Opn: true
                 }
 
                 ValveToggle {
-                            id: svf202t 
-                            name: "SVF202"
+                    id: svf202t 
+                    name: "SVF202"
                     x: 246
-                            y: 567
+                    y: 567
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
