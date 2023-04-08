@@ -13,9 +13,7 @@ ApplicationWindow {
     width: maximumWidth
     height: maximumHeight
     visible: true
-
-    property real dpi_scale: 0.8
-
+    property real dpi_scale: 0.6
 
     function updateElements() {
 
@@ -781,7 +779,7 @@ ApplicationWindow {
                                 Text {
                                     id: text8
                                     color: "#ffffff"
-                                    text: qsTr("PBVF201")
+                                    text: qsTr("IGNITER")
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 25
                                     horizontalAlignment: Text.AlignLeft
@@ -801,7 +799,7 @@ ApplicationWindow {
                                         visible: true
                                         color: "#26bd2e"
                                         readOnly: false
-                                                text: "10"
+                                        text: "10"
                                         anchors.fill: parent
                                         font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
@@ -869,7 +867,7 @@ ApplicationWindow {
                                         visible: true
                                         color: "#26bd2e"
                                         readOnly: false
-                                                text: "20"
+                                        text: "20"
                                         anchors.fill: parent
                                         font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
@@ -917,7 +915,7 @@ ApplicationWindow {
                                 Text {
                                     id: text12
                                     color: "#ffffff"
-                                    text: qsTr("IGNITER")
+                                    text: qsTr("PBVF201")
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 25
                                     horizontalAlignment: Text.AlignLeft
@@ -1003,14 +1001,51 @@ ApplicationWindow {
                                         implicitWidth: 100
                                         implicitHeight: 40
                                         opacity: enabled ? 1 : 0.3
-                                        color: send_button.down ? "#732727" : "#696969"
+                                        color: send_button.down ? "#732727" : "#808080"
                                         border.color: "#ffffff"
                                         border.width: 1
                                         radius: 4
                                     }
+                            onClicked: {
+                            ignition_button.visible = true;
+                            bridge.sendTiming(textField.text, textField2.text, textField3.text, textField4.text)
+                            }
                                    
                         } 
                                 
+                    }
+                    Button {
+                        id: ignition_button
+                        y: 1150
+                        text: "IGNITION"
+                        height: 76  
+                        visible: false
+                        anchors.left: rectangle3.left
+                        anchors.leftMargin: 33
+                        anchors.right: rectangle3.right
+                        anchors.rightMargin: 33
+                        contentItem: Text {
+                                        text: ignition_button.text
+                                        font.pointSize: 30
+                                        font.bold: true
+                                        opacity: enabled ? 1.0 : 0.3
+                                        color: "#ffffff"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+                        background: Rectangle {
+                                        implicitWidth: 100
+                                        implicitHeight: 40
+                                        opacity: enabled ? 1 : 0.3
+                                        color: ignition_button.down ? "#732727" : "#cb2a2a"
+                                        border.color: "#ffffff"
+                                        border.width: 1
+                                        radius: 4
+                                    }
+                            onClicked: {
+                                bridge.ignitionCmd(textField.text)
+                            }
                     }
 
                 

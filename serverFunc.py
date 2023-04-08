@@ -135,9 +135,21 @@ class Server:
         msg = "#" + valve + "/" + newState
         telemetry.sendMsg(self.getSocket(), msg)  
 
-    def sendRegCmd(self, command):
-        telemetry.sendMsg(self.getSocket(), command)
-        
+    def sendTimingCmd(self, timer, igniter, lox, fuel):
+        if not self.isConnected:
+            print("WARNING: No Connection")
+            return
+        msg= "#TIMING"+ "/" + timer + "/" + igniter + "/" + lox + "/" + fuel
+        telemetry.sendMsg(self.getSocket(), msg)  
+    
+    def ignitionCMD(self,timer):
+        if not self.isConnected:
+            print("WARNING: No Connection")
+            return
+        msg="#GM1/SNDIT"+ "/"+ timer
+        telemetry.sendMsg(self.getSocket(), msg)  
+
+
     #theres more logic to this but ill do it sometime
     def verifyValve(self):
         valve = self.armedValve
