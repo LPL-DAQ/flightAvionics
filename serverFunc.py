@@ -26,6 +26,7 @@ class Server:
         self.armedValves = dict()#check if still used
         
         self.pendLock = threading.Lock()
+        self.dataLock = threading.Lock()
 
     #standard getter methods
     def getDataReadings(self):
@@ -93,12 +94,17 @@ class Server:
                         sensorValue = received_reading[1]
                         time = received_reading[2]
                         self.dataReadings[sensorName] = sensorValue
+                        self.dataLock.acquire()
                         self.fp.write(sensorName + " " + sensorValue + " " + time + "\n")
+                        self.dataLock.release()
                         #print(name + " " + value + " " + time)
 
                     elif len(received_reading) == 2: #valve confirmation
                         valveName = received_reading[0]
                         valveState = received_reading[1]
+                        self.dataLock.acquire()
+                        self.fp.write("RECEIVED: " + valveName + " " + valveState + " " + timing.missionTime() + "\n")
+                        self.dataLock.release()
                         #needs to be implemented 
                         self.verifyValve()
                         self.valveReadings[valveName] = valveState
@@ -123,6 +129,9 @@ class Server:
             print("FUCKED UP VALVE CMD MSG BUDDY")
             print("State:", state)
             return
+        self.dataLock.acquire()
+        self.fp.write("SENDING: " + valve + " " + newState + " " + time + "\n")
+        self.dataLock.release()
         msg = "#" + valve + "/" + newState
         telemetry.sendMsg(self.getSocket(), msg)  
 
