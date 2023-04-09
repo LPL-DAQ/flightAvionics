@@ -127,6 +127,8 @@ class Client:
                                 elif direction == "CCW":
                                     self.Regulators[name].motor_run(5, 0)
                                     print("COMMAND SENT")
+                                elif direction == "STOP":
+                                    self.Regulators[name].StopMotorInterrupt
                                 else:
                                     print("Command error")
                             else:

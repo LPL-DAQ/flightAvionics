@@ -1254,6 +1254,35 @@ ApplicationWindow {
                 anchors.right: parent.right
                 anchors.rightMargin: 33
             }
+              Button{
+                id: stop_button
+                y: 300
+                width: 208
+                height: 65
+                text: "STOP"
+                anchors.left: parent.left
+                anchors.leftMargin: 33
+                contentItem: Text {
+                        text: stop_button.text
+                        font.pointSize: 30
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+                background:Rectangle{
+                border.color: "#ffffff"
+                color: stop_button.down ? "#732727" : "#941010"
+                }
+                onClicked: {
+                    bridge.regCommand("REG001","STOP")
+                }
+                
+
+            }
+
 
             Timer { id: timer }
 
