@@ -1,6 +1,6 @@
 import time
 
-ref_time =  time.time()
+ref_time = time.time()
 
 def setRefTime(HH,MM,SS):
     global ref_time
@@ -26,6 +26,6 @@ def getTimeDiff(first:str, last:str):
     
     sol = float(last) - float(first)
     if sol < 0:
-        #print("WARNING: SERVER OPERATED THRU MIDNIGHT")
+        print("WARNING: SERVER OPERATED THRU MIDNIGHT")
         sol += 86400
     return sol

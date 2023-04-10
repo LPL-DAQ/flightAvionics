@@ -13,6 +13,7 @@ Rectangle {
     border.width: 0
     property real ang_Open: 0
     property string name: "SVH001"
+    property bool nrm_Opn: false
 
     state: "OD"
 
@@ -23,7 +24,7 @@ Rectangle {
         },
         State {
             name: "OD"
-            PropertyChanges { target: icon_image; source: "NitrogenOpen.png"}
+            PropertyChanges { target: icon_image; source: "OpenValve_Nitrogen.png"}
         },
         State {
             name: "CA"
@@ -38,15 +39,38 @@ Rectangle {
     function update() {
         if (bridge.getValveState(name)) {
             if(bridge.getArmState(name)){
-                rectangle.state = "OA"
+                if (rectangle.nrm_Opn){
+                    rectangle.state = "CA"
+                }
+                else{
+                    rectangle.state = "OA"  
+                }
+                
             }else{
-                rectangle.state = "OD"
+                if (rectangle.nrm_Opn){
+                    rectangle.state = "CD"
+                }
+                else{
+                    rectangle.state = "OD"
+                }
+                
             }
         }else{
             if(bridge.getArmState(name)){
-                rectangle.state = "CA"
+                if (rectangle.nrm_Opn){
+                    rectangle.state = "OA"
+                }
+                else{
+                    rectangle.state = "CA"
+                }
             }else{
-                rectangle.state = "CD"
+                if (rectangle.nrm_Opn){
+                    rectangle.state = "OD"
+                }
+                else{
+                    rectangle.state = "CD"
+                }
+                
             }
         }
     }

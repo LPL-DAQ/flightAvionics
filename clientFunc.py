@@ -5,6 +5,7 @@ import threading
 import verify
 import telemetry
 import timing 
+import SVLib
 import DRVLib
 
 messengerLock = threading.Lock()
@@ -104,6 +105,13 @@ class Client:
                     while len(data) != 0:
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
+                            print()
+                            if received_reading[0] == "GM1": #ground command
+                                print("Received ignition command")
+                                timer= int(received_reading[2])
+                                time.sleep(timer)
+                                SVLib.groundCommands("IGNITION")
+                            elif len(received_reading) == 2:
                             tag= received_reading[0] #find which item command corresponds to
                             type= tag[0] #find if "S" for solenoids or "R" for regulators 
                             if type == "S" or type == "P": 
@@ -117,6 +125,14 @@ class Client:
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 messengerLock.release()
                                 print("MSG SENT")
+                            elif len(received_reading) == 5: #timing sequence
+                                print("Received Timing")
+                                igniter= received_reading[2]
+                                lox= received_reading[3]
+                                fuel= received_reading[4]
+                                timing=[igniter, lox, fuel]
+                                SVLib.timingSequence(timing)
+
                             elif type == "R":
                                 name= received_reading[0]
                                 direction= received_reading[1]
