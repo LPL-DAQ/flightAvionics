@@ -10,10 +10,11 @@ import "content/QML objects/visual elements"
 
 ApplicationWindow {
     id: window
-    width: maximumWidth
-    height: maximumHeight
+    width: 3840
+    height: 21600
     visible: true
-    property real dpi_scale: 0.6
+
+    property real dpi_scale: 1.4
 
     function updateElements() {
 
@@ -467,14 +468,14 @@ ApplicationWindow {
 
                         Reg {
                         id: prh001
-                        name: "PRH001"
+                        name: "PRN003"
                         x: 471
                         y: 326
                 }
 
                         Reg {
                         id: prh002
-                        name: "PRH002"
+                        name: "PRN004"
                         x: 471
                         y: 619
                 }
@@ -1285,7 +1286,7 @@ ApplicationWindow {
                 }
             RegToggle {
                 id: prh001_toggle
-                name: "PRH001"
+                name: "PRN003"
                 y: 81
                 width: 208
                 height: 65
@@ -1296,7 +1297,7 @@ ApplicationWindow {
 
             RegToggle {
                 id: prh002_toggle
-                name: "PRH002"
+                name: "PRN004"
                 x: 344
                 y: 81
                 width: 208
@@ -1319,22 +1320,7 @@ ApplicationWindow {
                 
                 MouseArea { anchors.fill: parent; 
                     onClicked: {
-                        console.log("clicked")
-                        upArrow.enabled = false;
-                        downArrow.enabled = false;
-                        upArrow.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow.source= "content/Images/DownArrowDeactivated.png"
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("PRH001","increase")
-                        upArrow.enabled = true;
-                        downArrow.enabled = true;
-                        upArrow.source= "content/Images/UpArrow.png"
-                        downArrow.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN003","increase")
                     }
                 }
                 
@@ -1350,24 +1336,36 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        downArrow.enabled = false;
-                        upArrow.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("PRH001","decrease")
-                        downArrow.enabled = true;
-                        upArrow.enabled = true;
-                        upArrow.source= "content/Images/UpArrow.png"
-                        downArrow.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN003","decrease")
                     }
                  }
+            }
+
+            Button{
+                id: stop_button
+                y: 300
+                width: 208
+                height: 65
+                anchors.left: parent.left
+                anchors.leftMargin: 33
+                text: "STOP"
+            contentItem: Text {
+                        text: stop_button.text
+                        font.pointSize: 30
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+            background:Rectangle{
+                border.color: "#ffffff"
+                color: stop_button.down ? "#732727" : "#941010"
+            }
+            onClicked: {
+                bridge.regCommand("PRN003","STOP")
+            }
             }
 
             Image {
@@ -1380,21 +1378,7 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        upArrow1.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow1.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow1.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("PRH002","increase")
-                        upArrow1.enabled = true;
-                        downArrow1.enabled = true;
-                        upArrow1.source= "content/Images/UpArrow.png"
-                        downArrow1.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN004","increase")
                     }
                 }
             }
@@ -1410,21 +1394,7 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        downArrow1.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow1.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow1.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("PRH002","decrease")
-                        downArrow1.enabled = true;
-                        upArrow1.enabled = true;
-                        upArrow1.source= "content/Images/UpArrow.png"
-                        downArrow1.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN004","decrease")
                     }
                  }
 

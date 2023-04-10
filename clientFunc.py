@@ -112,6 +112,9 @@ class Client:
                                 time.sleep(timer)
                                 SVLib.groundCommands("IGNITION")
                             elif len(received_reading) == 2:
+                            tag= received_reading[0] #find which item command corresponds to
+                            type= tag[0] #find if "S" for solenoids or "R" for regulators 
+                            if type == "S" or type == "P": 
                                 name = received_reading[0]
                                 value = received_reading[1]
 
@@ -130,6 +133,17 @@ class Client:
                                 timing=[igniter, lox, fuel]
                                 SVLib.timingSequence(timing)
 
+                            elif type == "R":
+                                name= received_reading[0]
+                                direction= received_reading[1]
+                                print("Received:", name, direction)
+                                if direction == "CW":
+                                    self.Regulators[name].motor_run(1000000, 1)
+                                elif direction == "CCW":
+                                    self.Regulators[name].motor_run(1000000, 0)
+                                    print("COMMAND SENT")
+                                else:
+                                    print("Command error")
                             else:
                                 print("FUCKED UP MSG :)")
                         data.remove(data[0])

@@ -19,7 +19,7 @@ class DRV8825():
         #constants
         self.wait=0.004
         self.initdelay=0.05
-        self.steptype="HALF"
+        self.steptype="FULL"
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.direction_pin, GPIO.OUT) #set direciton pin as output
