@@ -10,11 +10,11 @@ import "content/QML objects/visual elements"
 
 ApplicationWindow {
     id: window
-    width: maximumWidth
-    height: maximumHeight
+    width: 3840
+    height: 21600
     visible: true
 
-    property real dpi_scale: 0.8
+    property real dpi_scale: 1.4
 
 
     function updateElements() {
@@ -63,14 +63,14 @@ ApplicationWindow {
         // Tank Level
         dpf001.fetchNewVal()
 
-        svn001t.update()
-        svn002t.update()
         svn003t.update()
         svn004t.update()
         svn005t.update()
         svn006t.update()
+        svn007t.update()
+        svn008t.update()
 
-        svo101t.update()
+        svo102t.update()
         ebvo102t.update()
         ebvo101t.update()
 
@@ -80,14 +80,14 @@ ApplicationWindow {
         cpf201t.update()
 
 
-        svn001.update()
-        svn002.update()
         svn003.update()
         svn004.update()
         svn005.update()
         svn006.update()
+        svn007.update()
+        svn008.update()
         
-        svo101.update()
+        svo102.update()
         ebvo102.update()
         ebvo101.update()
 
@@ -96,15 +96,15 @@ ApplicationWindow {
         svf202.update()
         cpf201.update()
 
-        svn001_state.update()
-        svn002_state.update()
         svn003_state.update()
         svn004_state.update()
         svn005_state.update()
         svn006_state.update()
+        svn007_state.update()
+        svn008_state.update()
 
         
-        svo101_state.update()
+        svo102_state.update()
         ebvo102_state.update()
         ebvo101_state.update()
 
@@ -113,10 +113,10 @@ ApplicationWindow {
         svf202_state.update()
         cpf201_state.update()
 
-        reg001.update()
-        reg002.update()
-        reg001_open.open_percentage()
-        reg002_open.open_percentage()
+        prh001.update()
+        prh002.update()
+        prh001_open.open_percentage()
+        prh002_open.open_percentage()
 
     }
     function messagesBox(){
@@ -165,8 +165,8 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
 
                 Gage {
-                        id: ptn001
-                        name: "PTN001"
+                        id: ptn002
+                        name: "PTN002"
                         x: 246
                         y: 249
                 }
@@ -336,8 +336,8 @@ ApplicationWindow {
                 }
 
                         Gage {
-                        id: ptn002
-                        name: "PTN002"
+                        id: ptn001
+                        name: "PTN001"
                         x: 246
                         y: 540
                 }
@@ -350,6 +350,13 @@ ApplicationWindow {
                         unit: "°C"
                 }
 
+                        ValveState {
+                        id: svn004_state
+                        name: "SVN004"
+                        x: 670
+                        y: 275
+                        nrm_Opn: false
+                }
 
                 TankLevel {
                     id: dpf001
@@ -366,6 +373,7 @@ ApplicationWindow {
                         name: "SVF201"
                         x: 865
                         y: 275
+                        nrm_Opn: true
                 }
 
                         ValveState {
@@ -373,6 +381,7 @@ ApplicationWindow {
                         name: "PBVF201"
                         x: 1265
                         y: 275
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -380,6 +389,7 @@ ApplicationWindow {
                         name:"SVF202"
                         x: 1250
                         y: 150
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -387,13 +397,15 @@ ApplicationWindow {
                         name: "CPF201"
                         x: 1180
                         y: 40
+                        nrm_Opn: false
                 }
 
                         ValveState {
-                        id: svn006_state
-                        name: "SVN006"
+                        id: svn007_state
+                        name: "SVN007"
                         x: 1470
                         y: 732
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -401,6 +413,7 @@ ApplicationWindow {
                         name: "EBVO102"
                         x: 1265
                         y: 680
+                        nrm_Opn: false
                 }
 
                         ValveState {
@@ -408,68 +421,69 @@ ApplicationWindow {
                         name: "EBVO101"
                         x: 1032
                         y: 818
+                        nrm_Opn: false
                 }
 
                         ValveState {
-                        id: svo101_state
-                        name: "SVO101"
+                        id: svo102_state
+                        name: "SVO102"
                         x: 882
                         y: 689
-                }
-
-                        ValveState {
-                        id: svn004_state
-                        name: "SVN004"
-                        x: 670
-                        y: 770
-                }
-                    
-                        ValveState {
-                        id: svn002_state
-                        name: "SVN002"
-                        x: 670
-                        y: 569
-                }
-
-                        ValveState {
-                                id: svn001_state
-                                name: "SVN001"
-                                x: 670
-                                y: 275
-                        }
-
-                        ValveState {
-                        id: svn003_state
-                        name: "SVN003"
-                        x: 670
-                        y: 477
+                        nrm_Opn: true
                 }
 
                         ValveState {
                         id: svn005_state
                         name: "SVN005"
+                        x: 670
+                        y: 770
+                        nrm_Opn: false
+                }
+                    
+                        ValveState {
+                        id: svn003_state
+                        name: "SVN003"
+                        x: 670
+                        y: 569
+                        nrm_Opn: false
+                }
+
+                        
+
+                        ValveState {
+                        id: svn006_state
+                        name: "SVN006"
+                        x: 670
+                        y: 477
+                        nrm_Opn: false
+                }
+
+                        ValveState {
+                        id: svn008_state
+                        name: "SVN008"
                         x: 1510
                         y: 198
+                        nrm_Opn: false
                 }
 
 
                         Reg {
-                        id: reg001
-                        name: "REG001"
+                        id: prh001
+                        name: "PRN003"
                         x: 471
                         y: 326
                 }
 
                         Reg {
-                        id: reg002
-                        name: "REG002"
+                        id: prh002
+                        name: "PRN004"
                         x: 471
                         y: 619
                 }
 
                         NitrogenValve {
-                        id: svn001
-                        name: "SVN001"
+                        id: svn004
+                        name: "SVN004"
                         x: 680
                         y: 346
                         width: 57
@@ -477,8 +491,8 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn003
-                        name: "SVN003"
+                        id: svn006
+                        name: "SVN006"
                         x: 678
                         y: 433
                         width: 57
@@ -486,8 +500,8 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn002
-                        name: "SVN002"
+                        id: svn003
+                        name: "SVN003"
                         x: 681
                         y: 639
                         width: 57
@@ -495,33 +509,35 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn004
-                        name: "SVN004"
+                        id: svn005
+                        name: "SVN005"
                         x: 679
                         y: 726
                         width: 57
                         height: 36
                 }
 
-                        FuelValve {
+                        NitrogenValve {
                         id: svf201
                         name: "SVF201"
                         ang_Open: 90
                         x: 811
                         y: 288
-                }
-
-                        LoxValve {
-                        id: svo101
-                        name: "SVO101"
-                        ang_Open: 90
-                        x: 828
-                        y: 701
+                        nrm_Opn: true
                 }
 
                         NitrogenValve {
-                        id: svn006
-                        name: "SVN006"
+                        id: svo102
+                        name: "SVO102"
+                        ang_Open: 90
+                        x: 828
+                        y: 701
+                        nrm_Opn: true
+                }
+
+                        NitrogenValve {
+                        id: svn007
+                        name: "SVN007"
                         ang_Open: 90
                         x: 1412
                         y: 746
@@ -564,8 +580,8 @@ ApplicationWindow {
                 }
 
                         NitrogenValve {
-                        id: svn005
-                        name: "SVN005"
+                        id: svn008
+                        name: "SVN008"
                         ang_Open: 90
                         x: 1451
                         y: 211
@@ -1000,8 +1016,8 @@ ApplicationWindow {
                 
 
                 ValveToggle {
-                    id: svn001t
-                    name: "SVN001"
+                    id: svn004t
+                    name: "SVN004"
                     y: 96
                     anchors.left: parent.left
                     anchors.leftMargin: 33
@@ -1009,8 +1025,8 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                    id: svn002t
-                    name: "SVN002"
+                    id: svn003t
+                    name: "SVN003"
                     x: 280
                     y: 96
                     anchors.right: parent.right
@@ -1019,55 +1035,55 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                            id: svn003t
-                            name: "SVN003"
-                            y: 175
+                    id: svn006t
+                    name: "SVN006"
+                    y: 175
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
                 }
 
                 ValveToggle {
-                            id: svn004t
-                            name: "SVN004"
-                            y: 175
-                            anchors.right: parent.right
-                            anchors.rightMargin: 33
-                            nrml_Opn: false
-                        }
+                    id: svn005t
+                    name: "SVN005"
+                    y: 175
+                    anchors.right: parent.right
+                    anchors.rightMargin: 33
+                    nrml_Opn: false
+                     }
 
-                        ValveToggle {
-                            id: svn005t
-                            name: "SVN005"
-                            y: 253
-                            anchors.left: parent.left
-                            anchors.leftMargin: 33
-                            nrml_Opn: false
-                        }
+                ValveToggle {
+                    id: svn008t
+                    name: "SVN008"
+                    y: 253
+                    anchors.left: parent.left
+                    anchors.leftMargin: 33
+                    nrml_Opn: false
+                     }
 
-                        ValveToggle {
-                            id: svn006t
-                            name: "SVN006"
-                            y: 253
+                ValveToggle {
+                    id: svn007t
+                    name: "SVN007"
+                    y: 253
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
                 }
 
                 ValveToggle {
-                    id: svo101t
-                    name: "SVO101"
-                            y: 370
+                    id: svo102t
+                    name: "SVO102"
+                    y: 370
                     anchors.left: parent.left
                     anchors.leftMargin: 33
-                    nrml_Opn: false
+                    nrml_Opn: true
                 }
 
                 ValveToggle {
-                            id: ebvo101t
-                            name: "EBVO101"
+                    id: ebvo101t
+                    name: "EBVO101"
                     x: 246
-                            y: 370
+                    y: 370
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
@@ -1076,7 +1092,7 @@ ApplicationWindow {
                 ValveToggle {
                     id: ebvo102t 
                     name: "EBVO102"
-                            y: 447
+                    y: 447
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
@@ -1086,27 +1102,27 @@ ApplicationWindow {
                     id: bvo101t 
                     name: "BVO101"
                     x: 246
-                            y: 447
+                    y: 447
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
-                            visible: false
+                    visible: false
                 }
 
                 ValveToggle {
                     id: svf201t 
                     name: "SVF201"
-                            y: 567
+                    y: 567
                     anchors.left: parent.left
                     anchors.leftMargin: 33
-                    nrml_Opn: false
+                    nrml_Opn: true
                 }
 
                 ValveToggle {
-                            id: svf202t 
-                            name: "SVF202"
+                    id: svf202t 
+                    name: "SVF202"
                     x: 246
-                            y: 567
+                    y: 567
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
@@ -1233,8 +1249,8 @@ ApplicationWindow {
                     }
                 }
             RegToggle {
-                id: reg001_toggle
-                name: "REG001"
+                id: prh001_toggle
+                name: "PRN003"
                 y: 81
                 width: 208
                 height: 65
@@ -1244,8 +1260,8 @@ ApplicationWindow {
             }
 
             RegToggle {
-                id: reg002_toggle
-                name: "REG002"
+                id: prh002_toggle
+                name: "PRN004"
                 x: 344
                 y: 81
                 width: 208
@@ -1254,35 +1270,6 @@ ApplicationWindow {
                 anchors.right: parent.right
                 anchors.rightMargin: 33
             }
-              Button{
-                id: stop_button
-                y: 300
-                width: 208
-                height: 65
-                text: "STOP"
-                anchors.left: parent.left
-                anchors.leftMargin: 33
-                contentItem: Text {
-                        text: stop_button.text
-                        font.pointSize: 30
-                        font.bold: true
-                        opacity: enabled ? 1.0 : 0.3
-                        color: "#ffffff"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-                background:Rectangle{
-                border.color: "#ffffff"
-                color: stop_button.down ? "#732727" : "#941010"
-                }
-                onClicked: {
-                    bridge.regCommand("REG001","STOP")
-                }
-                
-
-            }
-
 
             Timer { id: timer }
 
@@ -1297,22 +1284,7 @@ ApplicationWindow {
                 
                 MouseArea { anchors.fill: parent; 
                     onClicked: {
-                        console.log("clicked")
-                        upArrow.enabled = false;
-                        downArrow.enabled = false;
-                        upArrow.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow.source= "content/Images/DownArrowDeactivated.png"
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("REG001","increase")
-                        upArrow.enabled = true;
-                        downArrow.enabled = true;
-                        upArrow.source= "content/Images/UpArrow.png"
-                        downArrow.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN003","increase")
                     }
                 }
                 
@@ -1328,24 +1300,36 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        downArrow.enabled = false;
-                        upArrow.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("REG001","decrease")
-                        downArrow.enabled = true;
-                        upArrow.enabled = true;
-                        upArrow.source= "content/Images/UpArrow.png"
-                        downArrow.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN003","decrease")
                     }
                  }
+            }
+
+            Button{
+                id: stop_button
+                y: 300
+                width: 208
+                height: 65
+                anchors.left: parent.left
+                anchors.leftMargin: 33
+                text: "STOP"
+            contentItem: Text {
+                        text: stop_button.text
+                        font.pointSize: 30
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+            background:Rectangle{
+                border.color: "#ffffff"
+                color: stop_button.down ? "#732727" : "#941010"
+            }
+            onClicked: {
+                bridge.regCommand("PRN003","STOP")
+            }
             }
 
             Image {
@@ -1358,21 +1342,7 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        upArrow1.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow1.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow1.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("REG002","increase")
-                        upArrow1.enabled = true;
-                        downArrow1.enabled = true;
-                        upArrow1.source= "content/Images/UpArrow.png"
-                        downArrow1.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN004","increase")
                     }
                 }
             }
@@ -1388,28 +1358,14 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        downArrow1.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow1.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow1.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("REG002","decrease")
-                        downArrow1.enabled = true;
-                        upArrow1.enabled = true;
-                        upArrow1.source= "content/Images/UpArrow.png"
-                        downArrow1.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN004","decrease")
                     }
                  }
 
             }
 
             Rectangle {
-                id: reg001_open
+                id: prh001_open
                 y: 197
                 width: 132
                 height: 51
@@ -1418,7 +1374,7 @@ ApplicationWindow {
                 anchors.leftMargin: 33
                 border.color: "#ffffff"
                 Text{
-                    id: reg001_text
+                    id: prh001_text
                     width: 74
                     color: "#ffffff"
                     font.pixelSize: 30
@@ -1444,12 +1400,12 @@ ApplicationWindow {
                 }
 
                 function open_percentage() {
-                    reg001_text.text=qsTr(bridge.regState("REG001"))
+                    prh001_text.text=qsTr(bridge.regState("PRH001"))
                 }
             }
 
             Rectangle {
-                id: reg002_open
+                id: prh002_open
                 y: 197
                 width: 132
                 height: 51
@@ -1458,7 +1414,7 @@ ApplicationWindow {
                 anchors.leftMargin: 344
                 border.color: "#ffffff"
                 Text{
-                    id: reg002_text
+                    id: prh002_text
                     width: 74
                     color: "#ffffff"
                     font.pixelSize: 30
@@ -1484,7 +1440,7 @@ ApplicationWindow {
                 }
 
                 function open_percentage() {
-                    reg002_text.text=qsTr(bridge.regState("REG002"))
+                    prh002_text.text=qsTr(bridge.regState("PRH002"))
                 }
 
                     }

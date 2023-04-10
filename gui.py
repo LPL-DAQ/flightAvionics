@@ -89,29 +89,58 @@ class Bridge(QObject):
 
         except:
             return False
-    @Slot(str,str)        
+    @Slot(str,str, result=int)        
     def regCommand(self, name:str, direction:str):
-                armedState = self.armedValues[name]
-                if (armedState=="ARMED"):
-                        if direction == "increase":
-                            self.percent1+=1
-                            command= "#" + name + "/CW" #command to rotate clockwise by fixed number of steps
-                            print(command)
-                            self.s.sendRegCmd(command)
-                        if direction == "decrease":
-                            if (self.percent1==0):
-                                self.percent1=0
-                                return
-                            self.percent1-=1
-                            command= "#" + name + "/CCW" #command to rotate clockwise by fixed number of steps
-                            self.s.sendRegCmd(command)
-                        else:
-                            command= "#" + name + "/STOP"
-                            print(command)
-                            self.s.sendRegCmd(command)
+        if name=="PRN003": #regulator 1
+            if direction == "increase":
+                if (self.armedValues[name]=="ARMED"):
+                    self.percent1+=1
+                    percent=self.percent1 #updates percentage field in GUI
+                    command="#REG001/CW" #command to rotate clockwise by fixed number of steps
+                    self.s.sendRegCmd(command)
+                    return percent
+
                 else:
                     print("Regulator not Armed")
-                       
+            if direction == "decrease":
+                if self.armedValues[name]=="ARMED":
+                    self.percent1-=1
+                    percent=self.percent1 #updates percentage field in GUI
+                    command="#REG001/CCW" #command to rotate counterclockwise by fixed number of steps
+                    self.s.sendRegCmd(command)
+                    return percent
+                else:
+                    print("Regulator not Armed")
+            else:
+                if self.armedValues[name]=="ARMED":
+                    command= "STOP"
+                    self.s.sendRegCmd(command)
+                else:
+                    print("Regulator not Armed")
+
+
+
+        elif name=="PRN004": #second regulator commands (not used yet)
+            if direction == "increase":
+                if self.armedValues[name]=="ARMED":
+                    self.percent2+=1
+                    percent=self.percent2
+                    command="#REG002/CW" #command to rotate clockwise by fixed number of steps
+                    self.s.sendRegCmd(command)
+                    return percent
+                else:
+                    print("Regulator not Armed")
+            else:
+                if self.armedValues[name]=="ARMED":
+                    self.percent2-=1
+                    percent=self.percent2
+                    command="#REG002/CCW" #command to rotate counterclockwise by fixed number of steps
+                    self.s.sendRegCmd(command)
+                    return percent
+                else:
+                    print("Regulator not Armed")
+            
+    
     @Slot(str,result=str)        
     def regState(self,name):
         #provides current regulator open percentage 

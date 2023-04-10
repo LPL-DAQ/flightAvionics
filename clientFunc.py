@@ -106,7 +106,7 @@ class Client:
                             received_reading = data[0].split("/")
                             tag= received_reading[0] #find which item command corresponds to
                             type= tag[0] #find if "S" for solenoids or "R" for regulators 
-                            if type == "S": 
+                            if type == "S" or type == "P": 
                                 name = received_reading[0]
                                 value = received_reading[1]
 
@@ -122,13 +122,10 @@ class Client:
                                 direction= received_reading[1]
                                 print("Received:", name, direction)
                                 if direction == "CW":
-                                    self.Regulators[name].motor_run(5, 1)
-                                    print("COMMAND SENT")
+                                    self.Regulators[name].motor_run(1000000, 1)
                                 elif direction == "CCW":
-                                    self.Regulators[name].motor_run(5, 0)
+                                    self.Regulators[name].motor_run(1000000, 0)
                                     print("COMMAND SENT")
-                                elif direction == "STOP":
-                                    self.Regulators[name].StopMotorInterrupt
                                 else:
                                     print("Command error")
                             else:
