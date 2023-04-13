@@ -63,7 +63,7 @@ class Bridge(QObject):
 
     @Slot(str, result=bool)
     def getValveState(self, valveName:str):
-        #return true if valve is open
+        #return true if valve is ON
         try:
             reading = self.valveStates[valveName]
             if reading == 'ON':
@@ -111,13 +111,6 @@ class Bridge(QObject):
                     return percent
                 else:
                     print("Regulator not Armed")
-            else:
-                if self.armedValues[name]=="ARMED":
-                    command= "STOP"
-                    self.s.sendRegCmd(command)
-                else:
-                    print("Regulator not Armed")
-
 
 
         elif name=="PRN004": #second regulator commands (not used yet)
@@ -154,21 +147,14 @@ class Bridge(QObject):
         print(valveName)
         if valveName != "None":
             self.s.sendValveCmd(valveName)
-    
+
+    @Slot(str, str, str, str)   
+    def sendTiming(self,timer:str, igniter:str, lox_main:str, fuel_main:str):
+        self.s.sendTimingCmd(timer,igniter,lox_main,fuel_main)
+
     @Slot(str)
-    def closeServer(self, password):
-        if password == "kill":
-            self.statusMessages="  "
-            self.s.closeSocket()
-        else:
-            self.statusMessages= "incorrect password, try again"
-    
-    @Slot(result=str)
-    def getStatusMessages(self):
-        return self.statusMessages
-    
-    
-        
+    def ignitionCmd(self, timer):
+        self.s.ignitionCMD(timer)
         
 
 

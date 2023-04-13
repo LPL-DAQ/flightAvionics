@@ -101,7 +101,7 @@ class Client:
                 data = msg.split("#")
                 try:
                     #print(msg) print line for received readings
-                    while data
+                    while data:
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
                             tag= received_reading[0] #find which item command corresponds to
@@ -122,9 +122,10 @@ class Client:
                                 direction= received_reading[1]
                                 print("Received:", name, direction)
                                 if direction == "CW":
-                                    self.Regulators[name].motor_run(1000000, 1)
+                                    self.Regulators[name].motor_run(10000, 1)
+                                    print("REG MOVED 10000 STEPS")
                                 elif direction == "CCW":
-                                    self.Regulators[name].motor_run(1000000, 0)
+                                    self.Regulators[name].motor_run(10000, 0)
                                     print("COMMAND SENT")
                                 else:
                                     print("Command error")
@@ -136,7 +137,6 @@ class Client:
                 except Exception as e:
                     print("Exception", e)
         
-
 
 
 

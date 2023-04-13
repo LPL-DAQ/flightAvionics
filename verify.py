@@ -1,5 +1,6 @@
 from configparser import ConfigParser
 import os
+from datetime import datetime
 
 import timing
 #returns a dict of the consoleType members if the file is valid and None if the file does not exist
@@ -69,7 +70,9 @@ def verifyServerIni(filepath:str):
             if not os.path.exists("data"):
                 print("WARNING: 'data' directory does not exist. Generating directory...")
                 os.makedirs("data")
-            serverDict["fp"] = open("data/" + parser["savefile"] + str(timing.missionTime()), 'w')
+            date =  str(datetime.now().strftime("[%H:%M:%S].txt"))
+            serverDict["fp"] = open("data/" + parser["savefile"] + date, 'w')
+            serverDict["log"] = open("data/" + parser["savefile"]+ "log" + date, 'w')
     except:
         print("ERROR: Invalid file name.")
         valid = False

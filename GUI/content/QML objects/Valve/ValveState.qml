@@ -11,6 +11,7 @@ Rectangle {
     property string state: "CLOSED"
     property string text_color: "#ff0000"
     property string name: "SVH001"
+    property bool nrm_Opn: false
                 
     Text {
         id: text4
@@ -43,12 +44,31 @@ Rectangle {
 
     function update() {
         if (bridge.getValveState(name)) {
+            if(valve_state.nrm_Opn){
+              valve_state.state = "CLOSED"  
+              valve_state.text_color = "#ff0000"
+            }
+            else{
+
             valve_state.state = "OPENED"
             valve_state.text_color = "#10ff00"
-        }else{
+
+            }
+            
+         }
+         else{
+            if(valve_state.nrm_Opn){
+              valve_state.state = "OPENED"  
+              valve_state.text_color = "#10ff00"
+            }
+            else{
+
             valve_state.state = "CLOSED"
             valve_state.text_color = "#ff0000"
-        }
+
+            }
+
+         }
     }
 
  }
