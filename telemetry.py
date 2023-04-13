@@ -30,7 +30,7 @@ class Readings:
         for LC_name in self.LCs:
             new_reading = dict()
             new_reading['value']= "{:0>.2f}".format(self.LCs[LC_name].pounds)
-            new_reading['time']= self.LCs[LC_name].timestamp
+            new_reading['time']= self.LCs[LC_name].timeStamp
             new_reading['type']= 'LC'
             self.readings[LC_name] = new_reading
 

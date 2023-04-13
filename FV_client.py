@@ -24,7 +24,7 @@ def main():
     print("Initializing SV Config...")
     SVs = SVLib.initialiseValves("configFiles/SV_Config_FV.ini")
     print("Initializing LC Config...")
-    LCs= LCLib.initialiseValves("configFiles/LC_Config_FV.ini")
+    LCs= LCLib.LCs_init("configFiles/LC_Config_FV.ini")
     
     #readings class
     FVreadings = telemetry.Readings(PTs,TCs,LCs)

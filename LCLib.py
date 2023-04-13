@@ -32,20 +32,23 @@ class LC:
 
 
     # Assumes voltage is given in mV
-    def __getWeight(self,voltage):
-        pounds = abs(self.slope*voltage+ self.offset)
+    def __getWeight(self,voltage: float):
+        pounds = self.slope*voltage + self.offset
         
         return pounds
     
-    def __countsToVolts(self, reading):
-        volts= 0.976858537*reading/(2^23) #converts from ADC counts to voltage based on 24 bit ADC (-1 for the sign)
+    def __countsToVolts(self, reading: float):
+        volts= 0.976858537*reading/(pow(2,23)) #converts from ADC counts to voltage based on 24 bit ADC (-1 for the sign)
 
         return volts
 
     def getPounds(self):
         self.reading = self.ADC.get_data_mean()
+        print(self.reading)
         self.voltage= self.__countsToVolts(self.reading)
+        print(self.voltage)
         self.pounds = self.__getWeight(self.voltage)
+        print(self.pounds)
         self.timeStamp= timing.missionTime()
         return self.pounds
 
@@ -57,7 +60,7 @@ def LCs_init(cfg_file_name: str):
     LCsCfg.read(cfg_file_name)
 
     # instantiate object of HX711 class
-    ADC = HX711(dout_pin=21, pd_sck_pin=20, gain_channel_A=128, select_channel='A')
+    ADC = HX711(dout_pin=6, pd_sck_pin=5, gain_channel_A=128, select_channel='A')
 
     #Create a LC dictionary
     LCs = dict()
@@ -68,10 +71,12 @@ def LCs_init(cfg_file_name: str):
     for LC_name in LCsCfg.sections():
         LC_port = LCsCfg[LC_name]['port'] 
         slope = float(LCsCfg[LC_name]['slope'])
+        print(slope)
         offset = float(LCsCfg[LC_name]['offset'])
+        print(offset)
 
         if LC_port[0] == 'A':
-            LCs[LC_name] = LC(ADC, slope, offset)
+            LCs[LC_name] = LC(ADC, offset, slope)
         #elif LC_port[0] == 'B':
             #LCs[LC_name] = LC(ADC1,LC_channel)
 
@@ -91,5 +96,4 @@ def refreshLCs(LC_dict: dict()):
     while True:
         for LC_name in LC_dict:
             pounds= LC_dict[LC_name].getPounds()
-            print(pounds) #debugging
             time.sleep(LC_period)
