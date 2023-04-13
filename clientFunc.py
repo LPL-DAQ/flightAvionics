@@ -101,12 +101,12 @@ class Client:
                 data = msg.split("#")
                 try:
                     #print(msg) print line for received readings
-                    while len(data) != 0:
+                    while data
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
                             tag= received_reading[0] #find which item command corresponds to
-                            type= tag[0] #find if "S" for solenoids or "R" for regulators 
-                            if type == "S" or type == "P": 
+                            valtype= tag[0] #find if "S" for solenoids or "R" for regulators 
+                            if valtype == "S" or valtype == "P": 
                                 name = received_reading[0]
                                 value = received_reading[1]
 
@@ -117,7 +117,7 @@ class Client:
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 messengerLock.release()
                                 print("MSG SENT")
-                            elif type == "R":
+                            elif valtype == "R":
                                 name= received_reading[0]
                                 direction= received_reading[1]
                                 print("Received:", name, direction)
