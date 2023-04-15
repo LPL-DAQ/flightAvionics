@@ -5,6 +5,7 @@ import threading
 import verify
 import telemetry
 import timing 
+import SVLib
 import DRVLib
 
 messengerLock = threading.Lock()
@@ -104,6 +105,13 @@ class Client:
                     while data:
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
+                            print()
+                            if received_reading[0] == "GM1": #ground command
+                                print("Received ignition command")
+                                timer= int(received_reading[2])
+                                time.sleep(timer)
+                                SVLib.groundCommands("IGNITION")
+                            elif len(received_reading) == 2:
                             tag= received_reading[0] #find which item command corresponds to
                             valtype= tag[0] #find if "S" for solenoids or "R" for regulators 
                             if valtype == "S" or valtype == "P": 

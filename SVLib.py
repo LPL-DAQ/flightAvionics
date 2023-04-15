@@ -11,12 +11,14 @@ def set_up_serial(port):
          It is tty.(random stuff) or Device manager for windows com(#))
     RETURN: serial object
     """
-    ser = serial.Serial(port,baudrate=9600, parity=serial.PARITY_NONE, timeout=1, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS)
+    ser1 = serial.Serial(port,baudrate=9600, parity=serial.PARITY_NONE, timeout=1, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS)
     time.sleep(2)
-    return ser
+    return ser1
+
+ser = set_up_serial('/dev/ttyACM0')
 
 
-def send_data(ser, data_to_send):
+def send_data(ser1, data_to_send):
     """
     SUM: sends data to the Arduino over UART
     AUG1: ser (serial object for device to send to) 
@@ -24,8 +26,9 @@ def send_data(ser, data_to_send):
     RETURN: None
     """
     send_data_list = list(data_to_send)
+    #print(send_data_list)
     for data_byte in send_data_list:
-        ser.write(data_byte.encode('ascii'))
+        ser1.write(data_byte.encode('ascii'))
         
 def receive_data(ser,byte=False):
 
@@ -61,7 +64,7 @@ class Valve():
 
 def initialiseValves(configFile:str):
 
-    ser = set_up_serial('/dev/ttyACM0')
+    
 
     SVsCfg = ConfigParser()
     SVsCfg.read(configFile)
@@ -75,3 +78,31 @@ def initialiseValves(configFile:str):
         valves[SV_name].powerOFF()
         print("[", SV_name, "] has been initialized in its normal state", sep="")
     return valves
+
+
+def timingSequence(timing):
+    i=0
+    print("SENDING TIMING")
+    while(i<3):
+        tmp = "00000"
+        times = str(timing[i])
+        #print(tmp[:(5 - len(str(timing[i])))])
+        new = tmp[:(5 - len(str(timing[i])))] + times
+        #print(new)
+        msg = "#T0"+ str(i) + "/" + new + "\n"
+        print(msg)
+        send_data(ser,msg)
+        time.sleep(1)
+        i=i+1
+
+def groundCommands(command):
+    if command == "IGNITION":
+        print("sending ignition command")
+        msg= "#GM1/SNDIT"
+    elif command == "ABORT":
+        print("sending abort command")
+        msg= "#GM1/ABORT"
+    send_data(ser,msg)
+    print("GROUND COMMAND SENT")
+
+
