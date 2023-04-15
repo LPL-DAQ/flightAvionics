@@ -70,7 +70,7 @@ def verifyServerIni(filepath:str):
             if not os.path.exists("data"):
                 print("WARNING: 'data' directory does not exist. Generating directory...")
                 os.makedirs("data")
-            date =  str(datetime.now().strftime("[%H:%M:%S].txt"))
+            date =  str(datetime.now().strftime("_%m-%d-%Y[%H:%M:%S].txt"))
             serverDict["fp"] = open("data/" + parser["savefile"] + date, 'w')
             serverDict["log"] = open("data/" + parser["savefile"]+ "log" + date, 'w')
     except:

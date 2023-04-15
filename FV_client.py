@@ -39,7 +39,8 @@ def main():
         executor.submit(PTLib.refreshPTs, PTs, client.getPTPoll()) #PT interogation thread
         executor.submit(TCLib.refreshTCs,TCs)#TC interogation thread
         executor.submit(client.runClient)#persistant connection
-        executor.submit(client.receiveNExecute)#valve receive and listen
+        executor.submit(client.receiveCMD)
+        executor.submit(client.executeCMD)
 
 #runs FV_client
 main()
