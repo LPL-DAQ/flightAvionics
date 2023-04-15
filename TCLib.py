@@ -128,7 +128,7 @@ def __convertTemp(offset: float(), offset_units: str()):
         return offset
 
     elif offset_units == 'c':
-        return offset * (9.0 / 5.0) + 32.0
+        return offset 
         
     elif offset_units == 'k':
         return (offset - 273.15) * (9.0 / 5.0) + 32.0

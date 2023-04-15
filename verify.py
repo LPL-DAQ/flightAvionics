@@ -70,7 +70,9 @@ def verifyServerIni(filepath:str):
             if not os.path.exists("data"):
                 print("WARNING: 'data' directory does not exist. Generating directory...")
                 os.makedirs("data")
-            serverDict["fp"] = open("data/" + parser["savefile"] + str(datetime.now().strftime("[%H:%M:%S]") + ".txt"), 'w')
+            date =  str(datetime.now().strftime("[%H:%M:%S].txt"))
+            serverDict["fp"] = open("data/" + parser["savefile"] + date, 'w')
+            serverDict["log"] = open("data/" + parser["savefile"]+ "log" + date, 'w')
     except:
         print("ERROR: Invalid file name.")
         valid = False

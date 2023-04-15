@@ -102,7 +102,7 @@ class Client:
                 data = msg.split("#")
                 try:
                     #print(msg) print line for received readings
-                    while len(data) != 0:
+                    while data:
                         if len(data[0]) != 0:
                             received_reading = data[0].split("/")
                             print()
@@ -113,8 +113,8 @@ class Client:
                                 SVLib.groundCommands("IGNITION")
                             elif len(received_reading) == 2:
                             tag= received_reading[0] #find which item command corresponds to
-                            type= tag[0] #find if "S" for solenoids or "R" for regulators 
-                            if type == "S" or type == "P": 
+                            valtype= tag[0] #find if "S" for solenoids or "R" for regulators 
+                            if valtype == "S" or valtype == "P": 
                                 name = received_reading[0]
                                 value = received_reading[1]
 
@@ -125,22 +125,15 @@ class Client:
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 messengerLock.release()
                                 print("MSG SENT")
-                            elif len(received_reading) == 5: #timing sequence
-                                print("Received Timing")
-                                igniter= received_reading[2]
-                                lox= received_reading[3]
-                                fuel= received_reading[4]
-                                timing=[igniter, lox, fuel]
-                                SVLib.timingSequence(timing)
-
-                            elif type == "R":
+                            elif valtype == "R":
                                 name= received_reading[0]
                                 direction= received_reading[1]
                                 print("Received:", name, direction)
                                 if direction == "CW":
-                                    self.Regulators[name].motor_run(1000000, 1)
+                                    self.Regulators[name].motor_run(10000, 1)
+                                    print("REG MOVED 10000 STEPS")
                                 elif direction == "CCW":
-                                    self.Regulators[name].motor_run(1000000, 0)
+                                    self.Regulators[name].motor_run(10000, 0)
                                     print("COMMAND SENT")
                                 else:
                                     print("Command error")
@@ -152,7 +145,6 @@ class Client:
                 except Exception as e:
                     print("Exception", e)
         
-
 
 
 

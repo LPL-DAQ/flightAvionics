@@ -111,13 +111,6 @@ class Bridge(QObject):
                     return percent
                 else:
                     print("Regulator not Armed")
-            else:
-                if self.armedValues[name]=="ARMED":
-                    command= "STOP"
-                    self.s.sendRegCmd(command)
-                else:
-                    print("Regulator not Armed")
-
 
 
         elif name=="PRN004": #second regulator commands (not used yet)
