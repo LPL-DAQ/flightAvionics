@@ -12,6 +12,7 @@ class Server:
         self.serverIni = verify.verifyServerIni(filepath)
         self.fp = self.serverIni["fp"]
         self.log = self.serverIni["log"]
+        self.display = self.serverIni["display"]
         #socket stuff
         self.ip, self.port = verify.getIPAddress(filepath)
         self.socket = None
@@ -23,6 +24,7 @@ class Server:
         self.valveReadings = dict()
         #name timestamp
         self.armedValve = ("None", "")
+
 
         self.armedValves = dict()#check if still used
         
@@ -50,6 +52,8 @@ class Server:
         return self.armedValves
     def getPendLock(self):
         return self.pendLock
+    def getDisplay(self):
+        return self.display
 
     def getArmedValve(self):
         return self.armedValve[0]

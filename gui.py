@@ -173,8 +173,8 @@ def guiThreadFunc(s:serverFunc.Server):
     app = QtWidgets.QApplication()
     view = QtQuick.QQuickView()
 
-    timer = QTimer()
-    timer.start(10)
+    displayTimer = QTimer()
+    updateTimer = QTimer()
 
     engine= QQmlApplicationEngine("GUI/mainView2.qml")
 
@@ -183,10 +183,11 @@ def guiThreadFunc(s:serverFunc.Server):
     context = engine.rootContext()
     context.setContextProperty("bridge", bridge)
 
-    timer.timeout.connect(root.updateElements)
-    timer.timeout.connect(root.messagesBox)
+    displayTimer.timeout.connect(root.updateElements)
+    updateTimer.timeout.connect(root.messagesBox)
 
-    
+    displayTimer.start(s.getDisplay())
+    updateTimer.start(10)
     
     sys.exit(app.exec())
     
