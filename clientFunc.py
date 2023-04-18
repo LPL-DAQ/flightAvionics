@@ -100,11 +100,12 @@ class Client:
             try:
                 while data:
                     if len(data[0]) != 0: #when split we get might get an empty string
+                        print(data[0])
                         received_reading = data[0].split("/")
                         if len(received_reading) == 2 and received_reading[0][0] == "R" and received_reading[1] == "STOP":#hard check for now
                             self.Regulators[received_reading[0]].abortRun()
                         else:   
-                            self.workQ.put(data) 
+                            self.workQ.put(data[0]) 
                     data.remove(data[0])
             except Exception as e:
                 print("ERROR: Invalid CMD", data[0])
