@@ -176,6 +176,9 @@ def guiThreadFunc(s:serverFunc.Server):
     displayTimer = QTimer()
     updateTimer = QTimer()
 
+    displayTimer.start(s.getDisplay())
+    updateTimer.start(10)
+
     engine= QQmlApplicationEngine("GUI/mainView2.qml")
 
     root = engine.rootObjects()[0]
@@ -186,8 +189,6 @@ def guiThreadFunc(s:serverFunc.Server):
     displayTimer.timeout.connect(root.updateElements)
     updateTimer.timeout.connect(root.messagesBox)
 
-    displayTimer.start(s.getDisplay())
-    updateTimer.start(10)
     
     sys.exit(app.exec())
     
