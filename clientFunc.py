@@ -111,7 +111,7 @@ class Client:
     
     def executeCMD(self):
         while self.connected:
-            if not self.workQ.empty:
+            if not self.workQ.empty():
                 try:
                     received_reading = self.workQ.get().split("/")
                     if len(received_reading) == 2:
