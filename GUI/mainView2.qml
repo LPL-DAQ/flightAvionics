@@ -1364,7 +1364,8 @@ ApplicationWindow {
                 color: stop_button.down ? "#732727" : "#941010"
             }
             onClicked: {
-                
+
+                bridge.regCommand("PRN003","STOP")
             }
             }
 

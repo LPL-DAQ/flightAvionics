@@ -97,6 +97,7 @@ class Bridge(QObject):
                     self.percent1+=1
                     percent=self.percent1 #updates percentage field in GUI
                     command="#REG001/CW" #command to rotate clockwise by fixed number of steps
+                    #print(command)
                     self.s.sendRegCmd(command)
                     return percent
 
@@ -107,10 +108,15 @@ class Bridge(QObject):
                     self.percent1-=1
                     percent=self.percent1 #updates percentage field in GUI
                     command="#REG001/CCW" #command to rotate counterclockwise by fixed number of steps
+                    #print(command)
                     self.s.sendRegCmd(command)
                     return percent
                 else:
                     print("Regulator not Armed")
+            else:
+                command = "#REG001/STOP"
+                #print(command)
+                self.s.sendRegCmd(command)
 
 
         elif name=="PRN004": #second regulator commands (not used yet)

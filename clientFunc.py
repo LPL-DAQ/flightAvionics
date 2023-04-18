@@ -103,6 +103,7 @@ class Client:
                         print(data[0])
                         received_reading = data[0].split("/")
                         if len(received_reading) == 2 and received_reading[0][0] == "R" and received_reading[1] == "STOP":#hard check for now
+                            print("Received stop command")
                             self.Regulators[received_reading[0]].abortRun()
                         else:   
                             self.workQ.put(data[0]) 
