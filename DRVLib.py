@@ -65,7 +65,7 @@ class DRV8825():
             for x in range(steps):
                 if self.stop_motor:
                     self.isRunning = False
-                    self.motor_run = False
+                    self.stop_motor = False
                     raise self.StopMotorInterrupt
                 else:
                     GPIO.output(self.step_pin,GPIO.HIGH)
