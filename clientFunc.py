@@ -69,7 +69,7 @@ class Client:
     def clientIO(self): #client send data function 
         period = self.clientIni["sendrate"] #gets the period
         print("Starting data stream...")
-        while self.connected:
+        while True:
             self.FVreadings.refreshAll() #polls all values sequentially...might be able to optimize
             try:
                 for sensorName in self.FVreadings.readings:#sends the reading
