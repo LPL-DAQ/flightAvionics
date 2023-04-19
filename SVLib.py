@@ -65,7 +65,6 @@ class Valve():
 def initialiseValves(configFile:str):
 
     
-
     SVsCfg = ConfigParser()
     SVsCfg.read(configFile)
     valves = dict()

@@ -81,6 +81,7 @@ class Client:
                 except Exception as e:
                     self.connected = False
                     self.clientSocket.close()
+                    self.FVstates.abort()
                     print("WARNING: Client has lost connection to the server")
                     break
 
