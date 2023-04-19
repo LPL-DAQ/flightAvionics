@@ -69,25 +69,26 @@ class Client:
     def clientIO(self): #client send data function 
         period = self.clientIni["sendrate"] #gets the period
         print("Starting data stream...")
-        while self.connected:
-            self.FVreadings.refreshAll() #polls all values sequentially...might be able to optimize
-            try:
-                for sensorName in self.FVreadings.readings:#sends the reading
-                    self.messengerLock.acquire()
-                    telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
-                    self.messengerLock.release()
-                    time.sleep(period)
-            except Exception as e:
-                self.connected = False
-                self.clientSocket.close()
-                print("WARNING: Client has lost connection to the server")
-                break
+        while True:
+            if self.connected:
+                self.FVreadings.refreshAll() #polls all values sequentially...might be able to optimize
+                try:
+                    for sensorName in self.FVreadings.readings:#sends the reading
+                        self.messengerLock.acquire()
+                        telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
+                        self.messengerLock.release()
+                    time.sleep(period) #should send every sensor then sleep
+                except Exception as e:
+                    self.connected = False
+                    self.clientSocket.close()
+                    print("WARNING: Client has lost connection to the server")
+                    break
 
     def runClient(self):#persistant connection
         while True:
             try:
-                self.clientIO()
                 self.clientSocket = self.findConnection()
+                self.clientIO()
             except Exception as e:
                 print(e)
                 print("Something unexpected occurred ¯\_(ツ)_/¯")
