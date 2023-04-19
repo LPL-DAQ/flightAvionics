@@ -87,9 +87,9 @@ class Client:
     def runClient(self):#persistant connection
         while True:
             try:
+                self.clientIO()
                 self.clientSocket = self.findConnection()
                 print("Connection ran")
-                self.clientIO()
             except Exception as e:
                 print(e)
                 print("Something unexpected occurred ¯\_(ツ)_/¯")
