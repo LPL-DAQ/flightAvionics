@@ -5,6 +5,7 @@ import telemetry
 import queue
 import timing
 import verify
+import time
 
 class Server:
     def __init__(self, filepath:str) -> None:
@@ -64,7 +65,7 @@ class Server:
     def setToNA(self):
         for name in self.dataReadings:
             self.dataReadings[name]  = "N/A"
-            
+
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(f"IP address: '{ip}' Port {port}")
@@ -77,7 +78,15 @@ class Server:
 
     #waits for connection with client
     def establishConnection(self):
-        s = self.establishAddress(self.ip, self.port)
+        valid = False
+        while not valid:
+            try:
+                s = self.establishAddress(self.ip, self.port)
+                valid = True
+            except Exception as e:
+                print("ERROR: BINDING FAILED...WAITING 10 seconds")
+                time.sleep(10)
+
         while not self.connect:
             print("Awaiting connection from client")
             s.listen(1)
