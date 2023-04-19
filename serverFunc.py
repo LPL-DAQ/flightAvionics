@@ -61,6 +61,10 @@ class Server:
     def setArmedValve(self, name:str):
         self.armedValve = (name, timing.missionTime())
 
+    def setToNA(self):
+        for name in self.dataReadings:
+            self.dataReadings[name]  = "N/A"
+            
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(f"IP address: '{ip}' Port {port}")

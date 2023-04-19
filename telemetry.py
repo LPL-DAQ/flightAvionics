@@ -77,7 +77,7 @@ class valveStates:
     
     def abort(self):
         for name in self.SVs:
-            name.powerOFF()
+            self.SVs[name].powerOFF()
 
 #sends msg given a socket
 def sendMsg(socket, msg):
