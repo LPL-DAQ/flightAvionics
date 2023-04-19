@@ -88,6 +88,7 @@ class Client:
         while True:
             try:
                 self.clientSocket = self.findConnection()
+                print("Connection ran")
                 self.clientIO()
             except Exception as e:
                 print(e)
