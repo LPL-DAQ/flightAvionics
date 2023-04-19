@@ -31,7 +31,7 @@ def dataListener(s:serverFunc.Server):
                 s.receiveData()
             except Exception as e:
                 print("ERROR1: Connection forcibly disconnected by host")
-                s.setToNA();
+                s.setToNA()
                 s.closeSocket()
 
 #thread function for commandSender
