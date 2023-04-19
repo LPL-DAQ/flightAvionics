@@ -52,6 +52,7 @@ __pycache__
 
 #DAQ
 data
+data/*.txt
 GUI/*.autosave
 
 GUI/content/QML objects/.DS_Store

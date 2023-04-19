@@ -70,12 +70,27 @@ def verifyServerIni(filepath:str):
             if not os.path.exists("data"):
                 print("WARNING: 'data' directory does not exist. Generating directory...")
                 os.makedirs("data")
-            date =  str(datetime.now().strftime("[%H:%M:%S].txt"))
+            date =  str(datetime.now().strftime("_%m-%d-%Y[%H:%M:%S].txt"))
             serverDict["fp"] = open("data/" + parser["savefile"] + date, 'w')
             serverDict["log"] = open("data/" + parser["savefile"]+ "log" + date, 'w')
     except:
         print("ERROR: Invalid file name.")
         valid = False
+    try:
+        if "display" not in parser:
+            valid = False
+            print("ERROR: display not specified")
+        else:
+            display = float(parser["display"])
+            if display < 0:
+                valid = False
+                print("ERROR: display cannot be negative")
+            else:
+                serverDict["display"] = display
+    except:
+        valid = False
+        print("ERROR: display must be a float")
+
     serverDict["ip"], serverDict["port"] = getIPAddress(filepath)
     if serverDict["ip"] == None or serverDict["port"] == None:
         valid = False
