@@ -38,7 +38,7 @@ class LC:
         return pounds
     
     def __countsToVolts(self, reading: float):
-        volts= 0.976858537*reading/(pow(2,23)) #converts from ADC counts to voltage based on 24 bit ADC (-1 for the sign)
+        volts= 5*reading/(pow(2,23)) #converts from ADC counts to voltage based on 24 bit ADC (-1 for the sign)
 
         return volts
 
@@ -60,7 +60,7 @@ def LCs_init(cfg_file_name: str):
     LCsCfg.read(cfg_file_name)
 
     # instantiate object of HX711 class
-    ADC = HX711(dout_pin=6, pd_sck_pin=5, gain_channel_A=128, select_channel='A')
+    ADC = HX711(dout_pin=21, pd_sck_pin=20, gain_channel_A=128, select_channel='A')
 
     #Create a LC dictionary
     LCs = dict()
@@ -91,7 +91,7 @@ def LCs_init(cfg_file_name: str):
 
 def refreshLCs(LC_dict: dict()):
     #The time between reading from LC(n) and LC(n+1)
-    LC_freq_Hz= 10
+    LC_freq_Hz= 100
     LC_period = 1/LC_freq_Hz #seconds
     while True:
         for LC_name in LC_dict:
