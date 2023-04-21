@@ -130,13 +130,13 @@ def parsePTini(PTfile: str):
         else:
             print("1 DP Found")
             if PTport[0] == 'A':
-                PTs[PTname] = DP(PTname, ADC0, PTchannel, PToffset, PTslope)
+                PTs[PTname] = PT(PTname, ADC0, PTchannel, PToffset, PTslope)
             elif PTport[0] == 'B':
-                PTs[PTname] = DP(PTname, ADC1, PTchannel, PToffset, PTslope)
+                PTs[PTname] = PT(PTname, ADC1, PTchannel, PToffset, PTslope)
             elif PTport[0] == 'C':
-                PTs[PTname] = DP(PTname, ADC2, PTchannel, PToffset, PTslope)
+                PTs[PTname] = PT(PTname, ADC2, PTchannel, PToffset, PTslope)
             elif PTport[0]== 'D':
-                PTs[PTname] = DP(PTname, ADC3, PTchannel, PToffset, PTslope)
+                PTs[PTname] = PT(PTname, ADC3, PTchannel, PToffset, PTslope)
 
         PTLoadCount += 1
         #print loading bar here
@@ -149,10 +149,7 @@ def refreshPTs(PT_dict: dict(), PT_delay: float):
     PT_period = PT_delay #seconds
     while True:
         for PT_name in PT_dict:
-            if PT_name[:2] == "DP": #if DP sensor, find infill percentage
-                PT_dict[PT_name].get_fill() 
-            else:
-                PT_dict[PT_name].updatePressure()
+            PT_dict[PT_name].updatePressure()
             #print(PT_dict[PT_name].getName() + " " + str(v1)) debug lines for value
             time.sleep(PT_period)
 
