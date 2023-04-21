@@ -408,16 +408,16 @@ ApplicationWindow {
                 }
 
                         ValveState {
-                        id: ebvo102_state
-                        name: "EBVO102"
+                        id: ebvo101_state
+                        name: "EBVO101"
                         x: 1265
                         y: 680
                         nrm_Opn: false
                 }
 
                         ValveState {
-                        id: ebvo101_state
-                        name: "EBVO101"
+                        id: ebvo102_state
+                        name: "EBVO102"
                         x: 1032
                         y: 818
                         nrm_Opn: false
@@ -561,8 +561,8 @@ ApplicationWindow {
                 }
 
                         LoxBallValve {
-                            id: ebvo102
-                            name: "EBVO102"
+                            id: ebvo101
+                            name: "EBVO101"
                             x: 1277
                             y: 635
                             width: 55
@@ -570,8 +570,8 @@ ApplicationWindow {
                 }
 
                         LoxBallValve {
-                            id: ebvo101
-                            name: "EBVO101"
+                            id: ebvo102
+                            name: "EBVO102"
                             x: 1042
                             y: 758
                             width: 61
@@ -1116,8 +1116,8 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                    id: ebvo101t
-                    name: "EBVO101"
+                    id: ebvo102t
+                    name: "EBVO102"
                     x: 246
                     y: 370
                     anchors.right: parent.right
@@ -1126,8 +1126,8 @@ ApplicationWindow {
                 }
 
                 ValveToggle {
-                    id: ebvo102t 
-                    name: "EBVO102"
+                    id: ebvo101t 
+                    name: "EBVO101"
                     y: 447
                     anchors.left: parent.left
                     anchors.leftMargin: 33

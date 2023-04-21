@@ -119,7 +119,7 @@ class Client:
                     if len(received_reading) == 2:
                         valveName = received_reading[0]
                         valveType = valveName[0]
-                        if valveType == "S" or valveType == "P": #solenoid or pneumatic
+                        if valveType == "S" or valveType == "P" or valveType == "E": #solenoid or pneumatic
                             name = received_reading[0]
                             value = received_reading[1]
                             self.FVstates.execute(name,value)#executes valve cmd
