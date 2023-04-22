@@ -17,7 +17,6 @@ class Readings:
             new_reading['time']= self.PTs[PT_name].timeStamp
             new_reading['type']= 'PT'
             self.readings[PT_name] = new_reading
-
         for TC_name in self.TCs:
             new_reading = dict()
             temp = self.TCs[TC_name].temperature.get('c')

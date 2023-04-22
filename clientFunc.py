@@ -113,7 +113,7 @@ class Client:
                                 SVLib.groundCommands("IGNITION")
                             elif len(received_reading) == 2:
                                 tag= received_reading[0] #find which item command corresponds to
-                            valtype= tag[0] #find if "S" for solenoids or "R" for regulators 
+                                valtype= tag[0] #find if "S" for solenoids or "R" for regulators 
                             if valtype == "S" or valtype == "P": 
                                 name = received_reading[0]
                                 value = received_reading[1]
