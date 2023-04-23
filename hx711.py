@@ -423,7 +423,7 @@ class HX711:
 
         return signed_data
 
-    def get_raw_data_mean(self, readings=30):
+    def get_raw_data_mean(self, readings=5):
         """
         get_raw_data_mean returns mean value of readings.
 
