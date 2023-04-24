@@ -43,7 +43,7 @@ class PT:
         return self.pressure
 
 class DP(PT):
-    tank_ht: float = 0.6 #m
+    tank_ht: float = 0.6604 #m
     density: float = 997 #kg/m3 water 
     percentage_fill: float = 0
 

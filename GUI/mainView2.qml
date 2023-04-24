@@ -10,12 +10,11 @@ import "content/QML objects/visual elements"
 
 ApplicationWindow {
     id: window
-    width: maximumWidth
-    height: maximumHeight
+    width: 3840
+    height: 21600
     visible: true
 
-    property real dpi_scale: 0.5
-
+    property real dpi_scale: 1.4
 
     function updateElements() {
 
@@ -567,9 +566,9 @@ ApplicationWindow {
 
                         Reg {
                         id: prh001
-                        name: "PRH001"
-                        x: 425
-                        y: 288
+                        name: "PRN003"
+                        x: 471
+                        y: 326
                 }
 
                         NitrogenValve {
@@ -859,7 +858,7 @@ ApplicationWindow {
                                 Text {
                                     id: text8
                                     color: "#ffffff"
-                                    text: qsTr("PBVF201")
+                                    text: qsTr("IGNITER")
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 25
                                     horizontalAlignment: Text.AlignLeft
@@ -879,7 +878,7 @@ ApplicationWindow {
                                         visible: true
                                         color: "#26bd2e"
                                         readOnly: false
-                                                text: "10"
+                                        text: "10"
                                         anchors.fill: parent
                                         font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
@@ -947,7 +946,7 @@ ApplicationWindow {
                                         visible: true
                                         color: "#26bd2e"
                                         readOnly: false
-                                                text: "20"
+                                        text: "20"
                                         anchors.fill: parent
                                         font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
@@ -995,7 +994,7 @@ ApplicationWindow {
                                 Text {
                                     id: text12
                                     color: "#ffffff"
-                                    text: qsTr("IGNITER")
+                                    text: qsTr("PBVF201")
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 25
                                     horizontalAlignment: Text.AlignLeft
@@ -1081,14 +1080,51 @@ ApplicationWindow {
                                         implicitWidth: 100
                                         implicitHeight: 40
                                         opacity: enabled ? 1 : 0.3
-                                        color: send_button.down ? "#732727" : "#696969"
+                                        color: send_button.down ? "#732727" : "#808080"
                                         border.color: "#ffffff"
                                         border.width: 1
                                         radius: 4
                                     }
+                            onClicked: {
+                            ignition_button.visible = true;
+                            bridge.sendTiming(textField.text, textField2.text, textField3.text, textField4.text)
+                            }
                                    
                         } 
                                 
+                    }
+                    Button {
+                        id: ignition_button
+                        y: 1150
+                        text: "IGNITION"
+                        height: 76  
+                        visible: false
+                        anchors.left: rectangle3.left
+                        anchors.leftMargin: 33
+                        anchors.right: rectangle3.right
+                        anchors.rightMargin: 33
+                        contentItem: Text {
+                                        text: ignition_button.text
+                                        font.pointSize: 30
+                                        font.bold: true
+                                        opacity: enabled ? 1.0 : 0.3
+                                        color: "#ffffff"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+                        background: Rectangle {
+                                        implicitWidth: 100
+                                        implicitHeight: 40
+                                        opacity: enabled ? 1 : 0.3
+                                        color: ignition_button.down ? "#732727" : "#cb2a2a"
+                                        border.color: "#ffffff"
+                                        border.width: 1
+                                        radius: 4
+                                    }
+                            onClicked: {
+                                bridge.ignitionCmd(textField.text)
+                            }
                     }
 
                 
@@ -1328,7 +1364,7 @@ ApplicationWindow {
                 }
             RegToggle {
                 id: prh001_toggle
-                name: "PRH001"
+                name: "PRN003"
                 y: 81
                 width: 208
                 height: 65
@@ -1339,7 +1375,7 @@ ApplicationWindow {
 
             RegToggle {
                 id: prh002_toggle
-                name: "PRH002"
+                name: "PRN004"
                 x: 344
                 y: 81
                 width: 208
@@ -1362,22 +1398,7 @@ ApplicationWindow {
                 
                 MouseArea { anchors.fill: parent; 
                     onClicked: {
-                        console.log("clicked")
-                        upArrow.enabled = false;
-                        downArrow.enabled = false;
-                        upArrow.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow.source= "content/Images/DownArrowDeactivated.png"
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("PRH001","increase")
-                        upArrow.enabled = true;
-                        downArrow.enabled = true;
-                        upArrow.source= "content/Images/UpArrow.png"
-                        downArrow.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN003","increase")
                     }
                 }
                 
@@ -1393,24 +1414,37 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        downArrow.enabled = false;
-                        upArrow.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("PRH001","decrease")
-                        downArrow.enabled = true;
-                        upArrow.enabled = true;
-                        upArrow.source= "content/Images/UpArrow.png"
-                        downArrow.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN003","decrease")
                     }
                  }
+            }
+
+            Button{
+                id: stop_button
+                y: 300
+                width: 208
+                height: 65
+                anchors.left: parent.left
+                anchors.leftMargin: 33
+                text: "STOP"
+            contentItem: Text {
+                        text: stop_button.text
+                        font.pointSize: 30
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+            background:Rectangle{
+                border.color: "#ffffff"
+                color: stop_button.down ? "#732727" : "#941010"
+            }
+            onClicked: {
+
+                bridge.regCommand("PRN003","STOP")
+            }
             }
 
             Image {
@@ -1423,21 +1457,7 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        upArrow1.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow1.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow1.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("PRH002","increase")
-                        upArrow1.enabled = true;
-                        downArrow1.enabled = true;
-                        upArrow1.source= "content/Images/UpArrow.png"
-                        downArrow1.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN004","increase")
                     }
                 }
             }
@@ -1453,21 +1473,7 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 MouseArea { anchors.fill: parent;
                     onClicked: {
-                        console.log("clicked")
-                        downArrow1.enabled = false;
-                        timer.interval = 1000  // a short delay, enabled status would change properly.
-                        upArrow1.source= "content/Images/UpArrowDeactivated.png"
-                        downArrow1.source= "content/Images/DownArrowDeactivated.png"
-                        timer.triggered.connect(callback)
-                        timer.start()
-                       
-                    }
-                    function callback() {
-                        bridge.regCommand("PRH002","decrease")
-                        downArrow1.enabled = true;
-                        upArrow1.enabled = true;
-                        upArrow1.source= "content/Images/UpArrow.png"
-                        downArrow1.source= "content/Images/DownArrow.png"
+                        bridge.regCommand("PRN004","decrease")
                     }
                  }
 

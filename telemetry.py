@@ -3,9 +3,10 @@ import socket
 
 #class for all sensor HW
 class Readings:
-    def __init__(self,PT_dict:dict,TC_dict:dict):
+    def __init__(self,PT_dict:dict,TC_dict:dict, LC_dict:dict):
         self.PTs = PT_dict
         self.TCs = TC_dict
+        self.LCs= LC_dict
         self.readings = dict()
         self.refreshAll()
         
@@ -25,16 +26,24 @@ class Readings:
                 voltage: self.PTs[PT_name].voltage
                 pressure:  self.PTs[PT_name].pressure
                 percent: self.PTs[PT_name].percentage_fill
-                print("Voltage: ", voltage, "Pressure: ", pressure, "Percent: ", percent)
+                #print("Voltage: ", voltage, "Pressure: ", pressure, "Percent: ", percent)
                 self.readings[PT_name] = new_reading
 
         for TC_name in self.TCs:
             new_reading = dict()
-            temp = self.TCs[TC_name].temperature.get('f')
+            temp = self.TCs[TC_name].temperature.get('c')
             new_reading['value']= "{:0>7.2f}".format(temp)
             new_reading['time']= self.TCs[TC_name].timeStamp
             new_reading['type']= 'TC'
             self.readings[TC_name] = new_reading
+        
+        for LC_name in self.LCs:
+            new_reading = dict()
+            new_reading['value']= "{:0>.2f}".format(self.LCs[LC_name].pounds)
+            new_reading['time']= self.LCs[LC_name].timeStamp
+            new_reading['type']= 'LC'
+            self.readings[LC_name] = new_reading
+
 
     #returns the data based off of sensor name
     def getData(self, name:str):

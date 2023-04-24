@@ -5,10 +5,10 @@ import threading
 import verify
 import telemetry
 import timing 
+import SVLib
 import DRVLib
 
-messengerLock = threading.Lock()
-
+import queue
 
 class Client:
 
@@ -29,6 +29,7 @@ class Client:
         self.clientSocket = self.findConnection()
 
         self.messengerLock = threading.Lock()
+        self.workQ = queue.Queue()
         
     #standard getter methods
     def getFVReadings(self):
@@ -68,13 +69,13 @@ class Client:
     def clientIO(self): #client send data function 
         period = self.clientIni["sendrate"] #gets the period
         print("Starting data stream...")
-        while True:
+        while self.connected:
             self.FVreadings.refreshAll() #polls all values sequentially...might be able to optimize
             try:
                 for sensorName in self.FVreadings.readings:#sends the reading
-                    messengerLock.acquire()
+                    self.messengerLock.acquire()
                     telemetry.sendReading(sensorName, self.FVreadings.readings[sensorName], self.getSocket())
-                    messengerLock.release()
+                    self.messengerLock.release()
                     time.sleep(period)
             except Exception as e:
                 self.connected = False
@@ -91,53 +92,71 @@ class Client:
                 print(e)
                 print("Something unexpected occurred ¯\_(ツ)_/¯")
 
-    def receiveNExecute(self):#receives and executes a valve command
-        while True:
-            if self.connected:
-                
-                msg = self.clientSocket.recv(1024)
-                
-                msg = msg.decode("utf-8")
-                data = msg.split("#")
+    def receiveCMD(self):
+        while self.connected:
+            msg = self.clientSocket.recv(1024)
+            msg = msg.decode("utf-8")
+            data = msg.split("#")
+            try:
+                while data:
+                    if len(data[0]) != 0: #when split we get might get an empty string
+                        print(data[0])
+                        received_reading = data[0].split("/")
+                        if len(received_reading) == 2 and received_reading[0][0] == "R" and received_reading[1] == "STOP":#hard check for now
+                            print("Received stop command")
+                            self.Regulators[received_reading[0]].abortRun()
+                        else:   
+                            self.workQ.put(data[0]) 
+                    data.remove(data[0])
+            except Exception as e:
+                print("ERROR: Invalid CMD", data[0])
+    
+    def executeCMD(self):
+        while self.connected:
+            if not self.workQ.empty():
                 try:
-                    #print(msg) print line for received readings
-                    while len(data) != 0:
-                        if len(data[0]) != 0:
-                            received_reading = data[0].split("/")
-                            tag= received_reading[0] #find which item command corresponds to
-                            type= tag[0] #find if "S" for solenoids or "R" for regulators 
-                            if type == "S": 
-                                name = received_reading[0]
-                                value = received_reading[1]
-
-                                self.FVstates.execute(name,value)#executes valve cmd
-                                
-                                msg = "#" + name + "/" + self.FVstates.getValveState(name)#creates confirmation msg
-                                messengerLock.acquire()
-                                telemetry.sendMsg(self.clientSocket, msg)
-                                messengerLock.release()
-                                print("MSG SENT")
-                            elif type == "R":
-                                name= received_reading[0]
-                                direction= received_reading[1]
-                                print("Received:", name, direction)
-                                if direction == "CW":
-                                    self.Regulators[name].motor_run(5, 1)
-                                    print("COMMAND SENT")
-                                elif direction == "CCW":
-                                    self.Regulators[name].motor_run(5, 0)
-                                    print("COMMAND SENT")
-                                else:
-                                    print("Command error")
+                    received_reading = self.workQ.get().split("/")
+                    if len(received_reading) == 2:
+                        valveName = received_reading[0]
+                        valveType = valveName[0]
+                        if valveType == "S" or valveType == "P": #solenoid or pneumatic
+                            name = received_reading[0]
+                            value = received_reading[1]
+                            self.FVstates.execute(name,value)#executes valve cmd
+                            msg = "#" + name + "/" + self.FVstates.getValveState(name)#creates confirmation msg
+                            self.messengerLock.acquire()
+                            telemetry.sendMsg(self.clientSocket, msg)
+                            self.messengerLock.release()
+                        elif valveType == "R": #regulator
+                            name = received_reading[0]
+                            command= received_reading[1]
+                            if command == "CW":
+                                try:
+                                    self.Regulators[name].motor_run(10000, 1)
+                                    #send some msg here
+                                except Exception as e:
+                                    #send abort conf here
+                                    print(name, " finished prematurely due to abort")
+                            elif command == "CCW":
+                                try:
+                                    self.Regulators[name].motor_run(10000, 0)
+                                    #send some msg here
+                                except Exception as e:
+                                    #send abort conf here
+                                    print(name, " finished prematurely due to abort")
+                            # elif command == "STOP":
+                            #     self.Regulators[name].abortRun()
                             else:
-                                print("FUCKED UP MSG :)")
-                        data.remove(data[0])
-                
-                        
+                                print("ERROR: Invalid CMD for", name)
+                    elif len(received_reading) == 3:
+                        if received_reading[0] == "GM1": #ground command
+                            print("Received ignition command")
+                            timer= int(received_reading[2])
+                            time.sleep(timer)
+                            SVLib.groundCommands("IGNITION")
                 except Exception as e:
-                    print("Exception", e)
+                    print("ERROR:", received_reading, "FAILED TO EXECUTE")
         
-
 
 
 

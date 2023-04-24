@@ -91,51 +91,54 @@ class Bridge(QObject):
             return False
     @Slot(str,str, result=int)        
     def regCommand(self, name:str, direction:str):
-        if name=="PRH001": #regulator 1
+        if name=="PRN003": #regulator 1
             if direction == "increase":
                 if (self.armedValues[name]=="ARMED"):
                     self.percent1+=1
                     percent=self.percent1 #updates percentage field in GUI
                     command="#REG001/CW" #command to rotate clockwise by fixed number of steps
+                    #print(command)
                     self.s.sendRegCmd(command)
+                    return percent
+
+                else:
+                    print("Regulator not Armed")
+            if direction == "decrease":
+                if self.armedValues[name]=="ARMED":
+                    self.percent1-=1
+                    percent=self.percent1 #updates percentage field in GUI
+                    command="#REG001/CCW" #command to rotate counterclockwise by fixed number of steps
+                    #print(command)
+                    self.s.sendRegCmd(command)
+                    return percent
                 else:
                     print("Regulator not Armed")
             else:
-                if self.armedValues[name]=="ARMED":
-                    if self.percent1==0:
-                        self.percent1=0;
-                        return
-                    else:
-                        self.percent1-=1
-                    percent=self.percent1 #updates percentage field in GUI
-                    command="#REG001/CCW" #command to rotate counterclockwise by fixed number of steps
-                    self.s.sendRegCmd(command)
-                else:
-                    print("Regulator not Armed")
+                command = "#REG001/STOP"
+                #print(command)
+                self.s.sendRegCmd(command)
 
-        elif name=="PRH002": #second regulator commands (not used yet)
+
+        elif name=="PRN004": #second regulator commands (not used yet)
             if direction == "increase":
                 if self.armedValues[name]=="ARMED":
                     self.percent2+=1
                     percent=self.percent2
                     command="#REG002/CW" #command to rotate clockwise by fixed number of steps
                     self.s.sendRegCmd(command)
+                    return percent
                 else:
                     print("Regulator not Armed")
             else:
                 if self.armedValues[name]=="ARMED":
-                    if self.percent2==0:
-                        self.percent2=0
-                        return
-                    else:
-                        self.percent2-=1
+                    self.percent2-=1
                     percent=self.percent2
                     command="#REG002/CCW" #command to rotate counterclockwise by fixed number of steps
                     self.s.sendRegCmd(command)
+                    return percent
                 else:
                     print("Regulator not Armed")
             
-        return percent
     
     @Slot(str,result=str)        
     def regState(self,name):
@@ -150,21 +153,14 @@ class Bridge(QObject):
         print(valveName)
         if valveName != "None":
             self.s.sendValveCmd(valveName)
-    
+
+    @Slot(str, str, str, str)   
+    def sendTiming(self,timer:str, igniter:str, lox_main:str, fuel_main:str):
+        self.s.sendTimingCmd(timer,igniter,lox_main,fuel_main)
+
     @Slot(str)
-    def closeServer(self, password):
-        if password == "kill":
-            self.statusMessages="  "
-            self.s.closeSocket()
-        else:
-            self.statusMessages= "incorrect password, try again"
-    
-    @Slot(result=str)
-    def getStatusMessages(self):
-        return self.statusMessages
-    
-    
-        
+    def ignitionCmd(self, timer):
+        self.s.ignitionCMD(timer)
         
 
 
@@ -183,8 +179,11 @@ def guiThreadFunc(s:serverFunc.Server):
     app = QtWidgets.QApplication()
     view = QtQuick.QQuickView()
 
-    timer = QTimer()
-    timer.start(10)
+    displayTimer = QTimer()
+    updateTimer = QTimer()
+
+    displayTimer.start(s.getDisplay())
+    updateTimer.start(10)
 
     engine= QQmlApplicationEngine("GUI/mainView2.qml")
 
@@ -193,10 +192,9 @@ def guiThreadFunc(s:serverFunc.Server):
     context = engine.rootContext()
     context.setContextProperty("bridge", bridge)
 
-    timer.timeout.connect(root.updateElements)
-    timer.timeout.connect(root.messagesBox)
+    displayTimer.timeout.connect(root.updateElements)
+    updateTimer.timeout.connect(root.messagesBox)
 
-    
     
     sys.exit(app.exec())
     
