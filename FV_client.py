@@ -9,6 +9,7 @@ import timing
 import PTLib
 import TCLib
 import SVLib
+import LCLib
 import clientFunc
 import DRVLib
 
@@ -26,9 +27,11 @@ def main():
     print("Initializing Reg Config ")
     REGs= DRVLib.initializeRegulators("configFiles/Reg_Config.ini")
     # iniData = telemetry.parseIniFile("configFiles/config.ini", "client")
+    print("Initializing LC Config...")
+    LCs= LCLib.LCs_init("configFiles/LC_Config_FV.ini")
     
     #readings class
-    FVreadings = telemetry.Readings(PTs,TCs)
+    FVreadings = telemetry.Readings(PTs,TCs,LCs)
     #valve state class
     FVstates = telemetry.valveStates(SVs)
 
@@ -38,6 +41,7 @@ def main():
     
         executor.submit(PTLib.refreshPTs, PTs, client.getPTPoll()) #PT interogation thread
         executor.submit(TCLib.refreshTCs,TCs)#TC interogation thread
+        executor.submit(LCLib.refreshLCs, LCs) #LC interogation thread
         executor.submit(client.runClient)#persistant connection
         executor.submit(client.receiveCMD)
         executor.submit(client.executeCMD)
