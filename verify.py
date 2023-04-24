@@ -1,4 +1,6 @@
 from configparser import ConfigParser
+import os
+from datetime import datetime
 
 import timing
 #returns a dict of the consoleType members if the file is valid and None if the file does not exist
@@ -64,11 +66,31 @@ def verifyServerIni(filepath:str):
         if "savefile" not in parser:
             valid = False
             print("ERROR: savefile not specified")
-        else:   
-            serverDict["fp"] = open("data/" + parser["savefile"] + str(timing.missionTime()), 'w')
+        else:
+            if not os.path.exists("data"):
+                print("WARNING: 'data' directory does not exist. Generating directory...")
+                os.makedirs("data")
+            date =  str(datetime.now().strftime("_%m-%d-%Y[%H:%M:%S].txt"))
+            serverDict["fp"] = open("data/" + parser["savefile"] + date, 'w')
+            serverDict["log"] = open("data/" + parser["savefile"]+ "log" + date, 'w')
     except:
-        print("ERROR: Invalid file name or data file is missing")
+        print("ERROR: Invalid file name.")
         valid = False
+    try:
+        if "display" not in parser:
+            valid = False
+            print("ERROR: display not specified")
+        else:
+            display = float(parser["display"])
+            if display < 0:
+                valid = False
+                print("ERROR: display cannot be negative")
+            else:
+                serverDict["display"] = display
+    except:
+        valid = False
+        print("ERROR: display must be a float")
+
     serverDict["ip"], serverDict["port"] = getIPAddress(filepath)
     if serverDict["ip"] == None or serverDict["port"] == None:
         valid = False
@@ -88,7 +110,11 @@ def verifyClientIni(filepath:str):
         valid = False
     else:
         try:
-            clientDict["pt_poll"] = float(parser["pt_poll"]) 
+            parsedVal = float(parser["pt_poll"])
+            if parsedVal == 0: #divide by 0 error
+                clientDict["pt_poll"] = 0
+            else: #converts freq to period
+                clientDict["pt_poll"] = 1.0 / parsedVal 
         except:
             print("ERROR: [pt_poll] must be a float")
             valid = False
@@ -96,8 +122,13 @@ def verifyClientIni(filepath:str):
         valid = False
     else:
         try:
-            clientDict["sendrate"] = float(parser["sendrate"]) 
-        except:
+            parsedVal = float(parser["sendrate"])
+            if parsedVal == 0: #divide by 0 error
+                clientDict["sendrate"] = 0
+            else: #converts freq to period
+                clientDict["sendrate"] = 1.0 / parsedVal
+        except Exception as e:
+            print(e)
             print("ERROR: [sendrate] must be a float")
             valid = False
     if not valid:

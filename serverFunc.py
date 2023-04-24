@@ -11,6 +11,8 @@ class Server:
         #server ini data
         self.serverIni = verify.verifyServerIni(filepath)
         self.fp = self.serverIni["fp"]
+        self.log = self.serverIni["log"]
+        self.display = self.serverIni["display"]
         #socket stuff
         self.ip, self.port = verify.getIPAddress(filepath)
         self.socket = None
@@ -23,9 +25,11 @@ class Server:
         #name timestamp
         self.armedValve = ("None", "")
 
+
         self.armedValves = dict()#check if still used
         
         self.pendLock = threading.Lock()
+        self.dataLock = threading.Lock()
 
     #standard getter methods
     def getDataReadings(self):
@@ -48,6 +52,8 @@ class Server:
         return self.armedValves
     def getPendLock(self):
         return self.pendLock
+    def getDisplay(self):
+        return self.display
 
     def getArmedValve(self):
         return self.armedValve[0]
@@ -57,7 +63,6 @@ class Server:
 
     def establishAddress(self, ip:str, port:int):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("TESTING")
         print(f"IP address: '{ip}' Port {port}")
         s.bind((ip, port))
         return s
@@ -94,12 +99,17 @@ class Server:
                         sensorValue = received_reading[1]
                         time = received_reading[2]
                         self.dataReadings[sensorName] = sensorValue
+                        self.dataLock.acquire()
                         self.fp.write(sensorName + " " + sensorValue + " " + time + "\n")
+                        self.dataLock.release()
                         #print(name + " " + value + " " + time)
 
                     elif len(received_reading) == 2: #valve confirmation
                         valveName = received_reading[0]
                         valveState = received_reading[1]
+                        self.dataLock.acquire()
+                        self.fp.write("RECEIVED: " + valveName + " " + valveState + " " + timing.missionTime() + "\n")
+                        self.dataLock.release()
                         #needs to be implemented 
                         self.verifyValve()
                         self.valveReadings[valveName] = valveState
@@ -124,8 +134,29 @@ class Server:
             print("FUCKED UP VALVE CMD MSG BUDDY")
             print("State:", state)
             return
+        self.dataLock.acquire()
+        self.log.write("SENDING: " + valve + " " + newState + " " + time + "\n")
+        self.dataLock.release()
         msg = "#" + valve + "/" + newState
+        telemetry.sendMsg(self.getSocket(), msg)
+
+    def sendTimingCmd(self, timer, igniter, lox, fuel):
+        if not self.isConnected:
+            print("WARNING: No Connection")
+            return
+        msg= "#TIMING"+ "/" + timer + "/" + igniter + "/" + lox + "/" + fuel
         telemetry.sendMsg(self.getSocket(), msg)  
+    
+    def ignitionCMD(self,timer):
+        if not self.isConnected:
+            print("WARNING: No Connection")
+            return
+        msg="#GM1/SNDIT"+ "/"+ timer
+        telemetry.sendMsg(self.getSocket(), msg) 
+        
+    def sendRegCmd(self, command):
+        telemetry.sendMsg(self.getSocket(), command) 
+
 
     #theres more logic to this but ill do it sometime
     def verifyValve(self):

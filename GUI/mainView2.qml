@@ -8,107 +8,110 @@ import "content/QML objects/visual elements"
 
 
 
-Item {
+ApplicationWindow {
     id: window
-    width: 2560*dpi_scale
-    height: 1440*dpi_scale
+    width: 3840
+    height: 21600
     visible: true
-    property real dpi_scale: 0.6
-    scale: 1
+
+    property real dpi_scale: 1.4
 
     function updateElements() {
 
 
 
-        // Refresh Helium PTs
-        pth001.fetchNewVal()
-        pth002.fetchNewVal()
-        pth003.fetchNewVal()
-        pth004.fetchNewVal()
-        pth005.fetchNewVal()
-        pth006.fetchNewVal()
+        // Refresh Nitrogen PTs
+        ptn001.fetchNewVal()
+        ptn002.fetchNewVal()
+        ptn003.fetchNewVal()
+        ptn004.fetchNewVal()
 
         // Refresh LOx PTs
         pto101.fetchNewVal()
         pto102.fetchNewVal()
-        pto103.fetchNewVal()
         pto404.fetchNewVal()
 
         // Refresh Kerosene PTs
         ptf201.fetchNewVal()
         ptf202.fetchNewVal()
-        ptf203.fetchNewVal()
-        ptf204.fetchNewVal()
         ptf401.fetchNewVal()
         ptf402.fetchNewVal()
         ptf403.fetchNewVal()
         
         // Refresh Helium TCs
-        tch001.fetchNewVal()
-        tch002.fetchNewVal()
-        tch003.fetchNewVal()
+        tcn001.fetchNewVal()
+        tcn002.fetchNewVal()
 
         // Refresh LOX TCs
         tco101.fetchNewVal()
         tco102.fetchNewVal()
         tco103.fetchNewVal()
-        tco104.fetchNewVal()
+        tco404.fetchNewVal()
 
         // Refresh Kerosene TCs
         tcf201.fetchNewVal()
-        tcf203.fetchNewVal()
+        tcf202.fetchNewVal()
         tcf401.fetchNewVal()
         tcf402.fetchNewVal()
+        tcf403.fetchNewVal()
 
         // Chamber PTs
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
 
+        // Tank Level
+        dpf001.fetchNewVal()
 
-        svh001t.update()
-        svh002t.update()
-        svh003t.update()
-        svh004t.update()
+        svn003t.update()
+        svn004t.update()
+        svn005t.update()
+        svn006t.update()
+        svn007t.update()
+        svn008t.update()
 
-        svo101t.update()
         svo102t.update()
+        ebvo102t.update()
+        ebvo101t.update()
 
         svf201t.update()
         pbvf201t.update()
-        svf204t.update()
+        svf202t.update()
         cpf201t.update()
-        ebvo102t.update()
-        bvo101t.update()
 
-        svh001.update()
-        svh002.update()
-        svh003.update()
-        svh004.update()
+
+        svn003.update()
+        svn004.update()
+        svn005.update()
+        svn006.update()
+        svn007.update()
+        svn008.update()
         
-        svo101.update()
         svo102.update()
         ebvo102.update()
-        bvo101.update()
+        ebvo101.update()
 
         svf201.update()
         pbvf201.update()
-        svf204.update()
+        svf202.update()
         cpf201.update()
 
-        svh001_state.update()
-        svh002_state.update()
-        svh003_state.update()
-        svh004_state.update()
+        svn003_state.update()
+        svn004_state.update()
+        svn005_state.update()
+        svn006_state.update()
+        svn007_state.update()
+        svn008_state.update()
+
         
-        svo101_state.update()
         svo102_state.update()
         ebvo102_state.update()
-        bvo101_state.update()
+        ebvo101_state.update()
 
         svf201_state.update()
         pbvf201_state.update()
-        svf204_state.update()
+        svf202_state.update()
         cpf201_state.update()
+
         prh001.update()
         prh002.update()
         prh001_open.open_percentage()
@@ -127,9 +130,17 @@ Item {
 
         }
 
+    ScrollView{
+        anchors.fill: parent
+
+        Flickable{
+            contentWidth: 2560*dpi_scale
+            contentHeight:  1440*dpi_scale
+        
+    
     Rectangle {
-        width: 2560
-        height: 1440
+                width: maximumWidth
+                height: maximumHeight
         color: "#000000"
         transformOrigin: Item.TopLeft
         scale: dpi_scale
@@ -144,680 +155,464 @@ Item {
             border.color: "#ffffff"
 
             Image {
-                id: pid
-                y: 72
-                width: 1902
-                height: 833
-                anchors.left: parent.left
-                source: "content/Images/pidUpdated.png"
-                anchors.leftMargin: 34
+                        id: hodorPID
+                        x: 0
+                        y: 8
+                        width: 1970
+                        height: 971
+                        source: "content/Images/HodorPID.png"
                 fillMode: Image.PreserveAspectFit
 
                 Gage {
-                    id: pth001
-                    name: "PTH001"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 289
-                    anchors.leftMargin: 219
+                        id: ptn002
+                        name: "PTN002"
+                        x: 246
+                        y: 249
                 }
 
                 Gage {
-                    id: tco103
-                    name: "TCO103"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1070
-                    anchors.bottomMargin: 0
+                        id: ptn003
+                        name: "PTN003"
+                        x: 473
+                        y: 242
                 }
 
                 Gage {
-                    id: pth002
-                    name: "PTH002"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 219
-                    anchors.bottomMargin: 259
-                    
+                        id: tcn001
+                        name: "TCN001"
+                        x: 473
+                        y: 274
+                        unit: "°C"
                 }
 
                 Gage {
-                    id: tch001
-                    name: "TCH001"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 219
-                    anchors.bottomMargin: 229
+                        id: ptf201
+                        name: "PTF201"
+                        x: 885
+                        y: 194
                 }
 
                 Gage {
-                    id: pth003
-                    name: "PTH003"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 536
-                    anchors.bottomMargin: 639
+                        id: tcf201
+                        name: "TCF201"
+                        x: 885
+                        y: 225
+                        unit: "°C"
                 }
 
                 Gage {
-                    id: pth004
-                    name: "PTH004"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 536
-                    anchors.bottomMargin: 579
+                        id: ptf202
+                        name: "PTF202"
+                        x: 1555
+                        y: 279
                 }
 
                 Gage {
-                    id: tch002
-                    name: "TCH002"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 536
-                    anchors.bottomMargin: 609
+                        id: tcf202
+                        name: "TCF202"
+                        x: 1555
+                        y: 310
+                        unit: "°C"
                 }
 
-                ValveState {
-                    id: svh001_state
-                    name: "SVH001"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 440
-                    anchors.bottomMargin: 267
+                        Gage {
+                        id: ptc405
+                        name: "PTC405"
+                        x: 1761
+                        y: 607
                 }
 
-                ValveState {
-                    id: svh003_state
-                    name: "SVH003"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 660
-                    anchors.bottomMargin: 173
+                        Gage {
+                        id: ptc406
+                        name: "PTC406"
+                        x: 1761
+                        y: 639
                 }
 
-                ValveState {
-                    id: svo102_state
-                    name: "SVO102"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 828
-                    anchors.bottomMargin: 173
+                        Gage {
+                        id: pto102
+                        name: "PTO102"
+                        x: 1585
+                        y: 693
                 }
 
-                ValveState {
-                    id: bvo101_state
-                    name: "BVO101"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1289
-                    anchors.bottomMargin: 0
+                        Gage {
+                        id: tco102
+                        name: "TCO102"
+                        x: 1585
+                        y: 724
+                        unit: "°C"
                 }
 
-                ValveState {
-                    id: ebvo102_state
-                    name: "EBVO102" 
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1289
-                    anchors.bottomMargin: 178
+                        Gage {
+                        id: pto101
+                        name: "PTO101"
+                        x: 884
+                        y: 485
                 }
 
-                ValveState {
-                    id: svo101_state
-                    name: "SVO101"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1158
-                    anchors.bottomMargin: 178
+                        Gage {
+                        id: tco101
+                        name: "TCO101"
+                        x: 884
+                        y: 516
+                        unit: "°C"
                 }
 
-                ValveState {
-                    id: pbvf201_state
-                    name: "PBVF201"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1289
-                    anchors.bottomMargin: 496
+                        Gage {
+                        id: ptn004
+                        name: "PTN004"
+                        x: 466
+                        y: 538
                 }
 
-                ValveState {
-                    id: svf204_state
-                    name: "SVF204"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1289
-                    anchors.bottomMargin: 640
+                        Gage {
+                        id: tcn002
+                        name: "TCN002"
+                        x: 466
+                        y: 568
+                        unit: "°C"
                 }
 
-                ValveState {
-                    id: cpf201_state
-                    name: "CPF201"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1208
-                    anchors.bottomMargin: 768
+                        Gage {
+                        id: ptf403
+                        name: "PTF403"
+                        x: 1488
+                        y: 424
                 }
 
-                ValveState {
-                    id: svf201_state
-                    name: "SVF201"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 827
-                    anchors.bottomMargin: 496
+                        Gage {
+                        id: tcf403
+                        name: "TCF403"
+                        x: 1488
+                        y: 454
+                        unit: "°C"
                 }
 
-                ValveState {
-                    id: svh004_state
-                    name: "SVH004"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 660
-                    anchors.bottomMargin: 496
+                        Gage {
+                        id: pto404
+                        name: "PTO404"
+                        x: 1488
+                        y: 484
                 }
 
-                ValveState {
-                    id: svh002_state
-                    name: "SVH002"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 402
-                    anchors.bottomMargin: 418
+                        Gage {
+                        id: tco404
+                        name: "TCO404"
+                        x: 1488
+                        y: 514
+                        unit: "°C"
                 }
 
-                Reg {
-                    id: prh001
-                    name: "PRH001"
-                    state: "NOTARMED"
-                    x: 571
-                    y: 315
-                    anchors.bottomMargin: 434
-                    anchors.leftMargin: 571
+                        Gage {
+                        id: ptf401
+                        name: "PTF401"
+                        x: 1775
+                        y: 205
                 }
                 
-                Reg {
-                    id: prh002
-                    name: "PRH002"
-                    state: "NOTARMED"
-                    x: 571
-                    y: 502
+                        Gage {
+                        id: ptf402
+                        name: "PTF402"
+                        x: 1775
+                        y: 236
                 }
 
-                LoxValve {
-                    id: svo101
-                    name: "SVO101"
-                    state: "CD"
-                    width: 77
-                    height: 44
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1170
-                    anchors.bottomMargin: 251
-                    
+                        Gage {
+                        id: tcf401
+                        name: "TCF401"
+                        x: 1775
+                        y: 267
+                        unit: "°C"
                 }
 
-                FuelBallValve {
-                    id: pbvf201
-                    name: "PBVF201"
-                    width: 85
-                    height: 41
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1295
-                    anchors.bottomMargin: 432
+                        Gage {
+                        id: tcf402
+                        name: "TCF402"
+                        x: 1775
+                        y: 298
+                        unit: "°C"
                 }
 
-                FuelCompressor {
-                    id: cpf201
-                    name: "CPF201"
-                    width: 67
-                    height: 44
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1216
-                    anchors.bottomMargin: 718
+                        Gage {
+                        id: ptn001
+                        name: "PTN001"
+                        x: 246
+                        y: 540
                 }
 
-                Rectangle {
-                    id: lox_percentage
+                        Gage {
+                        id: tco103
+                        name: "TCO103"
+                        x: 1222
+                        y: 762
+                        unit: "°C"
+                }
+
+                        ValveState {
+                        id: svn004_state
+                        name: "SVN004"
+                        x: 670
+                        y: 275
+                        nrm_Opn: false
+                }
+
+                TankLevel {
+                    id: dpf001
+                    name: "DPF001"
                     width: 63
                     height: 22
-                    color: "#000000"
+                    y: 420
                     anchors.left: parent.left
-                    anchors.bottom: parent.bottom
                     anchors.leftMargin: 1024
-                    anchors.bottomMargin: 231
+
+                }
+                        ValveState {
+                        id: svf201_state
+                        name: "SVF201"
+                        x: 865
+                        y: 275
+                        nrm_Opn: true
                 }
 
-                Rectangle {
-                    id: fuel_percentage
-                    width: 63
-                    height: 22
-                    color: "#000000"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1024
-                    anchors.bottomMargin: 418
+                        ValveState {
+                        id: pbvf201_state
+                        name: "PBVF201"
+                        x: 1265
+                        y: 275
+                        nrm_Opn: false
                 }
 
-                LoxBallValve {
-                    id: ebvo102
-                    name: "EBVO102"
-                    width: 85
-                    height: 41
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1295
-                    anchors.bottomMargin: 251
+                        ValveState {
+                        id: svf202_state
+                        name:"SVF202"
+                        x: 1250
+                        y: 150
+                        nrm_Opn: false
                 }
 
-                LoxBallValve {
-                    id: bvo101
-                    name: "BVO101"
-                    width: 85
-                    height: 41
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1295
-                    anchors.bottomMargin: 92
+                        ValveState {
+                        id: cpf201_state
+                        name: "CPF201"
+                        x: 1180
+                        y: 40
+                        nrm_Opn: false
                 }
 
-                HeliumValve {
-                    id: svh004
-                    name: "SVH004"
-                    width: 77
-                    height: 44
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 670
-                    anchors.bottomMargin: 436
+                        ValveState {
+                        id: svn007_state
+                        name: "SVN007"
+                        x: 1470
+                        y: 732
+                        nrm_Opn: false
                 }
 
-                HeliumValve {
-                    id: svh003
-                    name: "SVH003"
-                    width: 77
-                    height: 44
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 670
-                    anchors.bottomMargin: 251
+                        ValveState {
+                        id: ebvo102_state
+                        name: "EBVO102"
+                        x: 1265
+                        y: 680
+                        nrm_Opn: false
                 }
 
-                HeliumValve {
-                    id: svh001
-                    name: "SVH001"
-                    x: 445
-                    y: 455
-                    width: 77
-                    height: 44
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 335
-                    anchors.leftMargin: 445
+                        ValveState {
+                        id: ebvo101_state
+                        name: "EBVO101"
+                        x: 1032
+                        y: 818
+                        nrm_Opn: false
                 }
 
-                HeliumValve {
-                    id: svh002
-                    name: "SVH002"
-                    width: 77
-                    height: 44
-                    ang_Open: 90
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 330
-                    anchors.bottomMargin: 420
+                        ValveState {
+                        id: svo102_state
+                        name: "SVO102"
+                        x: 882
+                        y: 689
+                        nrm_Opn: true
                 }
 
-                HeliumValve {
-                    id: svf201
-                    name: "SVF201"
-                    width: 77
-                    height: 44
-                    ang_Open: 90
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 760
-                    anchors.bottomMargin: 498
+                        ValveState {
+                        id: svn005_state
+                        name: "SVN005"
+                        x: 670
+                        y: 770
+                        nrm_Opn: false
                 }
-
-                HeliumValve {
-                    id: svo102
-                    name: "SVO102"
-                    width: 77
-                    height: 44
-                    state: "CD"
-                    ang_Open: 90
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 760
-                    anchors.bottomMargin: 178
-                }
-
-                FuelValve {
-                    id: svf204
-                    name: "SVF204"
-                    x: 1295
-                    y: 199
-                    width: 77
-                    height: 44
-                    state: "CD"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1295
-                    anchors.bottomMargin: 590
-                }
-                Gage {
-                    id: ptf401
-                    name: "PTF401"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1657
-                    anchors.bottomMargin: 579
                     
+                        ValveState {
+                        id: svn003_state
+                        name: "SVN003"
+                        x: 670
+                        y: 569
+                        nrm_Opn: false
                 }
 
-                Gage {
-                    id: ptf402
-                    name: "PTF402"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1657
-                    anchors.bottomMargin: 549
+                        
+
+                        ValveState {
+                        id: svn006_state
+                        name: "SVN006"
+                        x: 670
+                        y: 477
+                        nrm_Opn: false
                 }
 
-                Gage {
-                    id: tcf401
-                    name: "TCF401"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1657
-                    anchors.bottomMargin: 519
+                        ValveState {
+                        id: svn008_state
+                        name: "SVN008"
+                        x: 1510
+                        y: 198
+                        nrm_Opn: false
                 }
 
-                Gage {
-                    id: tcf402
-                    name: "TCF402"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 1657
-                    anchors.bottomMargin: 490
+
+                        Reg {
+                        id: prh001
+                        name: "PRN003"
+                        x: 471
+                        y: 326
                 }
 
-                Gage {
-                    id: pth005
-                    name: "PTH005"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 551
-                    anchors.bottomMargin: 110
+                        Reg {
+                        id: prh002
+                        name: "PRN004"
+                        x: 471
+                        y: 619
                 }
 
-                Gage {
-                    id: pth006
-                    name: "PTH006"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 551
-                    anchors.bottomMargin: 80
+                        NitrogenValve {
+                        id: svn004
+                        name: "SVN004"
+                        x: 680
+                        y: 346
+                        width: 57
+                        height: 36
                 }
 
-                Gage {
-                    id: tch003
-                    name: "TCH003"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 551
-                    anchors.bottomMargin: 51
+                        NitrogenValve {
+                        id: svn006
+                        name: "SVN006"
+                        x: 678
+                        y: 433
+                        width: 57
+                        height: 36
                 }
 
-                Gage {
-                    id: pto101
-                    name: "PTO101"
-                    width: 180
-                    height: 30
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 898
-                    anchors.bottomMargin: 110
+                        NitrogenValve {
+                        id: svn003
+                        name: "SVN003"
+                        x: 681
+                        y: 639
+                        width: 57
+                        height: 36
                 }
 
-                Gage {
-                    id: tco101
-                    name: "TCO101"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 898
-                    anchors.bottomMargin: 80
+                        NitrogenValve {
+                        id: svn005
+                        name: "SVN005"
+                        x: 679
+                        y: 726
+                        width: 57
+                        height: 36
                 }
 
-                Gage {
-                    id: tco102
-                    name: "TCO102"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 898
-                    anchors.bottomMargin: 51
+                        NitrogenValve {
+                        id: svf201
+                        name: "SVF201"
+                        ang_Open: 90
+                        x: 811
+                        y: 288
+                        nrm_Opn: true
                 }
 
-                Gage {
-                    id: pto102
-                    name: "PTO102"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 291
-                    anchors.bottomMargin: 208
+                        NitrogenValve {
+                        id: svo102
+                        name: "SVO102"
+                        ang_Open: 90
+                        x: 828
+                        y: 701
+                        nrm_Opn: true
                 }
 
-                Gage {
-                    id: pto103
-                    name: "PTO103"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 291
-                    anchors.bottomMargin: 178
+                        NitrogenValve {
+                        id: svn007
+                        name: "SVN007"
+                        ang_Open: 90
+                        x: 1412
+                        y: 746
+                        width: 57
+                        height: 36
                 }
 
-                Gage {
-                    id: tco104
-                    name: "TCO104"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 291
-                    anchors.bottomMargin: 148
+                        FuelCompressor {
+                        id: cpf201
+                        width: 51
+                        height: 37
+                        name: "CPF201"
+                        x: 1197
+                        y: 99
                 }
 
-                Gage {
-                    id: ptf203
-                    name: "PTF203"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 293
-                    anchors.bottomMargin: 549
+                        FuelBallValve {
+                            id: pbvf201
+                            name: "PBVF201"
+                            x: 1277
+                            y: 350
                 }
 
-                Gage {
-                    id: ptf204
-                    name: "PTF204"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 293
-                    anchors.bottomMargin: 519
+                        LoxBallValve {
+                            id: ebvo102
+                            name: "EBVO102"
+                            x: 1277
+                            y: 635
+                            width: 55
+                            height: 28
                 }
 
-                Gage {
-                    id: tcf203
-                    name: "TCF203"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 293
-                    anchors.bottomMargin: 489
+                        LoxBallValve {
+                            id: ebvo101
+                            name: "EBVO101"
+                            x: 1042
+                            y: 758
+                            width: 61
+                            height: 32
                 }
 
-                Gage {
-                    id: ptf403
-                    name: "PTF403"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 71
-                    anchors.bottomMargin: 208
+                        NitrogenValve {
+                        id: svn008
+                        name: "SVN008"
+                        ang_Open: 90
+                        x: 1451
+                        y: 211
+                        width: 57
+                        height: 36
                 }
 
-                Gage {
-                    id: tcf403
-                    name: "TCF403"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 71
-                    anchors.bottomMargin: 178
+                        FuelValve {
+                        id: svf202
+                        name: "SVF202"
+                        x: 1263
+                        y: 212
                 }
 
-                Gage {
-                    id: pto404
-                    name: "PTO404"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 71
-                    anchors.bottomMargin: 148
+                        Rectangle {
+                        id: fuel_level
+                        x: 1031
+                        y: 380
+                        width: 78
+                        height: 24
+                        color: "#000000"
                 }
 
-                Gage {
-                    id: tco404
-                    name: "TCO404"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 71
-                    anchors.bottomMargin: 119
+                        Rectangle {
+                        id: lox_level
+                        x: 1030
+                        y: 670
+                        width: 78
+                        height: 24
+                        color: "#000000"
                 }
 
-                Gage {
-                    id: ptc405
-                    name: "PTC405"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 17
-                    anchors.bottomMargin: 286
-                }
-
-                Gage {
-                    id: ptc406
-                    name: "PTC406"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 17
-                    anchors.bottomMargin: 256
-                }
-
-                Gage {
-                    id: ptf201
-                    name: "PTF201"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 836
-                    anchors.bottomMargin: 646
-                }
-
-                Gage {
-                    id: ptf202
-                    name: "PTF202"
-                    width: 180
-                    height: 30
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 836
-                    anchors.bottomMargin: 617
-                }
-
-                Gage {
-                    id: tcf201
-                    name: "TCF201"
-                    width: 180
-                    height: 30
-                    unit: "K"
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 836
-                    anchors.bottomMargin: 587
-                }
             }
 
             Image {
@@ -835,7 +630,7 @@ Item {
                 x: 270
                 y: 55
                 color: "#ffffff"
-                text: qsTr("MISSION CONTORL")
+                text: qsTr("MISSION CONTROL")
                 font.pixelSize: 38
             }
 
@@ -877,7 +672,7 @@ Item {
 
                 Rectangle {
                     id: rectangle3
-                    y: 772
+                            y: 943
                     height: 45
                     color: "#1a3f0f"
                     border.color: "#ffffff"
@@ -985,7 +780,7 @@ Item {
                                 Text {
                                     id: text8
                                     color: "#ffffff"
-                                    text: qsTr("PBVF201")
+                                    text: qsTr("IGNITER")
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 25
                                     horizontalAlignment: Text.AlignLeft
@@ -1005,7 +800,7 @@ Item {
                                         visible: true
                                         color: "#26bd2e"
                                         readOnly: false
-                                        text: "30"
+                                        text: "10"
                                         anchors.fill: parent
                                         font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
@@ -1073,7 +868,7 @@ Item {
                                         visible: true
                                         color: "#26bd2e"
                                         readOnly: false
-                                        text: "30"
+                                        text: "20"
                                         anchors.fill: parent
                                         font.pixelSize: 25
                                         horizontalAlignment: Text.AlignHCenter
@@ -1121,7 +916,7 @@ Item {
                                 Text {
                                     id: text12
                                     color: "#ffffff"
-                                    text: qsTr("IGNITER")
+                                    text: qsTr("PBVF201")
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 25
                                     horizontalAlignment: Text.AlignLeft
@@ -1207,25 +1002,31 @@ Item {
                                         implicitWidth: 100
                                         implicitHeight: 40
                                         opacity: enabled ? 1 : 0.3
-                                        color: send_button.down ? "#732727" : "#696969"
+                                        color: send_button.down ? "#732727" : "#808080"
                                         border.color: "#ffffff"
                                         border.width: 1
                                         radius: 4
                                     }
+                            onClicked: {
+                            ignition_button.visible = true;
+                            bridge.sendTiming(textField.text, textField2.text, textField3.text, textField4.text)
+                            }
                                    
                         } 
-                        Button {
-                        id: abort_button
-                        y: 400
-                        text: "ABORT"
-                        height: 100  
+                                
+                    }
+                    Button {
+                        id: ignition_button
+                        y: 1150
+                        text: "IGNITION"
+                        height: 76  
+                        visible: false
                         anchors.left: rectangle3.left
                         anchors.leftMargin: 33
                         anchors.right: rectangle3.right
                         anchors.rightMargin: 33
-                                    
                         contentItem: Text {
-                                        text: abort_button.text
+                                        text: ignition_button.text
                                         font.pointSize: 30
                                         font.bold: true
                                         opacity: enabled ? 1.0 : 0.3
@@ -1238,25 +1039,21 @@ Item {
                                         implicitWidth: 100
                                         implicitHeight: 40
                                         opacity: enabled ? 1 : 0.3
-                                        color: abort_button.down ? "#732727" : "#FF0000"
+                                        color: ignition_button.down ? "#732727" : "#cb2a2a"
                                         border.color: "#ffffff"
                                         border.width: 1
                                         radius: 4
                                     }
                             onClicked: {
+                                bridge.ignitionCmd(textField.text)
                             }
-                                   
-                        }   
-
-                                                                    
-                                
                     }
 
                 
 
                 ValveToggle {
-                    id: svh001t
-                    name: "SVH001"
+                    id: svn004t
+                    name: "SVN004"
                     y: 96
                     anchors.left: parent.left
                     anchors.leftMargin: 33
@@ -1264,8 +1061,8 @@ Item {
                 }
 
                 ValveToggle {
-                    id: svh002t
-                    name: "SVH002"
+                    id: svn003t
+                    name: "SVN003"
                     x: 280
                     y: 96
                     anchors.right: parent.right
@@ -1274,38 +1071,55 @@ Item {
                 }
 
                 ValveToggle {
-                    id: svh003t
-                    name: "SVH003"
-                    y: 173
+                    id: svn006t
+                    name: "SVN006"
+                    y: 175
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
                 }
 
                 ValveToggle {
-                    id: svh004t
-                    name: "SVH004"
-                    x: 246
-                    y: 173
+                    id: svn005t
+                    name: "SVN005"
+                    y: 175
+                    anchors.right: parent.right
+                    anchors.rightMargin: 33
+                    nrml_Opn: false
+                     }
+
+                ValveToggle {
+                    id: svn008t
+                    name: "SVN008"
+                    y: 253
+                    anchors.left: parent.left
+                    anchors.leftMargin: 33
+                    nrml_Opn: false
+                     }
+
+                ValveToggle {
+                    id: svn007t
+                    name: "SVN007"
+                    y: 253
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
                 }
 
                 ValveToggle {
-                    id: svo101t
-                    name: "SVO101"
-                    y: 292
+                    id: svo102t
+                    name: "SVO102"
+                    y: 370
                     anchors.left: parent.left
                     anchors.leftMargin: 33
-                    nrml_Opn: false
+                    nrml_Opn: true
                 }
 
                 ValveToggle {
-                    id: svo102t
-                    name: "SVO102"
+                    id: ebvo101t
+                    name: "EBVO101"
                     x: 246
-                    y: 292
+                    y: 370
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
@@ -1314,7 +1128,7 @@ Item {
                 ValveToggle {
                     id: ebvo102t 
                     name: "EBVO102"
-                    y: 369
+                    y: 447
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
@@ -1324,35 +1138,36 @@ Item {
                     id: bvo101t 
                     name: "BVO101"
                     x: 246
-                    y: 369
+                    y: 447
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
+                    visible: false
                 }
 
                 ValveToggle {
                     id: svf201t 
                     name: "SVF201"
-                    y: 480
+                    y: 567
                     anchors.left: parent.left
                     anchors.leftMargin: 33
-                    nrml_Opn: false
+                    nrml_Opn: true
                 }
 
                 ValveToggle {
-                    id: pbvf201t 
-                    name: "PBVF201"
+                    id: svf202t 
+                    name: "SVF202"
                     x: 246
-                    y: 480
+                    y: 567
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
                 }
 
                 ValveToggle {
-                    id: svf204t     
-                    name: "SVF204"
-                    y: 557
+                            id: pbvf201t     
+                            name: "PBVF201"
+                            y: 644
                     anchors.left: parent.left
                     anchors.leftMargin: 33
                     nrml_Opn: false
@@ -1362,7 +1177,7 @@ Item {
                     id: cpf201t 
                     name: "CPF201"
                     x: 246
-                    y: 557
+                            y: 644
                     anchors.right: parent.right
                     anchors.rightMargin: 33
                     nrml_Opn: false
@@ -1371,7 +1186,7 @@ Item {
                 Button {
                     id: close_button
                     text: "ACTUATE"
-                    y: 645
+                            y: 748
                     height: 76
                     anchors.left: parent.left
                     anchors.leftMargin: 33
@@ -1403,8 +1218,8 @@ Item {
             
                 
                 Section_Header {
-                    id: helium_label
-                    hederText: "HELIUM"
+                            id: nitrogen_label
+                            hederText: "NITROGEN"
                     y: 49
                     height: 43
                     anchors.left: parent.left
@@ -1416,7 +1231,7 @@ Item {
                 Section_Header {
                     id: oxygen_label
                     hederText: "OXYGEN"
-                    y: 244
+                            y: 321
                     height: 43
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -1427,7 +1242,7 @@ Item {
                 Section_Header {
                     id: kerosene_label
                     hederText: "KEROSENE"
-                    y: 435
+                            y: 519
                     height: 43
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -1471,7 +1286,7 @@ Item {
                 }
             RegToggle {
                 id: prh001_toggle
-                name: "PRH001"
+                name: "PRN003"
                 y: 81
                 width: 208
                 height: 65
@@ -1482,7 +1297,7 @@ Item {
 
             RegToggle {
                 id: prh002_toggle
-                name: "PRH002"
+                name: "PRN004"
                 x: 344
                 y: 81
                 width: 208
@@ -1491,6 +1306,8 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: 33
             }
+
+            Timer { id: timer }
 
             Image {
                 id: upArrow
@@ -1501,7 +1318,12 @@ Item {
                 source: "content/Images/UpArrow.png"
                 fillMode: Image.PreserveAspectFit
                 
-                MouseArea { anchors.fill: parent; onClicked: bridge.regCommand("PRH001","increase") }
+                MouseArea { anchors.fill: parent; 
+                    onClicked: {
+                        bridge.regCommand("PRN003","increase")
+                    }
+                }
+                
             }
 
             Image {
@@ -1512,7 +1334,39 @@ Item {
                 height: 50
                 source: "content/Images/DownArrow.png"
                 fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent; onClicked: bridge.regCommand("PRH001","decrease") }
+                MouseArea { anchors.fill: parent;
+                    onClicked: {
+                        bridge.regCommand("PRN003","decrease")
+                    }
+                 }
+            }
+
+            Button{
+                id: stop_button
+                y: 300
+                width: 208
+                height: 65
+                anchors.left: parent.left
+                anchors.leftMargin: 33
+                text: "STOP"
+            contentItem: Text {
+                        text: stop_button.text
+                        font.pointSize: 30
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+            background:Rectangle{
+                border.color: "#ffffff"
+                color: stop_button.down ? "#732727" : "#941010"
+            }
+            onClicked: {
+
+                bridge.regCommand("PRN003","STOP")
+            }
             }
 
             Image {
@@ -1523,7 +1377,11 @@ Item {
                 height: 48
                 source: "content/Images/UpArrow.png"
                 fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent; onClicked: bridge.regCommand("PRH002","increase") }
+                MouseArea { anchors.fill: parent;
+                    onClicked: {
+                        bridge.regCommand("PRN004","increase")
+                    }
+                }
             }
 
 
@@ -1535,7 +1393,11 @@ Item {
                 height: 50
                 source: "content/Images/DownArrow.png"
                 fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent; onClicked: bridge.regCommand("PRH002","decrease") }
+                MouseArea { anchors.fill: parent;
+                    onClicked: {
+                        bridge.regCommand("PRN004","decrease")
+                    }
+                 }
 
             }
 
@@ -1618,6 +1480,54 @@ Item {
                     prh002_text.text=qsTr(bridge.regState("PRH002"))
                 }
 
+                    }
+                    }
+
+                     Rectangle {
+                        id: countdown_box
+                        x: 932
+                        width: 453
+                        height: 241
+                        color: "#000000"
+                        border.color: "#ffffff"
+                        anchors.top: rectangle1.bottom
+                        anchors.topMargin: 0
+                        Rectangle {
+                            id: rectangle130
+                            height: 45
+                            color: "#206e67"
+                            border.color: "#ffffff"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.top: parent.top
+                            Text {
+                                id: text110
+                                width: 248
+                                height: 29
+                                color: "#ffffff"
+                                text: qsTr("COUNTDOWN")
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pixelSize: 23
+                                horizontalAlignment: Text.AlignHCenter
+                                font.bold: true
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                            anchors.topMargin: 0
+                            anchors.rightMargin: 0
+                            anchors.leftMargin: 0
+
+                            TextEdit {
+                                id: textEdit200
+                                x: 39
+                                y: 77
+                                width: 368
+                                height: 129
+                                color: "#ffffff"
+                                text: qsTr("T-30")
+                                font.pixelSize: 80
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
                }
              }
         }
@@ -1666,14 +1576,14 @@ Item {
         
         TextArea {
             id: textArea
-            x: 38
-            y: 1026
-            width: 1067
+                    x: 28
+                    width: 932
             height: 300
             readOnly: true
             leftPadding: 20
             topPadding: 10
             font.pointSize: 30
+                    anchors.top: rectangle1.bottom
             color: "#ffffff"
             placeholderText: qsTr("Text Area")
                     Text {
@@ -1710,6 +1620,7 @@ Item {
             width: 424
             height: 107
             color: "#FFFFFF"
+            visible: false
             font.pointSize: 50
             horizontalAlignment: Text.AlignHCenter
             text: qsTr("T-30")
@@ -1718,6 +1629,42 @@ Item {
             leftPadding: 20
             background:Rectangle{
                 color: "#000000"
+                    }
+                }
+
+                Button {
+                    id: abort_button
+                    x: 980
+                    y: 1270
+                    text: "ABORT"
+                    height: 95  
+                    width: 400
+                    
+                                                                
+                    contentItem: Text {
+                        text: abort_button.text
+                        font.pointSize: 30
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+                    background: Rectangle {
+                        implicitWidth: 200
+                        implicitHeight: 95
+                        opacity: enabled ? 1 : 0.3
+                        color: abort_button.down ? "#732727" : "#FF0000"
+                        border.color: "#ffffff"
+                        border.width: 1
+                        radius: 4
+                    }
+                    onClicked: {
+                        }
+                                                            
+                    }   
+
             }
         }
      }

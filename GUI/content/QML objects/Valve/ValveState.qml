@@ -11,6 +11,7 @@ Rectangle {
     property string state: "CLOSED"
     property string text_color: "#ff0000"
     property string name: "SVH001"
+    property bool nrm_Opn: false
                 
     Text {
         id: text4
@@ -22,7 +23,7 @@ Rectangle {
         anchors.top: parent.top
         font.pixelSize: 18
         horizontalAlignment: Text.AlignHCenter
-        anchors.topMargin: 0
+        anchors.topMargin: 2
         font.bold: false
         }
 
@@ -37,18 +38,37 @@ Rectangle {
         font.pixelSize: 18
         horizontalAlignment: Text.AlignHCenter
         anchors.bottomMargin: 0
-        anchors.topMargin: 35
+        anchors.topMargin: 32
         font.bold: false
         }
 
     function update() {
         if (bridge.getValveState(name)) {
+            if(valve_state.nrm_Opn){
+              valve_state.state = "CLOSED"  
+              valve_state.text_color = "#ff0000"
+            }
+            else{
+
             valve_state.state = "OPENED"
             valve_state.text_color = "#10ff00"
-        }else{
+
+            }
+            
+         }
+         else{
+            if(valve_state.nrm_Opn){
+              valve_state.state = "OPENED"  
+              valve_state.text_color = "#10ff00"
+            }
+            else{
+
             valve_state.state = "CLOSED"
             valve_state.text_color = "#ff0000"
-        }
+
+            }
+
+         }
     }
 
  }

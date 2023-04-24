@@ -14,14 +14,24 @@ class Readings:
     def refreshAll(self):
         for PT_name in self.PTs:
             new_reading = dict()
-            new_reading['value']= "{:0>7.2f}".format(self.PTs[PT_name].pressure)
-            new_reading['time']= self.PTs[PT_name].timeStamp
-            new_reading['type']= 'PT'
-            self.readings[PT_name] = new_reading
+            if PT_name[:2] != "DP":
+                new_reading['value']= "{:0>7.2f}".format(self.PTs[PT_name].pressure)
+                new_reading['time']= self.PTs[PT_name].timeStamp
+                new_reading['type']= 'PT'
+                self.readings[PT_name] = new_reading
+            else:
+                new_reading['value']= "{:0>.2f}".format(self.PTs[PT_name].percentage_fill)
+                new_reading['time']= self.PTs[PT_name].timeStamp
+                new_reading['type']= 'PT'
+                voltage: self.PTs[PT_name].voltage
+                pressure:  self.PTs[PT_name].pressure
+                percent: self.PTs[PT_name].percentage_fill
+                #print("Voltage: ", voltage, "Pressure: ", pressure, "Percent: ", percent)
+                self.readings[PT_name] = new_reading
 
         for TC_name in self.TCs:
             new_reading = dict()
-            temp = self.TCs[TC_name].temperature.get('f')
+            temp = self.TCs[TC_name].temperature.get('c')
             new_reading['value']= "{:0>7.2f}".format(temp)
             new_reading['time']= self.TCs[TC_name].timeStamp
             new_reading['type']= 'TC'

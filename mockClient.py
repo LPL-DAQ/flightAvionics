@@ -9,9 +9,25 @@ import timing
 import PTLib
 import TCLib
 import SVLib
-import LCLib
 import clientFunc
 import DRVLib
+
+def mockConsole(client:clientFunc.Client):
+    while True:
+        userIn = input(">")
+        data = userIn.split(" ")
+        if len(data) == 3 and data[0] == "SEND":
+            try:
+                times = int(data[2])
+            except Exception as e:
+                print("ERROR: <times> must be an int")
+            for i in range(0, times):
+                telemetry.sendMsg(client.getSocket(), data[1])
+            print("JOB DONE")
+            
+def mockReceiver():
+    while True:
+
 
 def main():
     timing.setRefTime(0,0,0)
@@ -27,11 +43,9 @@ def main():
     print("Initializing Reg Config ")
     REGs= DRVLib.initializeRegulators("configFiles/Reg_Config.ini")
     # iniData = telemetry.parseIniFile("configFiles/config.ini", "client")
-    print("Initializing LC Config...")
-    LCs= LCLib.LCs_init("configFiles/LC_Config_FV.ini")
     
     #readings class
-    FVreadings = telemetry.Readings(PTs,TCs,LCs)
+    FVreadings = telemetry.Readings(PTs,TCs)
     #valve state class
     FVstates = telemetry.valveStates(SVs)
 
@@ -41,10 +55,8 @@ def main():
     
         executor.submit(PTLib.refreshPTs, PTs, client.getPTPoll()) #PT interogation thread
         executor.submit(TCLib.refreshTCs,TCs)#TC interogation thread
-        executor.submit(LCLib.refreshLCs, LCs) #LC interogation thread
         executor.submit(client.runClient)#persistant connection
-        executor.submit(client.receiveCMD)
-        executor.submit(client.executeCMD)
+        executor.submit(client.receiveNExecute)#valve receive and listen
 
 #runs FV_client
 main()

@@ -7,7 +7,7 @@ ehthumbs_vista.db
 
 # macOS
 # https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
-.DS_Store
+**/.DS_Store
 .AppleDouble
 .LSOverride
 
@@ -52,5 +52,7 @@ __pycache__
 
 #DAQ
 data
+data/*.txt
 GUI/*.autosave
 
+GUI/content/QML objects/.DS_Store
