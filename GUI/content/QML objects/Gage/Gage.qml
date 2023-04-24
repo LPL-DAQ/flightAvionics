@@ -4,8 +4,9 @@ import QtQuick.Controls 2.15
 Row {
     id: reading
     property string name: "XXX000"
-    width: 180
-    height: 31
+    width: 210
+    height: 40
+    
 
 
 
@@ -24,8 +25,8 @@ Row {
         id: text1
         color: "#ffffff"
         text: qsTr(name + ":")
-        font.pixelSize: 17
-        rightPadding: 0
+        font.pixelSize: 18
+        rightPadding: 10
         font.family: "Arial"
     }
 
@@ -34,7 +35,7 @@ Row {
         width: 74
         color: "#2ad12f"
         text: qsTr(value)
-        font.pixelSize: 17
+        font.pixelSize: 18
         horizontalAlignment: Text.AlignRight
         rightPadding: 6
         font.family: "Arial"
@@ -44,7 +45,7 @@ Row {
         id: text3
         color: "#69eef0"
         text: qsTr(unit)
-        font.pixelSize: 17
+        font.pixelSize: 18
         horizontalAlignment: Text.AlignHCenter
         font.family: "Arial"
     }

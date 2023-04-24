@@ -42,7 +42,7 @@ class Bridge(QObject):
             return self.guiReadings[gageName]
 
         except Exception as e:
-            return "N/A"
+            return "0000.00"
 
     @Slot(str,str)#arming the valves to their default state
     def armValve(self, valveName:str, state:str):
