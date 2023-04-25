@@ -78,19 +78,21 @@ def initialiseValves(configFile:str):
 
 
 def timingSequence(timing):
-    i=0
+    i=1
     print("SENDING TIMING")
-    while(i<3):
+    while(i<4):
         tmp = "00000"
-        times = str(timing[i])
+        times = str(timing[i-1])
         #print(tmp[:(5 - len(str(timing[i])))])
-        new = tmp[:(5 - len(str(timing[i])))] + times
+        new = tmp[:(5 - len(str(timing[i-1])))] + times
         #print(new)
         msg = "#T0"+ str(i) + "/" + new + "\n"
         print(msg)
         send_data(ser,msg)
         time.sleep(1)
         i=i+1
+    
+
 
 def groundCommands(command):
     if command == "IGNITION":

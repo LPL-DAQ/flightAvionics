@@ -14,7 +14,7 @@ ApplicationWindow {
     height: 21600
     visible: true
 
-    property real dpi_scale: 1.4
+    property real dpi_scale: 1.5
 
     function updateElements() {
 
@@ -60,7 +60,7 @@ ApplicationWindow {
         ptc406.fetchNewVal()
 
         // Tank Level
-        dpf001.fetchNewVal()
+        ptf001.fetchNewVal()
 
         svn003t.update()
         svn004t.update()
@@ -358,13 +358,13 @@ ApplicationWindow {
                 }
 
                 TankLevel {
-                    id: dpf001
-                    name: "DPF001"
+                    id: ptf001
+                    name: "PTF001"
                     width: 63
                     height: 22
                     y: 420
                     anchors.left: parent.left
-                    anchors.leftMargin: 1024
+                    anchors.leftMargin: 1000
 
                 }
                         ValveState {

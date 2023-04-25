@@ -101,16 +101,50 @@ class Client:
                 msg = msg.decode("utf-8")
                 data = msg.split("#")
                 try:
-                    while data:
-                        if len(data[0]) != 0: #when split we get might get an empty string
-                            print(data[0])
-                            received_reading = data[0].split("/")
-                            if len(received_reading) == 2 and received_reading[0][0] == "R" and received_reading[1] == "STOP":#hard check for now
-                                print("Received stop command")
-                                self.Regulators[received_reading[0]].abortRun()
-                            else:   
-                                self.workQ.put(data[0]) 
-                        data.remove(data[0])
+                    received_reading = self.workQ.get().split("/")
+                    if len(received_reading) == 2:
+                        valveName = received_reading[0]
+                        valveType = valveName[0]
+                        if valveType == "S" or valveType == "P": #solenoid or pneumatic
+                            name = received_reading[0]
+                            value = received_reading[1]
+                            self.FVstates.execute(name,value)#executes valve cmd
+                            msg = "#" + name + "/" + self.FVstates.getValveState(name)#creates confirmation msg
+                            self.messengerLock.acquire()
+                            telemetry.sendMsg(self.clientSocket, msg)
+                            self.messengerLock.release()
+                        elif valveType == "R": #regulator
+                            name = received_reading[0]
+                            command= received_reading[1]
+                            if command == "CW":
+                                try:
+                                    self.Regulators[name].motor_run(10000, 1)
+                                    #send some msg here
+                                except Exception as e:
+                                    #send abort conf here
+                                    print(name, " finished prematurely due to abort")
+                            elif command == "CCW":
+                                try:
+                                    self.Regulators[name].motor_run(10000, 0)
+                                    #send some msg here
+                                except Exception as e:
+                                    #send abort conf here
+                                    print(name, " finished prematurely due to abort")
+                            else:
+                                print("ERROR: Invalid CMD for", name)
+                        elif len(received_reading) == 5: #timing sequence
+                                print("Received Timing")
+                                igniter= received_reading[2]
+                                lox= received_reading[3]
+                                fuel= received_reading[4]
+                                timing=[igniter, lox, fuel]
+                                SVLib.timingSequence(timing)
+                        elif len(received_reading) == 3:
+                            if received_reading[0] == "GM1": #ground command
+                                print("Received ignition command")
+                                timer= int(received_reading[2])
+                                time.sleep(timer)
+                                SVLib.groundCommands("IGNITION")
                 except Exception as e:
                     print("ERROR: Invalid CMD", data[0])
     
