@@ -1017,7 +1017,7 @@ ApplicationWindow {
                     }
                     Button {
                         id: ignition_button
-                        y: 1150
+                        y: 1250
                         text: "IGNITION"
                         height: 76  
                         visible: false
