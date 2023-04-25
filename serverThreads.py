@@ -26,11 +26,14 @@ def dataListener(s:serverFunc.Server):
     while True:
         if not s.isConnected():
             s.establishConnection()
+            print("Connection worked")
         elif s.isConnected():
             try:
+                print("Receiving...")
                 s.receiveData()
             except Exception as e:
                 print("ERROR1: Connection forcibly disconnected by host")
+                s.setToNA()
                 s.closeSocket()
 
 #thread function for commandSender
