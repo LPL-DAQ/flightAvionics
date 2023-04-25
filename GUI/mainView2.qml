@@ -364,7 +364,7 @@ ApplicationWindow {
                     height: 22
                     y: 420
                     anchors.left: parent.left
-                    anchors.leftMargin: 1024
+                    anchors.leftMargin: 1000
 
                 }
                         ValveState {
