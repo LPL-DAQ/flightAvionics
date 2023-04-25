@@ -97,6 +97,7 @@ class Bridge(QObject):
                     self.percent1+=1
                     percent=self.percent1 #updates percentage field in GUI
                     command="#REG001/CW" #command to rotate clockwise by fixed number of steps
+                    #print(command)
                     self.s.sendRegCmd(command)
                     return percent
 
@@ -107,10 +108,15 @@ class Bridge(QObject):
                     self.percent1-=1
                     percent=self.percent1 #updates percentage field in GUI
                     command="#REG001/CCW" #command to rotate counterclockwise by fixed number of steps
+                    #print(command)
                     self.s.sendRegCmd(command)
                     return percent
                 else:
                     print("Regulator not Armed")
+            else:
+                command = "#REG001/STOP"
+                #print(command)
+                self.s.sendRegCmd(command)
 
 
         elif name=="PRN004": #second regulator commands (not used yet)
@@ -173,8 +179,11 @@ def guiThreadFunc(s:serverFunc.Server):
     app = QtWidgets.QApplication()
     view = QtQuick.QQuickView()
 
-    timer = QTimer()
-    timer.start(10)
+    displayTimer = QTimer()
+    updateTimer = QTimer()
+
+    displayTimer.start(s.getDisplay())
+    updateTimer.start(10)
 
     engine= QQmlApplicationEngine("GUI/mainView2.qml")
 
@@ -183,10 +192,9 @@ def guiThreadFunc(s:serverFunc.Server):
     context = engine.rootContext()
     context.setContextProperty("bridge", bridge)
 
-    timer.timeout.connect(root.updateElements)
-    timer.timeout.connect(root.messagesBox)
+    displayTimer.timeout.connect(root.updateElements)
+    updateTimer.timeout.connect(root.messagesBox)
 
-    
     
     sys.exit(app.exec())
     

@@ -3,6 +3,8 @@ import time
 from time import sleep
 from configparser import ConfigParser
 
+import threading
+
 
 #This code is to control the DRV8825 Driver for Stepper Motors (regulators)
 
@@ -15,7 +17,9 @@ class DRV8825():
         self.step_pin = int(_step_pin) # STEP GPIO Pin
         #self.MODE_pins= (14, 15, 18) #Step Mode GPIO pins
         #self.gpiopins=[self.direction_pin, self.step_pin, self.MODE, self.sensor]
-
+        self.isRunning = False
+        self.abort = False
+        #self.abortLock = threading.Lock()
         #constants
         self.wait=0.004
         self.initdelay=0.05
@@ -57,9 +61,11 @@ class DRV8825():
             GPIO.output(self.direction_pin,DIR)
             #GPIO.output(self.MODE_pins, self.RESOLUTION[steptype])
             time.sleep(self.initdelay)
-
+            self.isRunning = True
             for x in range(steps):
                 if self.stop_motor:
+                    self.isRunning = False
+                    self.stop_motor = False
                     raise self.StopMotorInterrupt
                 else:
                     GPIO.output(self.step_pin,GPIO.HIGH)
@@ -71,6 +77,12 @@ class DRV8825():
 
         except self.StopMotorInterrupt:
             print("Stop Motor Interrupt")
+
+    def abortRun(self):
+        if self.isRunning:#checks to see if stepper is running
+            self.stop_motor = True
+        else:
+            print("WARNING: REG IS CURRENTLY NOT RUNNING")
 
 
 def initializeRegulators(configFile:str):

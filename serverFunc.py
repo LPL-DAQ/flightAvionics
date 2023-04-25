@@ -11,6 +11,8 @@ class Server:
         #server ini data
         self.serverIni = verify.verifyServerIni(filepath)
         self.fp = self.serverIni["fp"]
+        self.log = self.serverIni["log"]
+        self.display = self.serverIni["display"]
         #socket stuff
         self.ip, self.port = verify.getIPAddress(filepath)
         self.socket = None
@@ -22,6 +24,7 @@ class Server:
         self.valveReadings = dict()
         #name timestamp
         self.armedValve = ("None", "")
+
 
         self.armedValves = dict()#check if still used
         
@@ -49,6 +52,8 @@ class Server:
         return self.armedValves
     def getPendLock(self):
         return self.pendLock
+    def getDisplay(self):
+        return self.display
 
     def getArmedValve(self):
         return self.armedValve[0]
@@ -130,10 +135,10 @@ class Server:
             print("State:", state)
             return
         self.dataLock.acquire()
-        self.fp.write("SENDING: " + valve + " " + newState + " " + time + "\n")
+        self.log.write("SENDING: " + valve + " " + newState + " " + time + "\n")
         self.dataLock.release()
         msg = "#" + valve + "/" + newState
-        telemetry.sendMsg(self.getSocket(), msg)  
+        telemetry.sendMsg(self.getSocket(), msg)
 
     def sendTimingCmd(self, timer, igniter, lox, fuel):
         if not self.isConnected:
@@ -147,7 +152,10 @@ class Server:
             print("WARNING: No Connection")
             return
         msg="#GM1/SNDIT"+ "/"+ timer
-        telemetry.sendMsg(self.getSocket(), msg)  
+        telemetry.sendMsg(self.getSocket(), msg) 
+        
+    def sendRegCmd(self, command):
+        telemetry.sendMsg(self.getSocket(), command) 
 
 
     #theres more logic to this but ill do it sometime
