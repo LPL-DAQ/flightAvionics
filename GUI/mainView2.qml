@@ -14,7 +14,7 @@ ApplicationWindow {
     height: 21600
     visible: true
 
-    property real dpi_scale: 1.4
+    property real dpi_scale: 0.5
 
     function updateElements() {
 
@@ -127,6 +127,19 @@ ApplicationWindow {
 
         }
 
+    function ignitionConfirmation() {
+        MessageDialog {
+            id: messageDialog
+            title: "May I have your attention please"
+            text: "It's so cool that you are using Qt Quick."
+            onAccepted: {
+                console.log("And of course you could only agree.")
+                Qt.quit()
+            }
+            Component.onCompleted: visible = true
+            }
+    }
+
     ScrollView{
         anchors.fill: parent
 
@@ -163,8 +176,8 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 36
+                    width: 180
+                    height: 31
                     x: 208
                     y: 205
 
@@ -181,9 +194,9 @@ ApplicationWindow {
 
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 68
-                    x: 450
+                    width: 180
+                    height: 62
+                    x: 455
                     y: 205
                     
                     Gage {
@@ -206,9 +219,9 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 68
-                    x: 886
+                    width: 180
+                    height: 62
+                    x: 900
                     y: 341
                     Gage {
                         id: ptf201
@@ -231,9 +244,9 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 68
-                    x: 1599
+                    width: 180
+                    height: 62
+                    x: 1630
                     y: 223
                     Gage {
                             id: ptf202
@@ -254,10 +267,10 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 68
+                    width: 180
+                    height: 62
                     x: 1848
-                    y: 515
+                    y: 525
 
 
                             Gage {
@@ -278,8 +291,8 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 68
+                    width: 180
+                    height: 62
                     x: 1712
                     y: 659
 
@@ -303,9 +316,9 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 68
-                    x: 886
+                    width: 180
+                    height: 62
+                    x: 900
                     y: 651
 
                         Gage {
@@ -327,10 +340,10 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 68
-                    x: 434
-                    y: 499
+                    width: 180
+                    height: 62
+                    x: 450
+                    y: 515
 
                         Gage {
                         id: ptn004
@@ -351,9 +364,9 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 102
-                    x: 1616
+                    width: 180
+                    height: 93
+                    x: 1625
                     y: 392
 
                         Gage {
@@ -383,10 +396,10 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 136
-                    x: 1813
-                    y: 142
+                    width: 180
+                    height: 124
+                    x: 1850
+                    y: 155
 
                         Gage {
                         id: ptf401
@@ -422,9 +435,9 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 36
-                    x: 208
+                    width: 180
+                    height: 32
+                    x: 220
                     y: 532
 
 
@@ -439,9 +452,9 @@ ApplicationWindow {
                 Rectangle{
                     color: "#000000"
                     border.color: "#ffffff"
-                    width: 200
-                    height: 36
-                    x: 1094
+                    width: 180
+                    height: 32
+                    x: 1120
                     y: 785
 
 
@@ -466,11 +479,9 @@ ApplicationWindow {
                 TankLevel {
                     id: dpf001
                     name: "DPF001"
-                    width: 63
-                    height: 22
-                    y: 420
+                    y: 380
                     anchors.left: parent.left
-                    anchors.leftMargin: 1024
+                    anchors.leftMargin: 1170
 
                 }
                 ValveState {
@@ -567,8 +578,8 @@ ApplicationWindow {
                         Reg {
                         id: prh001
                         name: "PRN003"
-                        x: 471
-                        y: 326
+                        x: 425
+                        y: 288
                 }
 
                         NitrogenValve {
@@ -671,24 +682,6 @@ ApplicationWindow {
                         name: "SVF202"
                         x: 1382
                         y: 164
-                }
-
-                        Rectangle {
-                        id: fuel_level
-                        x: 1168
-                        y: 373
-                        width: 78
-                        height: 24
-                        color: "#000000"
-                }
-
-                        Rectangle {
-                        id: lox_level
-                        x: 1152
-                        y: 688
-                        width: 78
-                        height: 24
-                        color: "#000000"
                 }
 
             }
@@ -1095,7 +1088,7 @@ ApplicationWindow {
                     }
                     Button {
                         id: ignition_button
-                        y: 1150
+                        y: 1180
                         text: "IGNITION"
                         height: 76  
                         visible: false
@@ -1123,7 +1116,7 @@ ApplicationWindow {
                                         radius: 4
                                     }
                             onClicked: {
-                                bridge.ignitionCmd(textField.text)
+                                window.ignitionConfirmation()
                             }
                     }
 
