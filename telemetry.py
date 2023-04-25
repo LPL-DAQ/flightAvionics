@@ -63,6 +63,10 @@ class valveStates:
             print("WARNING: Unknown Valve name")
             return None
         return self.states[name]
+    
+    def abort(self):
+        for name in self.SVs:
+            self.SVs[name].powerOFF()
 
 #sends msg given a socket
 def sendMsg(socket, msg):
