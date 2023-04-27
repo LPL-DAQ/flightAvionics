@@ -63,6 +63,9 @@ ApplicationWindow {
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
 
+        // Load cell
+        lc001.fetchNewVal()
+
         svn003t.update()
         svn004t.update()
         svn005t.update()
@@ -1391,7 +1394,7 @@ ApplicationWindow {
                             anchors.leftMargin: 0
 
                             LoadCell {
-                                id: load_cell
+                                id: lc001
                                 x: 50
                                 y: 77
                                 name: "LC001"
