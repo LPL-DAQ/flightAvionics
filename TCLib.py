@@ -79,8 +79,12 @@ class TC():
     def __tempFilePath(self):
         """Returns string file path of slave file of chose sensor by index integer input."""
         sensor_master_directory = '/sys/bus/w1/devices/w1_bus_master1/'
-        sensor_slave_file = sensor_master_directory + '3b-' + self.id + '/w1_slave'
-        return sensor_slave_file
+        try:
+            sensor_slave_file = sensor_master_directory + '3b-' + self.id + '/w1_slave'
+            return sensor_slave_file
+        
+        except:
+            print("invalid port ID")
         
     def __rawTemperature(self):
         """Opens chosen sensor slave file, reads contents,
@@ -177,7 +181,7 @@ def convertTime(convert_time: int()):
         subprocess.Popen(['sudo', 'sh', '-c', echo_command])
 
 
-convertTime(15)
+convertTime(70)
 
 
 def refreshTCs(TC_dict: dict()):
