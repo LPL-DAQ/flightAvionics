@@ -1348,11 +1348,95 @@ ApplicationWindow {
                                 height: 129
                                 color: "#ffffff"
                                 text: qsTr("T-30")
+                                readOnly: true
                                 font.pixelSize: 80
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
                }
+             }
+
+             Rectangle {
+                        id: load_cell_box
+                        x: 932
+                        width: 453
+                        height: 241
+                        color: "#000000"
+                        border.color: "#ffffff"
+                        anchors.top: rectangle1.bottom
+                        anchors.topMargin: 0
+                        anchors.right: countdown_box.left
+                        anchors.leftMargin: 0
+                        Rectangle {
+                            id: rectangle55
+                            height: 45
+                            color: "#0a3a7f"
+                            border.color: "#ffffff"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.top: parent.top
+                            Text {
+                                id: text77
+                                width: 248
+                                height: 29
+                                color: "#ffffff"
+                                text: qsTr("LOAD CELL")
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pixelSize: 23
+                                horizontalAlignment: Text.AlignHCenter
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                            anchors.topMargin: 0
+                            anchors.rightMargin: 0
+                            anchors.leftMargin: 0
+
+                            LoadCell {
+                                id: load_cell
+                                x: 50
+                                y: 77
+                                name: "LC001"
+                            }
+                    
+                         }
+
+                 Button {
+                    id: tare
+                    text: "TARE LOAD CELL"
+                    height: 40  
+                    width: 200
+                    anchors.top: parent.bottom
+                    anchors.topMargin: -70
+                    anchors.right: parent.right
+                    anchors.rightMargin: 140
+
+                    
+                                                                
+                    contentItem: Text {
+                        text: tare.text
+                        font.pointSize: 20
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 200
+                        implicitHeight: 95
+                        opacity: enabled ? 1 : 0.3
+                        color: tare.down ? "#732727" : "#773301"
+                        border.color: "#ffffff"
+                        border.width: 1
+                        radius: 4
+                    }
+                    
+                    onClicked: {
+                    }
+                                                            
+                 }   
+
              }
         }
         

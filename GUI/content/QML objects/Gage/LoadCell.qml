@@ -3,8 +3,8 @@ import QtQuick.Controls 2.15
 
 Rectangle {
                 id: fuel_percentage
-                property string name: "DPF201"
-                width: 80
+                property string name: "LC001"
+                width: 300
                 height: 22
                 color: "#000000"
                 
@@ -17,18 +17,18 @@ Rectangle {
                     y: 4
                     x: 0
                     color: "#ffffff"
-                    text: qsTr("Fill")
-                    font.pixelSize: 20
+                    text: qsTr("FORCE:")
+                    font.pixelSize: 30
                 }
                 
                 Text {
                     id: text1
                     y: 4
                     color: "#2ad12f"
-                    text: qsTr("00")
+                    text: qsTr("0000.00")
                     anchors.left: parent.left
-                    font.pixelSize: 20
-                    anchors.leftMargin: 40
+                    font.pixelSize: 30
+                    anchors.leftMargin: 140
                 }
                 
                 Text {
@@ -36,9 +36,9 @@ Rectangle {
                     x: 32
                     y: 4
                     color: "#69eef0"
-                    text: qsTr("%")
+                    text: qsTr("N")
                     anchors.right: parent.right
-                    font.pixelSize: 20
+                    font.pixelSize: 30
                     anchors.rightMargin: 2
                 }
             }
