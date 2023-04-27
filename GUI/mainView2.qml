@@ -1238,16 +1238,6 @@ ApplicationWindow {
                     nrml_Opn: false
                 }
 
-                ValveToggle {
-                    id: cpf201t 
-                    name: "CPF201"
-                    x: 246
-                            y: 644
-                    anchors.right: parent.right
-                    anchors.rightMargin: 33
-                    nrml_Opn: false
-                }
-
                 Button {
                     id: close_button
                     text: "ACTUATE"
