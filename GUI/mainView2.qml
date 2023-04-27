@@ -1,11 +1,12 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts
+import QtQuick.Dialogs
+
 import "content/Images"
 import "content/QML objects/Gage"
 import "content/QML objects/Valve"
 import "content/QML objects/visual elements"
-
 
 
 ApplicationWindow {
@@ -16,6 +17,7 @@ ApplicationWindow {
 
     property real dpi_scale: 0.5
 
+    
     function updateElements() {
 
 
@@ -46,7 +48,6 @@ ApplicationWindow {
         tco101.fetchNewVal()
         tco102.fetchNewVal()
         tco103.fetchNewVal()
-        tco404.fetchNewVal()
 
         // Refresh Kerosene TCs
         tcf201.fetchNewVal()
@@ -58,9 +59,6 @@ ApplicationWindow {
         // Chamber PTs
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
-
-        // Tank Level
-        dpf001.fetchNewVal()
 
         svn003t.update()
         svn004t.update()
@@ -109,11 +107,6 @@ ApplicationWindow {
         pbvf201_state.update()
         svf202_state.update()
 
-        prh001.update()
-        prh002.update()
-        prh001_open.open_percentage()
-        prh002_open.open_percentage()
-
     }
     function messagesBox(){
         //print("Test", bridge.serverStatus)
@@ -127,18 +120,7 @@ ApplicationWindow {
 
         }
 
-    function ignitionConfirmation() {
-        MessageDialog {
-            id: messageDialog
-            title: "May I have your attention please"
-            text: "It's so cool that you are using Qt Quick."
-            onAccepted: {
-                console.log("And of course you could only agree.")
-                Qt.quit()
-            }
-            Component.onCompleted: visible = true
-            }
-    }
+    
 
     ScrollView{
         anchors.fill: parent
@@ -1086,9 +1068,21 @@ ApplicationWindow {
                         } 
                                 
                     }
+
+                    MessageDialog {
+                        id: messageDialog
+                        title: "Warning"
+                        text: "Initiate Ignition Sequence?"
+                        property int icon: StandardIcon.Warning        
+                        onAccepted: {
+                            bridge.ignitionCmd(textField.text)
+                        }
+                        Component.onCompleted: visible = false
+                    }
+                    
                     Button {
                         id: ignition_button
-                        y: 1180
+                        y: 1260
                         text: "IGNITION"
                         height: 76  
                         visible: false
@@ -1116,7 +1110,10 @@ ApplicationWindow {
                                         radius: 4
                                     }
                             onClicked: {
-                                window.ignitionConfirmation()
+
+                                messageDialog.visible = true
+
+                                   
                             }
                     }
 
@@ -1321,239 +1318,6 @@ ApplicationWindow {
                     anchors.rightMargin: 0
                 }
             }
-            Rectangle {
-                id: rectangle4
-                x: 1385
-                y: 978
-                width: 585
-                height: 379
-                color: "#000000"
-                border.color: "#ffffff"
-
-                Rectangle {
-                    id: rectangle18
-                    height: 45
-                    color: "#0a3a7f"
-                    border.color: "#ffffff"
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.topMargin: 0
-                    anchors.leftMargin: 0
-                    anchors.rightMargin: 0
-                    
-                    Text {
-                        id: text20
-                        width: 248
-                        height: 29
-                        color: "#ffffff"
-                        text: qsTr("PRESSURE REGULATORS")
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.pixelSize: 23
-                        horizontalAlignment: Text.AlignHCenter
-                        font.bold: true
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-            RegToggle {
-                id: prh001_toggle
-                name: "PRN003"
-                y: 81
-                width: 208
-                height: 65
-                color: "#00ffffff"
-                anchors.left: parent.left
-                anchors.leftMargin: 33
-            }
-
-            RegToggle {
-                id: prh002_toggle
-                name: "PRN004"
-                x: 344
-                y: 81
-                width: 208
-                height: 65
-                color: "#00ffffff"
-                anchors.right: parent.right
-                anchors.rightMargin: 33
-            }
-
-            Timer { id: timer }
-
-            Image {
-                id: upArrow
-                x: 186
-                y: 162
-                width: 55
-                height: 48
-                source: "content/Images/UpArrow.png"
-                fillMode: Image.PreserveAspectFit
-                
-                MouseArea { anchors.fill: parent; 
-                    onClicked: {
-                        bridge.regCommand("PRN003","increase")
-                    }
-                }
-                
-            }
-
-            Image {
-                id: downArrow
-                x: 186
-                y: 245
-                width: 55
-                height: 50
-                source: "content/Images/DownArrow.png"
-                fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent;
-                    onClicked: {
-                        bridge.regCommand("PRN003","decrease")
-                    }
-                 }
-            }
-
-            Button{
-                id: stop_button
-                y: 300
-                width: 208
-                height: 65
-                anchors.left: parent.left
-                anchors.leftMargin: 33
-                text: "STOP"
-            contentItem: Text {
-                        text: stop_button.text
-                        font.pointSize: 30
-                        font.bold: true
-                        opacity: enabled ? 1.0 : 0.3
-                        color: "#ffffff"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-            background:Rectangle{
-                border.color: "#ffffff"
-                color: stop_button.down ? "#732727" : "#941010"
-            }
-            onClicked: {
-
-                bridge.regCommand("PRN003","STOP")
-            }
-            }
-
-            Image {
-                id: upArrow1
-                x: 497
-                y: 162
-                width: 55
-                height: 48
-                source: "content/Images/UpArrow.png"
-                fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent;
-                    onClicked: {
-                        bridge.regCommand("PRN004","increase")
-                    }
-                }
-            }
-
-
-            Image {
-                id: downArrow1
-                x: 497
-                y: 245
-                width: 55
-                height: 50
-                source: "content/Images/DownArrow.png"
-                fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent;
-                    onClicked: {
-                        bridge.regCommand("PRN004","decrease")
-                    }
-                 }
-
-            }
-
-            Rectangle {
-                id: prh001_open
-                y: 197
-                width: 132
-                height: 51
-                color: "#00ffffff"
-                anchors.left: parent.left
-                anchors.leftMargin: 33
-                border.color: "#ffffff"
-                Text{
-                    id: prh001_text
-                    width: 74
-                    color: "#ffffff"
-                    font.pixelSize: 30
-                    horizontalAlignment: Text.AlignLeft
-                    rightPadding: 6
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.leftMargin: 50
-                    anchors.topMargin:5
-
-                }
-                Text{
-                    id: percent_symbol
-                    width: 74
-                    color: "#ffffff"
-                    font.pixelSize: 30
-                    text: "%"      
-                    rightPadding: 6
-                    anchors.left: parent.left
-                    anchors.leftMargin: 100
-                    anchors.top: parent.top
-                    anchors.topMargin:5
-                }
-
-                function open_percentage() {
-                    prh001_text.text=qsTr(bridge.regState("PRH001"))
-                }
-            }
-
-            Rectangle {
-                id: prh002_open
-                y: 197
-                width: 132
-                height: 51
-                color: "#00ffffff"
-                anchors.left: parent.left
-                anchors.leftMargin: 344
-                border.color: "#ffffff"
-                Text{
-                    id: prh002_text
-                    width: 74
-                    color: "#ffffff"
-                    font.pixelSize: 30
-                    horizontalAlignment: Text.AlignLeft
-                    rightPadding: 6
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.leftMargin: 50
-                    anchors.topMargin:5
-
-                }
-                Text{
-                    id: percent_symbol2
-                    width: 74
-                    color: "#ffffff"
-                    font.pixelSize: 30
-                    text: "%"      
-                    rightPadding: 6
-                    anchors.left: parent.left
-                    anchors.leftMargin: 100
-                    anchors.top: parent.top
-                    anchors.topMargin:5
-                }
-
-                function open_percentage() {
-                    prh002_text.text=qsTr(bridge.regState("PRH002"))
-                }
-
-                    }
-                    }
-
                      Rectangle {
                         id: countdown_box
                         x: 932
@@ -1563,6 +1327,8 @@ ApplicationWindow {
                         border.color: "#ffffff"
                         anchors.top: rectangle1.bottom
                         anchors.topMargin: 0
+                        anchors.right: parent.right
+                        anchors.leftMargin: 0
                         Rectangle {
                             id: rectangle130
                             height: 45
@@ -1580,7 +1346,6 @@ ApplicationWindow {
                                 anchors.verticalCenter: parent.verticalCenter
                                 font.pixelSize: 23
                                 horizontalAlignment: Text.AlignHCenter
-                                font.bold: true
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
                             anchors.topMargin: 0
@@ -1609,10 +1374,10 @@ ApplicationWindow {
             y: 1351
             width: 237
             height: 58
-            text: "KILL SERVER"
+            text: "Close Server"
             contentItem: Text {
                         text: kill_server.text
-                        font.pointSize: 30
+                        font.pointSize: 25
                         font.bold: true
                         opacity: enabled ? 1.0 : 0.3
                         color: "#ffffff"
@@ -1626,6 +1391,7 @@ ApplicationWindow {
             }
             onClicked: {
                 textField5.visible = true;
+                Qt.quit()
             }
             TextField {
                 id: textField5
@@ -1647,8 +1413,8 @@ ApplicationWindow {
         
         TextArea {
             id: textArea
-                    x: 28
-                    width: 932
+            x: 28
+            width: 932
             height: 300
             readOnly: true
             leftPadding: 20
