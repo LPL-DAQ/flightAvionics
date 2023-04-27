@@ -462,14 +462,6 @@ ApplicationWindow {
                         nrm_Opn: false
                 }
 
-                TankLevel {
-                    id: dpf001
-                    name: "DPF001"
-                    y: 380
-                    anchors.left: parent.left
-                    anchors.leftMargin: 1170
-
-                }
                 ValveState {
                         id: svf201_state
                         name: "SVF201"
