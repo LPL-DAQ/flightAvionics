@@ -2,6 +2,9 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts
 import QtQuick.Dialogs
+import QtQuick.Controls.Basic
+
+
 
 import "content/Images"
 import "content/QML objects/Gage"
@@ -124,6 +127,7 @@ ApplicationWindow {
 
     ScrollView{
         anchors.fill: parent
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
         Flickable{
             contentWidth: 2560*dpi_scale
@@ -725,7 +729,7 @@ ApplicationWindow {
 
                 Rectangle {
                     id: rectangle3
-                            y: 943
+                    y: 920
                     height: 45
                     color: "#1a3f0f"
                     border.color: "#ffffff"
@@ -1073,7 +1077,7 @@ ApplicationWindow {
                         id: messageDialog
                         title: "Warning"
                         text: "Initiate Ignition Sequence?"
-                        property int icon: StandardIcon.Warning        
+                        buttons: MessageDialog.Ok | MessageDialog.Cancel
                         onAccepted: {
                             bridge.ignitionCmd(textField.text)
                         }
@@ -1109,6 +1113,7 @@ ApplicationWindow {
                                         border.width: 1
                                         radius: 4
                                     }
+                        
                             onClicked: {
 
                                 messageDialog.visible = true
@@ -1278,7 +1283,8 @@ ApplicationWindow {
                         border.color: "#ffffff"
                         border.width: 1
                         radius: 4
-                        }       
+                        } 
+                       
                     onClicked: {
                             bridge.sendCommand()
                     }
@@ -1370,11 +1376,12 @@ ApplicationWindow {
         
         Button{
             id: kill_server
-            x: 36
-            y: 1351
+            x: 23
             width: 237
             height: 58
             text: "Close Server"
+            anchors.top: rectangle1.bottom
+            anchors.topMargin: 100
             contentItem: Text {
                         text: kill_server.text
                         font.pointSize: 25
@@ -1389,6 +1396,7 @@ ApplicationWindow {
                 border.color: "#ffffff"
                 color: kill_server.down ? "#732727" : "#941010"
             }
+            
             onClicked: {
                 textField5.visible = true;
                 Qt.quit()
@@ -1410,46 +1418,39 @@ ApplicationWindow {
                 }
              }
         }
+
+      
         
-        TextArea {
-            id: textArea
-            x: 28
-            width: 932
-            height: 300
-            readOnly: true
-            leftPadding: 20
-            topPadding: 10
-            font.pointSize: 30
-                    anchors.top: rectangle1.bottom
-            color: "#ffffff"
-            placeholderText: qsTr("Text Area")
-                    Text {
+        Row{
+            x: 23
+            width: 2000
+            height: 44
+            padding: 5
+            layoutDirection: Qt.LeftToRight
+            anchors.top: rectangle1.bottom
+            anchors.topMargin: 10
+
+            Text{
+                text: qsTr("SERVER STATUS: ")
+                rightPadding: 0
+                font.pixelSize: 30
+                color: "#ffffff"
+            }
+
+            Text {
                     id: server_status_text
-                    x: 23
-                    y: 21
-                    width: 1028
-                    height: 44
                     color: "#ffffff"
                     text: qsTr("NOT CONNECTED")
                     font.pixelSize: 30
-                    horizontalAlignment: Text.AlignLeft
-                }
-                    Text {
-                    id: warning_text1
-                    x: 24
-                    y: 71
-                    width: 1028
-                    height: 78
-                    color: "#ffffff"
-                    text: qsTr(" ")
-                    font.pixelSize: 30
-                    horizontalAlignment: Text.AlignLeft
-                }
-            background:Rectangle{
-                color: "#000000"
-                border.color: "#FFFFFF"
+                    leftPadding: 50
+                    
             }
+
         }
+
+                    
+                    
+        
             TextArea {
             id: textArea1
             x: 1557
@@ -1471,7 +1472,7 @@ ApplicationWindow {
 
                 Button {
                     id: abort_button
-                    x: 980
+                    x: 1650
                     y: 1270
                     text: "ABORT"
                     height: 95  
@@ -1488,6 +1489,7 @@ ApplicationWindow {
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
+
                     background: Rectangle {
                         implicitWidth: 200
                         implicitHeight: 95
@@ -1497,10 +1499,11 @@ ApplicationWindow {
                         border.width: 1
                         radius: 4
                     }
+                    
                     onClicked: {
-                        }
+                    }
                                                             
-                    }   
+                 }   
 
             }
         }

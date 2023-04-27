@@ -153,6 +153,14 @@ class Server:
             return
         msg="#GM1/SNDIT"+ "/"+ timer
         telemetry.sendMsg(self.getSocket(), msg) 
+    
+    def abortCMD(self):
+        if not self.isConnected:
+            print("WARNING: No Connection")
+            return
+        
+        msg="#GM1/ABORT"
+        telemetry.sendMsg(self.getSocket(), msg) 
         
     def sendRegCmd(self, command):
         telemetry.sendMsg(self.getSocket(), command) 
