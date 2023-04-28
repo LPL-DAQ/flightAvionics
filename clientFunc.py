@@ -157,14 +157,17 @@ class Client:
                                 self.abort = True
                                 for i in self.valveStates.SVs:
                                     self.valveStates.execute(i, "OFF")
-                                msg = "ABORTED/" + timing.missionTime()
+                                msg = "#ABORTED/" + timing.missionTime()
                                 self.messengerLock.acquire()
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 self.messengerLock.release()
+                                self.sendCurrValveStates()
                                 self.abort = False
                             elif(received_reading[0] == "STOPLAUNCH"):
                                 if self.midLaunch:
                                     self.launchStop = True
+                                else:
+                                    print("STOP CMD IGNORED")
 
                         elif len(received_reading) == 2 and self.isAReg(received_reading[0]) and received_reading[1] == "STOP":
                             print("Received stop command")
@@ -181,24 +184,44 @@ class Client:
                 return False
             time.sleep(1)
         self.valveStates.execute("EBV0101", "ON")
+        msg = "#EBV0101/" + self.FVstates.getValveState("EBV0101") + "/" + timing.missionTime()#creates confirmation msg
+        self.messengerLock.acquire()
+        telemetry.sendMsg(self.clientSocket, msg)
+        self.messengerLock.release()
         for i in range(0, 17):
             if self.abort:
                 return False
             time.sleep(.1)
         self.valveStates.execute("PBVF201", "ON")
+        msg = "#PBVF201/" + self.FVstates.getValveState("PBVF201") + "/" + timing.missionTime()#creates confirmation msg
+        self.messengerLock.acquire()
+        telemetry.sendMsg(self.clientSocket, msg)
+        self.messengerLock.release()
         for i in range(0, 43):
             if self.abort:
                 return False
             time.sleep(.1)
         self.valveStates.execute("EBV0101", "OFF")
+        msg = "#EBV0101/" + self.FVstates.getValveState("EBV0101") + "/" + timing.missionTime()#creates confirmation msg
+        self.messengerLock.acquire()
+        telemetry.sendMsg(self.clientSocket, msg)
+        self.messengerLock.release()
         for i in range(0, 38):
             if self.abort:
                 return False
             time.sleep(.1)
         self.valveStates.execute("PBVF201", "OFF")
+        msg = "#PBVF201/" + self.FVstates.getValveState("PBVF201") + "/" + timing.missionTime()#creates confirmation msg
+        self.messengerLock.acquire()
+        telemetry.sendMsg(self.clientSocket, msg)
+        self.messengerLock.release()
         time.sleep(0.2)
         self.valveStates.execute("SVN007", "ON")
         self.valveStates.execute("SVN008", "ON")
+        msg = "#SVN007/" + self.FVstates.getValveState("PBVF201") + "/" + timing.missionTime() + "#SVN007/" + self.FVstates.getValveState("SVN008") + "/" + timing.missionTime()#creates confirmation msg
+        self.messengerLock.acquire()
+        telemetry.sendMsg(self.clientSocket, msg)
+        self.messengerLock.release()
         return True
 
 
@@ -213,13 +236,14 @@ class Client:
                             if received_reading[0] == "LAUNCH":
                                 self.midLaunch = True
                                 if self.launch():
-                                    msg = "LAUNCH/DONE/" + timing.missionTime()
+                                    msg = "#LAUNCH/DONE/" + timing.missionTime()
                                 else:
-                                    msg = "LAUNCH/ABORTED/" + timing.missionTime()
+                                    msg = "#LAUNCH/ABORTED/" + timing.missionTime()
                                 
                                 self.messengerLock.acquire()
                                 telemetry.sendMsg(self.clientSocket, msg)
                                 self.messengerLock.release()
+                                self.sendCurrValveStates()
                                 self.launchStop = False
                                 self.midLaunch = False
 
