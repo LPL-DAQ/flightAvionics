@@ -20,15 +20,18 @@ class Server:
         self.connect = False #flag to determine if there is a secure connection
         #PT and TC data
         self.dataReadings = dict()
+        self.dataTimings = dict()
         #SV control data
         self.valveReadings = dict()
         #name timestamp
         self.armedValve = ("None", "")
+        self.isExecuting = False
+        self.isLaunching = False
 
 
         self.armedValves = dict()#check if still used
         
-        self.pendLock = threading.Lock()
+        self.valveLock = threading.Lock()
         self.dataLock = threading.Lock()
 
     #standard getter methods
@@ -50,8 +53,8 @@ class Server:
         return self.valveReadings
     def getArmedValves(self):
         return self.armedValves
-    def getPendLock(self):
-        return self.pendLock
+    def getValveLock(self):
+        return self.valveLock
     def getDisplay(self):
         return self.display
 
@@ -94,25 +97,39 @@ class Server:
                 if len(data[0]) != 0: #value
                     received_reading = data[0].split("/")
                     #print(received_reading) #print line for all received readings
-                    if len(received_reading) == 3: #sensor reading
-                        sensorName = received_reading[0]
-                        sensorValue = received_reading[1]
-                        time = received_reading[2]
-                        self.dataReadings[sensorName] = sensorValue
-                        self.dataLock.acquire()
-                        self.fp.write(sensorName + " " + sensorValue + " " + time + "\n")
-                        self.dataLock.release()
+                    if len(received_reading) == 2:
+                        if received_reading[0] == "ABORTED":
+                            msgTime = received_reading[1]
+                            self.valveLock.acquire()
+                            self.log.write("ABORTED: " + msgTime + "\n")
+                            self.valveLock.release() 
+                            self.isExecuting = False 
+                    if len(received_reading) == 3:
+                        if received_reading[0] == "LAUNCH":
+                            self.isExecuting = False
+                            self.isLaunching = False
+                            self.valveLock.acquire()
+                            self.log.write("LAUNCH: " + received_reading[1] + " " + received_reading[3] + "\n")
+                            self.valveLock.release() 
+                        if received_reading[0] in self.dataReadings:
+                            sensorName = received_reading[0]
+                            sensorValue = received_reading[1]
+                            time = received_reading[2]
+                            self.dataReadings[sensorName] = sensorValue
+                            self.dataTimings[sensorName] = time
+                            self.fp.write(sensorName + " " + sensorValue + " " + time + "\n")
+                        elif received_reading[0] in self.valveReadings:
+                            valveName = received_reading[0]
+                            valveState = received_reading[1]
+                            valveTime = received_reading[2]
+                            self.valveLock.acquire()
+                            self.log.write("RECEIVED: " + valveName + " " + valveState + " " + valveTime + "\n")
+                            self.valveLock.release()
+                            self.verifyValve()
+                            self.valveReadings[valveName] = valveState
+                        else:
+                            print("WARNING: UNKNOWN READING")
                         #print(name + " " + value + " " + time)
-
-                    elif len(received_reading) == 2: #valve confirmation
-                        valveName = received_reading[0]
-                        valveState = received_reading[1]
-                        self.dataLock.acquire()
-                        self.fp.write("RECEIVED: " + valveName + " " + valveState + " " + timing.missionTime() + "\n")
-                        self.dataLock.release()
-                        #needs to be implemented 
-                        self.verifyValve()
-                        self.valveReadings[valveName] = valveState
                     else:
                         print("WARNING: Malformed message received", data[0])
                 data.remove(data[0])
@@ -124,21 +141,24 @@ class Server:
         if not self.isConnected:
             print("WARNING: No Connection")
             return
-        state = self.valveReadings[valve]
-        time = timing.missionTime()
-        if state == "OFF":
-            newState = "ON"
-        elif state == "ON":
-            newState = "OFF"
-        else:#test msg for debug purposes :3
-            print("FUCKED UP VALVE CMD MSG BUDDY")
-            print("State:", state)
-            return
-        self.dataLock.acquire()
-        self.log.write("SENDING: " + valve + " " + newState + " " + time + "\n")
-        self.dataLock.release()
-        msg = "#" + valve + "/" + newState
-        telemetry.sendMsg(self.getSocket(), msg)
+        if self.isExecuting:
+            print("ERROR: ABORT OR LAUNCH IN PROGRESS")
+        else:
+            state = self.valveReadings[valve]
+            time = timing.missionTime()
+            if state == "OFF":
+                newState = "ON"
+            elif state == "ON":
+                newState = "OFF"
+            else:#test msg for debug purposes :3
+                print("FUCKED UP VALVE CMD MSG BUDDY")
+                print("State:", state)
+                return
+            self.valveLock.acquire()
+            self.log.write("SENDING: " + valve + " " + newState + " " + time + "\n")
+            self.valveLock.release()
+            msg = "#" + valve + "/" + newState
+            telemetry.sendMsg(self.getSocket(), msg)
 
     def sendTimingCmd(self, timer, igniter, lox, fuel):
         if not self.isConnected:
@@ -157,12 +177,28 @@ class Server:
     def sendRegCmd(self, command):
         telemetry.sendMsg(self.getSocket(), command) 
 
+    def sendAbort(self):
+        self.isExecuting = True
+        telemetry.sendMsg(self.getSocket(), "ABORT")
 
+    def sendLaunch(self):
+        self.isExecuting = True
+        self.isLaunching = True
+        telemetry.sendMsg(self.getSocket(), "LAUNCH")
+
+    def stopLaunch(self):
+        if not self.isLaunching:
+            print("ERROR: DAQ IS NOT IN LAUNCH SEQUENCE")
+        else:
+            telemetry.sendMsg(self.getSocket(), "STOPLAUNCH")
     #theres more logic to this but ill do it sometime
     def verifyValve(self):
         valve = self.armedValve
         print(valve[0], "command received in", timing.getTimeDiff(valve[1], timing.missionTime()))
              
+    def raiseAllSensorsToNA(self):
+        for i in self.dataReadings:
+            self.dataReadings[i] = "N/A"
     #code for multi valve command...needs some fix
     # def removeValve(self, valveName:str):
     #     if valveName in self.pendingValves:

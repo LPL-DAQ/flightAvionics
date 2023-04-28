@@ -56,6 +56,12 @@ class Readings:
         new_reading['time']= time
         new_reading['type']= name[0:2]
         self.readings[name] = new_reading
+
+    def isASensor(self, name:str): #returns true if the sensor is in either one of the readings dict
+        if (name in self.PTs or name in self.TCs or name in self.LCs):
+            return True
+        return False
+
         
 #class for all control HW
 class valveStates:
@@ -83,6 +89,11 @@ class valveStates:
             print("WARNING: Unknown Valve name")
             return None
         return self.states[name]
+    
+    def isAValve(self, name:str):
+        if name in self.SVs:
+            return True
+        return False
 
 #sends msg given a socket
 def sendMsg(socket, msg):

@@ -42,10 +42,10 @@ def receive_data(ser,byte=False):
     return data
 
 class Valve():
-
+    #state: -1 unitialized 0 off 1 on
     def __init__(self, serial_port:serial.Serial(),pin:str):
         self.pin = pin
-        self.isON = False
+        self.state = -1
         self.serial_port = serial_port
         self.sending = False
         
@@ -53,19 +53,16 @@ class Valve():
     def powerON(self):
         msg = "#S"+self.pin+"/LOW__\n"
         send_data(self.serial_port,msg)
-        self.isON = False
+        self.state = 1
 
     #sets valve to closed state
     def powerOFF(self):
         msg = "#S"+self.pin+"/HIGH_\n"
         send_data(self.serial_port,msg)
-        self.isON = True
+        self.isON = 0
 
 
 def initialiseValves(configFile:str):
-
-    
-
     SVsCfg = ConfigParser()
     SVsCfg.read(configFile)
     valves = dict()
@@ -75,8 +72,8 @@ def initialiseValves(configFile:str):
         valves[SV_name] = Valve(ser,SV_port)
         #might need an arduino poll to fully determine state
         #test all of them
-        valves[SV_name].powerOFF()
-        print("[", SV_name, "] has been initialized in its normal state", sep="")
+        #valves[SV_name].powerOFF()
+        #print("[", SV_name, "] has been initialized in its normal state", sep="")
     return valves
 
 

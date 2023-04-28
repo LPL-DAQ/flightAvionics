@@ -28,7 +28,7 @@ def main():
     REGs= DRVLib.initializeRegulators("configFiles/Reg_Config.ini")
     # iniData = telemetry.parseIniFile("configFiles/config.ini", "client")
     print("Initializing LC Config...")
-    LCs= LCLib.LCs_init("configFiles/LC_Config_FV.ini")
+    LCs = LCLib.LCs_init("configFiles/LC_Config_FV.ini")
     
     #readings class
     FVreadings = telemetry.Readings(PTs,TCs,LCs)

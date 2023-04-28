@@ -31,7 +31,19 @@ def dataListener(s:serverFunc.Server):
                 s.receiveData()
             except Exception as e:
                 print("ERROR1: Connection forcibly disconnected by host")
+                s.raiseAllSensorsToNA()
                 s.closeSocket()
+
+def sensorEnforcer(s:serverFunc.Server):
+    while True:
+        for i in s.dataTimings:
+            try:         
+                if timing.getTimeDiff(s.dataTimings[i], timing.missionTime()) >= 5:
+                    s.dataReadings[i] = "N/A"
+            except Exception as e:
+                print("WARNING: ", i, " exists in timing but not data")
+        time.sleep(1)
+
 
 #thread function for commandSender
 # def valveCmd(s:serverFunc.Server):
@@ -70,6 +82,15 @@ class dataReceiver(QThread):
 
     def run(self):
         dataListener(self.s)
+
+class sensorEnforcer(QThread):
+    def __init__(self, s:serverFunc.Server) -> None:
+        super().__init__()
+        self.s = s
+
+    def run(self):
+        sensorEnforcer(self.s)
+
 
 #checks to see if any valve cmds have timed out
 # class valveTimeOut(QThread):

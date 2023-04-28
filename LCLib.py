@@ -95,5 +95,5 @@ def refreshLCs(LC_dict: dict()):
     LC_period = 1/LC_freq_Hz #seconds
     while True:
         for LC_name in LC_dict:
-            pounds= LC_dict[LC_name].getPounds()
+            pounds = LC_dict[LC_name].getPounds() #pounds is not used here
             time.sleep(LC_period)
