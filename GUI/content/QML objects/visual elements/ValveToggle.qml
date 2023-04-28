@@ -16,7 +16,7 @@ Rectangle {
 
     property string name: "SVH001"
     property bool isOpen: false
-    property bool nrml_Opn: true
+    property bool nrml_Opn: false
 
     function update() {
         if (bridge.getArmState(name)){

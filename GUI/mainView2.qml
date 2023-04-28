@@ -1,11 +1,15 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts
+import QtQuick.Dialogs
+import QtQuick.Controls.Basic
+
+
+
 import "content/Images"
 import "content/QML objects/Gage"
 import "content/QML objects/Valve"
 import "content/QML objects/visual elements"
-
 
 
 ApplicationWindow {
@@ -14,8 +18,9 @@ ApplicationWindow {
     height: 21600
     visible: true
 
-    property real dpi_scale: 1.4
+    property real dpi_scale: 0.5
 
+    
     function updateElements() {
 
 
@@ -46,7 +51,6 @@ ApplicationWindow {
         tco101.fetchNewVal()
         tco102.fetchNewVal()
         tco103.fetchNewVal()
-        tco404.fetchNewVal()
 
         // Refresh Kerosene TCs
         tcf201.fetchNewVal()
@@ -59,8 +63,8 @@ ApplicationWindow {
         ptc405.fetchNewVal()
         ptc406.fetchNewVal()
 
-        // Tank Level
-        dpf001.fetchNewVal()
+        // Load cell
+        lc001.fetchNewVal()
 
         svn003t.update()
         svn004t.update()
@@ -76,7 +80,6 @@ ApplicationWindow {
         svf201t.update()
         pbvf201t.update()
         svf202t.update()
-        cpf201t.update()
 
 
         svn003.update()
@@ -93,7 +96,6 @@ ApplicationWindow {
         svf201.update()
         pbvf201.update()
         svf202.update()
-        cpf201.update()
 
         svn003_state.update()
         svn004_state.update()
@@ -110,12 +112,6 @@ ApplicationWindow {
         svf201_state.update()
         pbvf201_state.update()
         svf202_state.update()
-        cpf201_state.update()
-
-        prh001.update()
-        prh002.update()
-        prh001_open.open_percentage()
-        prh002_open.open_percentage()
 
     }
     function messagesBox(){
@@ -130,8 +126,11 @@ ApplicationWindow {
 
         }
 
+    
+
     ScrollView{
         anchors.fill: parent
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
         Flickable{
             contentWidth: 2560*dpi_scale
@@ -139,8 +138,8 @@ ApplicationWindow {
         
     
     Rectangle {
-                width: maximumWidth
-                height: maximumHeight
+        width: maximumWidth
+        height: maximumHeight
         color: "#000000"
         transformOrigin: Item.TopLeft
         scale: dpi_scale
@@ -149,7 +148,7 @@ ApplicationWindow {
             id: rectangle1
             x: 28
             y: 21
-            width: 1970
+            width: 2052
             height: 979
             color: "#00ffffff"
             border.color: "#ffffff"
@@ -157,293 +156,384 @@ ApplicationWindow {
             Image {
                         id: hodorPID
                         x: 0
-                        y: 8
-                        width: 1970
-                        height: 971
-                        source: "content/Images/HodorPID.png"
+                        y: -6
+                        width: 2035
+                        height: 977
+                        source: "content/Images/HODORGUI.png"
                 fillMode: Image.PreserveAspectFit
 
-                Gage {
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 31
+                    x: 208
+                    y: 205
+
+                    Gage {
                         id: ptn002
                         name: "PTN002"
-                        x: 246
-                        y: 249
-                }
+                        x: 0
+                        y: 0
+                    }
 
-                Gage {
+                }
+                
+                Rectangle{
+
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 62
+                    x: 455
+                    y: 205
+                    
+                    Gage {
                         id: ptn003
                         name: "PTN003"
-                        x: 473
-                        y: 242
-                }
+                        x: 0
+                        y: 0
+                    }
 
-                Gage {
+                    Gage {
                         id: tcn001
                         name: "TCN001"
-                        x: 473
-                        y: 274
+                        x: 0
+                        y: 32
                         unit: "°C"
-                }
+                    }
 
-                Gage {
+                }
+                
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 62
+                    x: 900
+                    y: 341
+                    Gage {
                         id: ptf201
                         name: "PTF201"
-                        x: 885
-                        y: 194
-                }
+                        x: 0
+                        y: 0
+                    }
 
-                Gage {
+                    Gage {
                         id: tcf201
                         name: "TCF201"
-                        x: 885
-                        y: 225
+                        x: 0
+                        y: 32
                         unit: "°C"
+                    }
+
+
+                }
+                
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 62
+                    x: 1630
+                    y: 223
+                    Gage {
+                            id: ptf202
+                            name: "PTF202"
+                            x: 0
+                            y: 0
+                    }
+
+                    Gage {
+                            id: tcf202
+                            name: "TCF202"
+                            x: 0
+                            y: 32
+                            unit: "°C"
+                    }
                 }
 
-                Gage {
-                        id: ptf202
-                        name: "PTF202"
-                        x: 1555
-                        y: 279
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 62
+                    x: 1848
+                    y: 525
+
+
+                            Gage {
+                            id: ptc405
+                            name: "PTC405"
+                            x: 0
+                            y: 0
+                           }
+
+                            Gage {
+                            id: ptc406
+                            name: "PTC406"
+                            x: 0
+                            y: 32
+                        }
                 }
 
-                Gage {
-                        id: tcf202
-                        name: "TCF202"
-                        x: 1555
-                        y: 310
-                        unit: "°C"
-                }
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 62
+                    x: 1712
+                    y: 659
 
-                        Gage {
-                        id: ptc405
-                        name: "PTC405"
-                        x: 1761
-                        y: 607
-                }
-
-                        Gage {
-                        id: ptc406
-                        name: "PTC406"
-                        x: 1761
-                        y: 639
-                }
 
                         Gage {
                         id: pto102
                         name: "PTO102"
-                        x: 1585
-                        y: 693
-                }
+                        x: 0
+                        y: 0
+                    }
 
                         Gage {
                         id: tco102
                         name: "TCO102"
-                        x: 1585
-                        y: 724
+                        x: 0
+                        y: 32
                         unit: "°C"
+                    }
                 }
+
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 62
+                    x: 900
+                    y: 651
 
                         Gage {
                         id: pto101
                         name: "PTO101"
-                        x: 884
-                        y: 485
-                }
+                        x: 0
+                        y: 0
+                    }
 
                         Gage {
                         id: tco101
                         name: "TCO101"
-                        x: 884
-                        y: 516
+                        x: 0
+                        y: 32
                         unit: "°C"
+                    }
                 }
+
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 62
+                    x: 450
+                    y: 515
 
                         Gage {
                         id: ptn004
                         name: "PTN004"
-                        x: 466
-                        y: 538
-                }
+                        x: 0
+                        y: 0
+                    }
 
                         Gage {
                         id: tcn002
                         name: "TCN002"
-                        x: 466
-                        y: 568
+                        x: 0
+                        y: 32
                         unit: "°C"
+                    }
                 }
+
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 93
+                    x: 1625
+                    y: 392
 
                         Gage {
                         id: ptf403
                         name: "PTF403"
-                        x: 1488
-                        y: 424
-                }
+                        x: 0
+                        y: 0
+                    }
+                
 
                         Gage {
                         id: tcf403
                         name: "TCF403"
-                        x: 1488
-                        y: 454
+                        x: 0
+                        y: 32
                         unit: "°C"
-                }
+                    }
 
                         Gage {
                         id: pto404
                         name: "PTO404"
-                        x: 1488
-                        y: 484
+                        x: 0
+                        y: 64
+                    }
                 }
 
-                        Gage {
-                        id: tco404
-                        name: "TCO404"
-                        x: 1488
-                        y: 514
-                        unit: "°C"
-                }
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 124
+                    x: 1850
+                    y: 155
 
                         Gage {
                         id: ptf401
                         name: "PTF401"
-                        x: 1775
-                        y: 205
-                }
+                        x: 0
+                        y: 0
+                    }
                 
                         Gage {
                         id: ptf402
                         name: "PTF402"
-                        x: 1775
-                        y: 236
-                }
+                        x: 0
+                        y: 32
+                    }
 
                         Gage {
                         id: tcf401
                         name: "TCF401"
-                        x: 1775
-                        y: 267
+                        x: 0
+                        y: 64
                         unit: "°C"
-                }
+                    }
 
                         Gage {
                         id: tcf402
                         name: "TCF402"
-                        x: 1775
-                        y: 298
+                        x: 0
+                        y: 96
                         unit: "°C"
+                    }
                 }
+
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 32
+                    x: 220
+                    y: 532
+
 
                         Gage {
                         id: ptn001
                         name: "PTN001"
-                        x: 246
-                        y: 540
+                        x: 0
+                        y: 0
+                    }
                 }
+
+                Rectangle{
+                    color: "#000000"
+                    border.color: "#ffffff"
+                    width: 180
+                    height: 32
+                    x: 1120
+                    y: 785
+
+
 
                         Gage {
                         id: tco103
                         name: "TCO103"
-                        x: 1222
-                        y: 762
+                        x: 0
+                        y: 0
                         unit: "°C"
+                    }
                 }
 
-                        ValveState {
+                ValveState {
                         id: svn004_state
                         name: "SVN004"
-                        x: 670
-                        y: 275
+                        x: 685
+                        y: 230
                         nrm_Opn: false
                 }
 
-                TankLevel {
-                    id: dpf001
-                    name: "DPF001"
-                    width: 63
-                    height: 22
-                    y: 420
-                    anchors.left: parent.left
-                    anchors.leftMargin: 1024
-
-                }
-                        ValveState {
+                ValveState {
                         id: svf201_state
                         name: "SVF201"
-                        x: 865
-                        y: 275
+                        x: 967
+                        y: 125
                         nrm_Opn: true
                 }
 
-                        ValveState {
+                ValveState {
                         id: pbvf201_state
                         name: "PBVF201"
-                        x: 1265
-                        y: 275
+                        x: 1385
+                        y: 230
                         nrm_Opn: false
                 }
 
-                        ValveState {
+                ValveState {
                         id: svf202_state
                         name:"SVF202"
-                        x: 1250
-                        y: 150
+                        x: 1370
+                        y: 106
                         nrm_Opn: false
                 }
 
-                        ValveState {
-                        id: cpf201_state
-                        name: "CPF201"
-                        x: 1180
-                        y: 40
-                        nrm_Opn: false
-                }
-
-                        ValveState {
+                ValveState {
                         id: svn007_state
                         name: "SVN007"
-                        x: 1470
-                        y: 732
+                        x: 1660
+                        y: 808
                         nrm_Opn: false
                 }
 
                         ValveState {
                         id: ebvo102_state
                         name: "EBVO102"
-                        x: 1265
-                        y: 680
+                        x: 1383
+                        y: 782
                         nrm_Opn: false
                 }
 
                         ValveState {
                         id: ebvo101_state
                         name: "EBVO101"
-                        x: 1032
-                        y: 818
+                        x: 1386
+                        y: 655
                         nrm_Opn: false
                 }
 
                         ValveState {
                         id: svo102_state
                         name: "SVO102"
-                        x: 882
-                        y: 689
+                        x: 968
+                        y: 470
                         nrm_Opn: true
                 }
 
                         ValveState {
                         id: svn005_state
                         name: "SVN005"
-                        x: 670
-                        y: 770
+                        x: 602
+                        y: 739
                         nrm_Opn: false
                 }
                     
                         ValveState {
                         id: svn003_state
                         name: "SVN003"
-                        x: 670
-                        y: 569
+                        x: 674
+                        y: 543
                         nrm_Opn: false
                 }
 
@@ -452,16 +542,16 @@ ApplicationWindow {
                         ValveState {
                         id: svn006_state
                         name: "SVN006"
-                        x: 670
-                        y: 477
+                        x: 608
+                        y: 427
                         nrm_Opn: false
                 }
 
                         ValveState {
                         id: svn008_state
                         name: "SVN008"
-                        x: 1510
-                        y: 198
+                        x: 1668
+                        y: 73
                         nrm_Opn: false
                 }
 
@@ -469,22 +559,15 @@ ApplicationWindow {
                         Reg {
                         id: prh001
                         name: "PRN003"
-                        x: 471
-                        y: 326
-                }
-
-                        Reg {
-                        id: prh002
-                        name: "PRN004"
-                        x: 471
-                        y: 619
+                        x: 425
+                        y: 288
                 }
 
                         NitrogenValve {
                         id: svn004
                         name: "SVN004"
-                        x: 680
-                        y: 346
+                        x: 697
+                        y: 306
                         width: 57
                         height: 36
                 }
@@ -492,8 +575,8 @@ ApplicationWindow {
                         NitrogenValve {
                         id: svn006
                         name: "SVN006"
-                        x: 678
-                        y: 433
+                        x: 617
+                        y: 384
                         width: 57
                         height: 36
                 }
@@ -501,8 +584,8 @@ ApplicationWindow {
                         NitrogenValve {
                         id: svn003
                         name: "SVN003"
-                        x: 681
-                        y: 639
+                        x: 684
+                        y: 615
                         width: 57
                         height: 36
                 }
@@ -510,8 +593,8 @@ ApplicationWindow {
                         NitrogenValve {
                         id: svn005
                         name: "SVN005"
-                        x: 679
-                        y: 726
+                        x: 616
+                        y: 696
                         width: 57
                         height: 36
                 }
@@ -519,52 +602,40 @@ ApplicationWindow {
                         NitrogenValve {
                         id: svf201
                         name: "SVF201"
-                        ang_Open: 90
-                        x: 811
-                        y: 288
+                        x: 980
+                        y: 211
                         nrm_Opn: true
                 }
 
                         NitrogenValve {
                         id: svo102
                         name: "SVO102"
-                        ang_Open: 90
-                        x: 828
-                        y: 701
+                        x: 980
+                        y: 542
                         nrm_Opn: true
                 }
 
                         NitrogenValve {
                         id: svn007
                         name: "SVN007"
-                        ang_Open: 90
-                        x: 1412
-                        y: 746
+                        x: 1674
+                        y: 752
                         width: 57
                         height: 36
-                }
-
-                        FuelCompressor {
-                        id: cpf201
-                        width: 51
-                        height: 37
-                        name: "CPF201"
-                        x: 1197
-                        y: 99
                 }
 
                         FuelBallValve {
                             id: pbvf201
                             name: "PBVF201"
-                            x: 1277
-                            y: 350
+                            x: 1396
+                            y: 310
                 }
 
                         LoxBallValve {
                             id: ebvo102
                             name: "EBVO102"
-                            x: 1277
-                            y: 635
+                            x: 1392
+                            y: 738
                             width: 55
                             height: 28
                 }
@@ -572,8 +643,8 @@ ApplicationWindow {
                         LoxBallValve {
                             id: ebvo101
                             name: "EBVO101"
-                            x: 1042
-                            y: 758
+                            x: 1396
+                            y: 619
                             width: 61
                             height: 32
                 }
@@ -581,9 +652,8 @@ ApplicationWindow {
                         NitrogenValve {
                         id: svn008
                         name: "SVN008"
-                        ang_Open: 90
-                        x: 1451
-                        y: 211
+                        x: 1683
+                        y: 142
                         width: 57
                         height: 36
                 }
@@ -591,26 +661,8 @@ ApplicationWindow {
                         FuelValve {
                         id: svf202
                         name: "SVF202"
-                        x: 1263
-                        y: 212
-                }
-
-                        Rectangle {
-                        id: fuel_level
-                        x: 1031
-                        y: 380
-                        width: 78
-                        height: 24
-                        color: "#000000"
-                }
-
-                        Rectangle {
-                        id: lox_level
-                        x: 1030
-                        y: 670
-                        width: 78
-                        height: 24
-                        color: "#000000"
+                        x: 1382
+                        y: 164
                 }
 
             }
@@ -672,7 +724,7 @@ ApplicationWindow {
 
                 Rectangle {
                     id: rectangle3
-                            y: 943
+                    y: 920
                     height: 45
                     color: "#1a3f0f"
                     border.color: "#ffffff"
@@ -1015,9 +1067,21 @@ ApplicationWindow {
                         } 
                                 
                     }
+
+                    MessageDialog {
+                        id: messageDialog
+                        title: "Warning"
+                        text: "Initiate Ignition Sequence?"
+                        buttons: MessageDialog.Ok | MessageDialog.Cancel
+                        onAccepted: {
+                            bridge.ignitionCmd(textField.text)
+                        }
+                        Component.onCompleted: visible = false
+                    }
+                    
                     Button {
                         id: ignition_button
-                        y: 1150
+                        y: 1260
                         text: "IGNITION"
                         height: 76  
                         visible: false
@@ -1044,8 +1108,12 @@ ApplicationWindow {
                                         border.width: 1
                                         radius: 4
                                     }
+                        
                             onClicked: {
-                                bridge.ignitionCmd(textField.text)
+
+                                messageDialog.visible = true
+
+                                   
                             }
                     }
 
@@ -1173,16 +1241,6 @@ ApplicationWindow {
                     nrml_Opn: false
                 }
 
-                ValveToggle {
-                    id: cpf201t 
-                    name: "CPF201"
-                    x: 246
-                            y: 644
-                    anchors.right: parent.right
-                    anchors.rightMargin: 33
-                    nrml_Opn: false
-                }
-
                 Button {
                     id: close_button
                     text: "ACTUATE"
@@ -1210,7 +1268,8 @@ ApplicationWindow {
                         border.color: "#ffffff"
                         border.width: 1
                         radius: 4
-                        }       
+                        } 
+                       
                     onClicked: {
                             bridge.sendCommand()
                     }
@@ -1250,239 +1309,6 @@ ApplicationWindow {
                     anchors.rightMargin: 0
                 }
             }
-            Rectangle {
-                id: rectangle4
-                x: 1385
-                y: 978
-                width: 585
-                height: 379
-                color: "#000000"
-                border.color: "#ffffff"
-
-                Rectangle {
-                    id: rectangle18
-                    height: 45
-                    color: "#0a3a7f"
-                    border.color: "#ffffff"
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.topMargin: 0
-                    anchors.leftMargin: 0
-                    anchors.rightMargin: 0
-                    
-                    Text {
-                        id: text20
-                        width: 248
-                        height: 29
-                        color: "#ffffff"
-                        text: qsTr("PRESSURE REGULATORS")
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.pixelSize: 23
-                        horizontalAlignment: Text.AlignHCenter
-                        font.bold: true
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-            RegToggle {
-                id: prh001_toggle
-                name: "PRN003"
-                y: 81
-                width: 208
-                height: 65
-                color: "#00ffffff"
-                anchors.left: parent.left
-                anchors.leftMargin: 33
-            }
-
-            RegToggle {
-                id: prh002_toggle
-                name: "PRN004"
-                x: 344
-                y: 81
-                width: 208
-                height: 65
-                color: "#00ffffff"
-                anchors.right: parent.right
-                anchors.rightMargin: 33
-            }
-
-            Timer { id: timer }
-
-            Image {
-                id: upArrow
-                x: 186
-                y: 162
-                width: 55
-                height: 48
-                source: "content/Images/UpArrow.png"
-                fillMode: Image.PreserveAspectFit
-                
-                MouseArea { anchors.fill: parent; 
-                    onClicked: {
-                        bridge.regCommand("PRN003","increase")
-                    }
-                }
-                
-            }
-
-            Image {
-                id: downArrow
-                x: 186
-                y: 245
-                width: 55
-                height: 50
-                source: "content/Images/DownArrow.png"
-                fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent;
-                    onClicked: {
-                        bridge.regCommand("PRN003","decrease")
-                    }
-                 }
-            }
-
-            Button{
-                id: stop_button
-                y: 300
-                width: 208
-                height: 65
-                anchors.left: parent.left
-                anchors.leftMargin: 33
-                text: "STOP"
-            contentItem: Text {
-                        text: stop_button.text
-                        font.pointSize: 30
-                        font.bold: true
-                        opacity: enabled ? 1.0 : 0.3
-                        color: "#ffffff"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-            background:Rectangle{
-                border.color: "#ffffff"
-                color: stop_button.down ? "#732727" : "#941010"
-            }
-            onClicked: {
-
-                bridge.regCommand("PRN003","STOP")
-            }
-            }
-
-            Image {
-                id: upArrow1
-                x: 497
-                y: 162
-                width: 55
-                height: 48
-                source: "content/Images/UpArrow.png"
-                fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent;
-                    onClicked: {
-                        bridge.regCommand("PRN004","increase")
-                    }
-                }
-            }
-
-
-            Image {
-                id: downArrow1
-                x: 497
-                y: 245
-                width: 55
-                height: 50
-                source: "content/Images/DownArrow.png"
-                fillMode: Image.PreserveAspectFit
-                MouseArea { anchors.fill: parent;
-                    onClicked: {
-                        bridge.regCommand("PRN004","decrease")
-                    }
-                 }
-
-            }
-
-            Rectangle {
-                id: prh001_open
-                y: 197
-                width: 132
-                height: 51
-                color: "#00ffffff"
-                anchors.left: parent.left
-                anchors.leftMargin: 33
-                border.color: "#ffffff"
-                Text{
-                    id: prh001_text
-                    width: 74
-                    color: "#ffffff"
-                    font.pixelSize: 30
-                    horizontalAlignment: Text.AlignLeft
-                    rightPadding: 6
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.leftMargin: 50
-                    anchors.topMargin:5
-
-                }
-                Text{
-                    id: percent_symbol
-                    width: 74
-                    color: "#ffffff"
-                    font.pixelSize: 30
-                    text: "%"      
-                    rightPadding: 6
-                    anchors.left: parent.left
-                    anchors.leftMargin: 100
-                    anchors.top: parent.top
-                    anchors.topMargin:5
-                }
-
-                function open_percentage() {
-                    prh001_text.text=qsTr(bridge.regState("PRH001"))
-                }
-            }
-
-            Rectangle {
-                id: prh002_open
-                y: 197
-                width: 132
-                height: 51
-                color: "#00ffffff"
-                anchors.left: parent.left
-                anchors.leftMargin: 344
-                border.color: "#ffffff"
-                Text{
-                    id: prh002_text
-                    width: 74
-                    color: "#ffffff"
-                    font.pixelSize: 30
-                    horizontalAlignment: Text.AlignLeft
-                    rightPadding: 6
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.leftMargin: 50
-                    anchors.topMargin:5
-
-                }
-                Text{
-                    id: percent_symbol2
-                    width: 74
-                    color: "#ffffff"
-                    font.pixelSize: 30
-                    text: "%"      
-                    rightPadding: 6
-                    anchors.left: parent.left
-                    anchors.leftMargin: 100
-                    anchors.top: parent.top
-                    anchors.topMargin:5
-                }
-
-                function open_percentage() {
-                    prh002_text.text=qsTr(bridge.regState("PRH002"))
-                }
-
-                    }
-                    }
-
                      Rectangle {
                         id: countdown_box
                         x: 932
@@ -1492,6 +1318,8 @@ ApplicationWindow {
                         border.color: "#ffffff"
                         anchors.top: rectangle1.bottom
                         anchors.topMargin: 0
+                        anchors.right: parent.right
+                        anchors.leftMargin: 0
                         Rectangle {
                             id: rectangle130
                             height: 45
@@ -1509,7 +1337,6 @@ ApplicationWindow {
                                 anchors.verticalCenter: parent.verticalCenter
                                 font.pixelSize: 23
                                 horizontalAlignment: Text.AlignHCenter
-                                font.bold: true
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
                             anchors.topMargin: 0
@@ -1524,24 +1351,109 @@ ApplicationWindow {
                                 height: 129
                                 color: "#ffffff"
                                 text: qsTr("T-30")
+                                readOnly: true
                                 font.pixelSize: 80
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
                }
              }
+
+             Rectangle {
+                        id: load_cell_box
+                        x: 932
+                        width: 453
+                        height: 241
+                        color: "#000000"
+                        border.color: "#ffffff"
+                        anchors.top: rectangle1.bottom
+                        anchors.topMargin: 0
+                        anchors.right: countdown_box.left
+                        anchors.leftMargin: 0
+                        Rectangle {
+                            id: rectangle55
+                            height: 45
+                            color: "#0a3a7f"
+                            border.color: "#ffffff"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.top: parent.top
+                            Text {
+                                id: text77
+                                width: 248
+                                height: 29
+                                color: "#ffffff"
+                                text: qsTr("LOAD CELL")
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pixelSize: 23
+                                horizontalAlignment: Text.AlignHCenter
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                            anchors.topMargin: 0
+                            anchors.rightMargin: 0
+                            anchors.leftMargin: 0
+
+                            LoadCell {
+                                id: lc001
+                                x: 50
+                                y: 77
+                                name: "LC001"
+                            }
+                    
+                         }
+
+                 Button {
+                    id: tare
+                    text: "TARE LOAD CELL"
+                    height: 40  
+                    width: 200
+                    anchors.top: parent.bottom
+                    anchors.topMargin: -70
+                    anchors.right: parent.right
+                    anchors.rightMargin: 140
+
+                    
+                                                                
+                    contentItem: Text {
+                        text: tare.text
+                        font.pointSize: 20
+                        font.bold: true
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#ffffff"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 200
+                        implicitHeight: 95
+                        opacity: enabled ? 1 : 0.3
+                        color: tare.down ? "#732727" : "#773301"
+                        border.color: "#ffffff"
+                        border.width: 1
+                        radius: 4
+                    }
+                    
+                    onClicked: {
+                    }
+                                                            
+                 }   
+
+             }
         }
         
         Button{
             id: kill_server
-            x: 36
-            y: 1351
+            x: 23
             width: 237
             height: 58
-            text: "KILL SERVER"
+            text: "Close Server"
+            anchors.top: rectangle1.bottom
+            anchors.topMargin: 100
             contentItem: Text {
                         text: kill_server.text
-                        font.pointSize: 30
+                        font.pointSize: 25
                         font.bold: true
                         opacity: enabled ? 1.0 : 0.3
                         color: "#ffffff"
@@ -1553,8 +1465,10 @@ ApplicationWindow {
                 border.color: "#ffffff"
                 color: kill_server.down ? "#732727" : "#941010"
             }
+            
             onClicked: {
                 textField5.visible = true;
+                Qt.quit()
             }
             TextField {
                 id: textField5
@@ -1573,46 +1487,39 @@ ApplicationWindow {
                 }
              }
         }
+
+      
         
-        TextArea {
-            id: textArea
-                    x: 28
-                    width: 932
-            height: 300
-            readOnly: true
-            leftPadding: 20
-            topPadding: 10
-            font.pointSize: 30
-                    anchors.top: rectangle1.bottom
-            color: "#ffffff"
-            placeholderText: qsTr("Text Area")
-                    Text {
+        Row{
+            x: 23
+            width: 2000
+            height: 44
+            padding: 5
+            layoutDirection: Qt.LeftToRight
+            anchors.top: rectangle1.bottom
+            anchors.topMargin: 10
+
+            Text{
+                text: qsTr("SERVER STATUS: ")
+                rightPadding: 0
+                font.pixelSize: 30
+                color: "#ffffff"
+            }
+
+            Text {
                     id: server_status_text
-                    x: 23
-                    y: 21
-                    width: 1028
-                    height: 44
                     color: "#ffffff"
                     text: qsTr("NOT CONNECTED")
                     font.pixelSize: 30
-                    horizontalAlignment: Text.AlignLeft
-                }
-                    Text {
-                    id: warning_text1
-                    x: 24
-                    y: 71
-                    width: 1028
-                    height: 78
-                    color: "#ffffff"
-                    text: qsTr(" ")
-                    font.pixelSize: 30
-                    horizontalAlignment: Text.AlignLeft
-                }
-            background:Rectangle{
-                color: "#000000"
-                border.color: "#FFFFFF"
+                    leftPadding: 50
+                    
             }
+
         }
+
+                    
+                    
+        
             TextArea {
             id: textArea1
             x: 1557
@@ -1634,7 +1541,7 @@ ApplicationWindow {
 
                 Button {
                     id: abort_button
-                    x: 980
+                    x: 1650
                     y: 1270
                     text: "ABORT"
                     height: 95  
@@ -1651,6 +1558,7 @@ ApplicationWindow {
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
+
                     background: Rectangle {
                         implicitWidth: 200
                         implicitHeight: 95
@@ -1660,10 +1568,11 @@ ApplicationWindow {
                         border.width: 1
                         radius: 4
                     }
+                    
                     onClicked: {
-                        }
+                    }
                                                             
-                    }   
+                 }   
 
             }
         }

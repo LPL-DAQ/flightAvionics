@@ -161,6 +161,10 @@ class Bridge(QObject):
     @Slot(str)
     def ignitionCmd(self, timer):
         self.s.ignitionCMD(timer)
+    
+    @Slot(str)
+    def abortCmd(self):
+        self.s.abortCMD()
         
 
 

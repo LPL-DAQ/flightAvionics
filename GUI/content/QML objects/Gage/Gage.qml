@@ -6,6 +6,7 @@ Row {
     property string name: "XXX000"
     width: 180
     height: 31
+    
 
 
 
